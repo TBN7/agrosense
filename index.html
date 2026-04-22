@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AgroSense KZ — Smart Agricultural Intelligence</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Roboto:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -31,13 +31,13 @@
   --nav-collapsed:64px;
   --right-w:300px;
   --top-h:60px;
-  --radius:12px;
-  --radius-sm:8px;
-  --font-head:'Syne',sans-serif;
-  --font-body:'Outfit',sans-serif;
+  --radius:16px;
+  --radius-sm:12px;
+  --font-head:'Inter',sans-serif;
+  --font-body:'Inter',sans-serif;
   --font-mono:'JetBrains Mono',monospace;
 }
-body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;font-size:14px;}
+body{font-family:var(--font-body);background:radial-gradient(circle at top, rgba(59,158,255,0.12), transparent 25%), linear-gradient(180deg,#06101D 0%,#091426 100%);color:var(--text);min-height:100vh;overflow-x:hidden;font-size:14px;}
 
 /* ── ONBOARDING ── */
 #onboarding{position:fixed;inset:0;background:var(--bg);z-index:1000;display:flex;align-items:center;justify-content:center;background-image:radial-gradient(ellipse 80% 60% at 50% -10%,rgba(0,214,143,0.08) 0%,transparent 60%),radial-gradient(ellipse 50% 40% at 80% 80%,rgba(59,158,255,0.06) 0%,transparent 60%);}
@@ -408,6 +408,37 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
 .empty-state{text-align:center;padding:40px;color:var(--text2);}
 .scrollbar-hide{scrollbar-width:none;}
 .scrollbar-hide::-webkit-scrollbar{display:none;}
+
+body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(circle at 15% 15%,rgba(255,255,255,.08),transparent 20%),radial-gradient(circle at 85% 10%,rgba(0,214,143,.08),transparent 18%),radial-gradient(circle at 50% 100%,rgba(59,158,255,.12),transparent 20%);opacity:.75;}
+.topnav,.sidebar,.right-panel,.glass-card,.kpi-card,.chart-card,.weather-widget,.mini-alert,.ai-chat-preview,.sensor-card,.alert-item,.insight-card,.zone-item,.sidebar-farm,.zone-profile,.zones-list,.settings-content,.settings-nav,.ob-card,.ob-region,.ob-size,.ai-center{background:rgba(15,32,64,.58);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 12px 38px rgba(0,0,0,.18);}
+.kpi-card.fire-critical,.sensor-card.fire-critical,.alert-item.fire-critical,.mini-alert.fire-critical{background:linear-gradient(135deg, rgba(255,92,107,.18), rgba(15,32,64,.8));border-color:rgba(255,92,107,.45)!important;}
+.page{opacity:0;transform:translateY(10px);pointer-events:none;}
+.page.active{display:block;opacity:1;transform:translateY(0);pointer-events:auto;animation:fadePage .35s ease;}
+@keyframes fadePage{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.map-premium{width:min(92%,920px);height:min(78vh,620px);display:grid;grid-template-columns:repeat(6,1fr);grid-template-rows:repeat(5,1fr);gap:14px;padding:22px;border-radius:28px;background:linear-gradient(180deg,rgba(7,17,31,.55),rgba(10,22,40,.88));border:1px solid rgba(255,255,255,.08);box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 20px 60px rgba(0,0,0,.3);position:relative;}
+.field-block{position:relative;border-radius:24px;border:1px solid rgba(255,255,255,.08);padding:14px;cursor:pointer;display:flex;align-items:end;min-height:100px;transition:.25s ease;overflow:hidden;background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));}
+.field-block::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.08),transparent 60%);}
+.field-block:hover{transform:translateY(-2px) scale(1.01);border-color:rgba(255,255,255,.16);}
+.field-block.active{outline:2px solid rgba(255,255,255,.18);box-shadow:0 0 0 1px rgba(255,255,255,.08),0 18px 40px rgba(0,0,0,.28);}
+.field-block .field-label{position:relative;z-index:1;font-family:var(--font-head);font-size:13px;font-weight:700;}
+.field-block .field-meta{position:relative;z-index:1;font-size:11px;color:rgba(232,240,255,.85);margin-top:4px;}
+.field-green{background:linear-gradient(145deg,rgba(0,214,143,.20),rgba(22,61,56,.65));}
+.field-amber{background:linear-gradient(145deg,rgba(245,183,49,.20),rgba(77,58,20,.65));}
+.field-red{background:linear-gradient(145deg,rgba(255,92,107,.28),rgba(77,20,27,.72));}
+.field-blue{background:linear-gradient(145deg,rgba(59,158,255,.22),rgba(20,37,77,.72));}
+.modal-overlay{position:fixed;inset:0;background:rgba(5,10,20,.64);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;z-index:3000;padding:20px;}
+.modal-overlay.show{display:flex;}
+.modal-card{width:min(460px,100%);padding:26px;border-radius:24px;background:linear-gradient(180deg,rgba(15,32,64,.92),rgba(10,20,38,.96));border:1px solid rgba(255,255,255,.08);box-shadow:0 24px 80px rgba(0,0,0,.4);}
+.modal-title{font-family:var(--font-head);font-size:22px;font-weight:700;margin-bottom:10px;}
+.modal-sub{color:var(--text2);line-height:1.6;margin-bottom:20px;}
+.modal-actions{display:flex;justify-content:flex-end;gap:10px;}
+.spinner{width:22px;height:22px;border:2px solid rgba(255,255,255,.16);border-top-color:var(--green);border-radius:50%;animation:spin 1s linear infinite;display:inline-block;vertical-align:middle;margin-right:10px;}
+.ai-loader{display:none;align-items:center;gap:10px;font-size:13px;color:var(--text2);margin:10px 0 0 0;}
+.ai-loader.show{display:flex;}
+.mobile-tabbar{display:none;}
+@media (max-width: 980px){.right-panel{display:none}.kpi-grid,.sensors-grid,.analytics-grid,.chart-row,.recs-grid,.exec-cards{grid-template-columns:1fr 1fr}.zones-layout{grid-template-columns:1fr;height:auto;margin:0}.zones-list,.zone-profile{border:none}.map-area{min-height:380px}.sidebar{display:none}.main-content{padding-bottom:90px}.mobile-tabbar{display:grid;grid-template-columns:repeat(4,1fr);position:fixed;left:12px;right:12px;bottom:12px;z-index:1500;background:rgba(12,26,46,.88);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.08);border-radius:22px;box-shadow:0 20px 50px rgba(0,0,0,.34);overflow:hidden}.mobile-tabbar button{border:none;background:transparent;color:var(--text2);padding:12px 6px;font-size:11px;font-family:var(--font-body)}.mobile-tabbar button.active{color:var(--green);background:rgba(0,214,143,.08)}.body-layout{overflow:visible}.topnav{padding:0 12px;gap:10px}.nav-search,.nav-conn,.nav-weather{display:none}}
+@media (max-width: 720px){.ob-wrap{width:min(94vw,560px)}.ob-cards,.ob-regions,.ob-sizes,.kpi-grid,.sensors-grid,.analytics-grid,.chart-row,.recs-grid,.exec-cards,.zp-grid{grid-template-columns:1fr}.page{padding:16px}.page-header{flex-direction:column;gap:12px}.ai-actions,.alert-actions,.modal-actions{flex-wrap:wrap}.map-filters{flex-wrap:wrap}.map-premium{grid-template-columns:repeat(2,1fr);grid-template-rows:auto;gap:10px;height:auto;padding:16px}.field-block{min-height:92px}}
+
 </style>
 </head>
 <body>
@@ -807,68 +838,17 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
               <div class="map-btn">⟳</div>
               <div class="map-btn">⤢</div>
             </div>
-            <svg viewBox="0 0 600 400" style="width:100%;height:100%;max-height:calc(100vh - 120px);">
-              <defs>
-                <radialGradient id="grd1" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#0F2040"/><stop offset="100%" stop-color="#070F1A"/></radialGradient>
-                <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/></pattern>
-              </defs>
-              <rect width="600" height="400" fill="url(#grd1)"/>
-              <rect width="600" height="400" fill="url(#grid)"/>
-              <!-- KZ outline (simplified) -->
-              <path d="M80,120 L180,80 L300,70 L420,90 L520,110 L540,180 L520,260 L460,310 L380,340 L280,350 L180,320 L100,280 L70,210 Z" fill="rgba(0,100,60,0.08)" stroke="rgba(0,214,143,0.15)" stroke-width="1.5"/>
-              <!-- Farm Zones Polygons -->
-              <g class="map-polygon" onclick="selectZone(null,'Wheat Zone A1','Wheat','847 ha','Drip Irrigation','Critical — Drought Stress','22','3.1','2024-03-15')">
-                <path d="M160,150 L210,140 L230,180 L185,195 Z" fill="rgba(255,92,107,0.25)" stroke="#FF5C6B" stroke-width="1.5"/>
-                <text x="190" y="170" fill="#FF5C6B" font-size="9" font-family="'JetBrains Mono'" text-anchor="middle">A1</text>
-              </g>
-              <g class="map-polygon" onclick="selectZone(null,'Wheat Zone A2','Wheat','620 ha','Sprinkler','Healthy','45','7.8','2024-03-15')">
-                <path d="M215,140 L265,132 L280,168 L232,178 Z" fill="rgba(245,183,49,0.2)" stroke="#F5B731" stroke-width="1.5"/>
-                <text x="248" y="158" fill="#F5B731" font-size="9" font-family="'JetBrains Mono'" text-anchor="middle">A2</text>
-              </g>
-              <g class="map-polygon" onclick="selectZone(null,'Corn Zone B1','Corn','410 ha','Drip Irrigation','Healthy','58','8.5','2024-02-20')">
-                <path d="M300,155 L350,148 L360,185 L308,192 Z" fill="rgba(0,214,143,0.2)" stroke="#00D68F" stroke-width="1.5"/>
-                <text x="330" y="173" fill="#00D68F" font-size="9" font-family="'JetBrains Mono'" text-anchor="middle">B1</text>
-              </g>
-              <g class="map-polygon" onclick="selectZone(null,'Corn Zone B2','Corn','380 ha','Drip Irrigation','Warning — pH low','38','5.1','2024-02-20')">
-                <path d="M308,195 L358,188 L365,220 L315,228 Z" fill="rgba(245,183,49,0.2)" stroke="#F5B731" stroke-width="1.5"/>
-                <text x="336" y="210" fill="#F5B731" font-size="9" font-family="'JetBrains Mono'" text-anchor="middle">B2</text>
-              </g>
-              <g class="map-polygon" onclick="selectZone(null,'Potato Field East','Potato','290 ha','Flood Irrigation','Alert — Smoke','61','7.2','2024-04-01')">
-                <path d="M390,200 L440,193 L448,228 L397,235 Z" fill="rgba(255,92,107,0.25)" stroke="#FF5C6B" stroke-width="1.5"/>
-                <text x="419" y="215" fill="#FF5C6B" font-size="9" font-family="'JetBrains Mono'" text-anchor="middle">PE</text>
-              </g>
-              <g class="map-polygon" onclick="selectZone(null,'Potato Field West','Potato','310 ha','Drip Irrigation','Healthy','55','7.0','2024-04-01')">
-                <path d="M350,200 L390,193 L397,228 L356,235 Z" fill="rgba(0,214,143,0.15)" stroke="#00D68F" stroke-width="1.5"/>
-                <text x="373" y="215" fill="#00D68F" font-size="9" font-family="'JetBrains Mono'" text-anchor="middle">PW</text>
-              </g>
-              <g class="map-polygon">
-                <path d="M150,230 L260,215 L270,285 L155,295 Z" fill="rgba(0,214,143,0.08)" stroke="rgba(0,214,143,0.3)" stroke-width="1" stroke-dasharray="4,3"/>
-                <text x="208" y="255" fill="rgba(0,214,143,0.6)" font-size="9" font-family="'JetBrains Mono'" text-anchor="middle">Pasture A</text>
-              </g>
-              <g class="map-polygon">
-                <path d="M265,220 L340,210 L348,270 L270,280 Z" fill="rgba(245,183,49,0.1)" stroke="rgba(245,183,49,0.4)" stroke-width="1" stroke-dasharray="4,3"/>
-                <text x="305" y="248" fill="rgba(245,183,49,0.7)" font-size="9" font-family="'JetBrains Mono'" text-anchor="middle">Pasture C</text>
-              </g>
-              <g class="map-polygon">
-                <path d="M160,125 L210,115 L218,140 L166,148 Z" fill="rgba(59,158,255,0.2)" stroke="#3B9EFF" stroke-width="1.5"/>
-                <text x="190" y="132" fill="#3B9EFF" font-size="9" font-family="'JetBrains Mono'" text-anchor="middle">Z5</text>
-              </g>
-              <!-- Sensor dots -->
-              <circle cx="190" cy="168" r="4" fill="#FF5C6B" opacity="0.9"><animate attributeName="r" values="4;7;4" dur="2s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.9;0.3;0.9" dur="2s" repeatCount="indefinite"/></circle>
-              <circle cx="419" cy="213" r="4" fill="#FF5C6B" opacity="0.9"><animate attributeName="r" values="4;7;4" dur="2.5s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.9;0.3;0.9" dur="2.5s" repeatCount="indefinite"/></circle>
-              <circle cx="330" cy="173" r="3" fill="#00D68F" opacity="0.8"/>
-              <circle cx="248" cy="158" r="3" fill="#F5B731" opacity="0.8"/>
-              <!-- Legend -->
-              <rect x="10" y="350" width="280" height="38" rx="6" fill="rgba(12,26,46,0.9)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
-              <circle cx="28" cy="369" r="5" fill="rgba(255,92,107,0.3)" stroke="#FF5C6B" stroke-width="1"/>
-              <text x="38" y="373" fill="rgba(255,255,255,0.5)" font-size="10" font-family="'Outfit'">Critical</text>
-              <circle cx="90" cy="369" r="5" fill="rgba(245,183,49,0.3)" stroke="#F5B731" stroke-width="1"/>
-              <text x="100" y="373" fill="rgba(255,255,255,0.5)" font-size="10" font-family="'Outfit'">Warning</text>
-              <circle cx="160" cy="369" r="5" fill="rgba(0,214,143,0.3)" stroke="#00D68F" stroke-width="1"/>
-              <text x="170" y="373" fill="rgba(255,255,255,0.5)" font-size="10" font-family="'Outfit'">Healthy</text>
-              <circle cx="228" cy="369" r="5" fill="rgba(0,0,0,0)" stroke="#FF5C6B" stroke-width="1.5"><animate attributeName="r" values="5;8;5" dur="2s" repeatCount="indefinite"/></circle>
-              <text x="240" y="373" fill="rgba(255,255,255,0.5)" font-size="10" font-family="'Outfit'">Live alert</text>
-            </svg>
+            <div class="map-premium" id="premium-map">
+              <div class="field-block field-red active" data-zone="Wheat Zone A1" style="grid-column:1 / span 2;grid-row:1 / span 2" onclick="selectZoneFromMap(this,'Wheat Zone A1','Wheat','847 ha','Drip Irrigation','Critical — Drought Stress','22','6.4','2024-03-15',28)"><div><div class="field-label">Wheat A1</div><div class="field-meta">Moisture 22% · pH 6.4</div></div></div>
+              <div class="field-block field-amber" style="grid-column:3 / span 2;grid-row:1 / span 2" onclick="selectZoneFromMap(this,'Wheat Zone A2','Wheat','620 ha','Sprinkler','Watchlist','31','6.8','2024-03-15',63)"><div><div class="field-label">Wheat A2</div><div class="field-meta">Moisture 31% · pH 6.8</div></div></div>
+              <div class="field-block field-blue" style="grid-column:5 / span 2;grid-row:1 / span 2" onclick="selectZoneFromMap(this,'Corn Zone B1','Corn','410 ha','Drip Irrigation','Healthy','58','6.6','2024-02-20',88)"><div><div class="field-label">Corn B1</div><div class="field-meta">Moisture 58% · pH 6.6</div></div></div>
+              <div class="field-block field-green" style="grid-column:1 / span 2;grid-row:3 / span 2" onclick="selectZoneFromMap(this,'Corn Zone B2','Corn','380 ha','Drip Irrigation','Warning — pH low','38','5.8','2024-02-20',71)"><div><div class="field-label">Corn B2</div><div class="field-meta">Moisture 38% · pH 5.8</div></div></div>
+              <div class="field-block field-red" style="grid-column:3 / span 2;grid-row:3 / span 2" onclick="selectZoneFromMap(this,'Potato Field East','Potato','290 ha','Flood Irrigation','Smoke Detected','61','6.9','2024-04-01',91)"><div><div class="field-label">Potato East</div><div class="field-meta">Smoke detected · Fire risk 91%</div></div></div>
+              <div class="field-block field-green" style="grid-column:5 / span 2;grid-row:3 / span 1" onclick="selectZoneFromMap(this,'Potato Field West','Potato','310 ha','Drip Irrigation','Healthy','55','7.0','2024-04-01',83)"><div><div class="field-label">Potato West</div><div class="field-meta">Moisture 55% · pH 7.0</div></div></div>
+              <div class="field-block field-green" style="grid-column:5 / span 2;grid-row:4 / span 2" onclick="selectZoneFromMap(this,'Barley Zone Z5','Barley','520 ha','Drip Irrigation','Healthy','49','6.8','2024-03-28',86)"><div><div class="field-label">Barley Z5</div><div class="field-meta">Seeding window open</div></div></div>
+              <div class="field-block field-amber" style="grid-column:1 / span 3;grid-row:5 / span 1" onclick="selectZoneFromMap(this,'Cattle Pasture C','Pasture','980 ha','Natural','Overgrazing Risk','41','N/A','–',55)"><div><div class="field-label">Pasture C</div><div class="field-meta">Load 140% · rotation needed</div></div></div>
+              <div class="field-block field-green" style="grid-column:4 / span 1;grid-row:5 / span 1" onclick="selectZoneFromMap(this,'Cattle Pasture A','Pasture','1,200 ha','Natural','Healthy','72','N/A','–',84)"><div><div class="field-label">Pasture A</div><div class="field-meta">Stable vegetation</div></div></div>
+            </div>
           </div>
 
           <!-- ZONE PROFILE -->
@@ -1159,7 +1139,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
             <div class="page-title">AI Insights</div>
             <div class="page-sub">Predictive analytics powered by AgroSense Neural Engine v3.1</div>
           </div>
-          <div style="background:var(--blue-dim);border:1px solid rgba(59,158,255,0.2);border-radius:var(--radius-sm);padding:8px 16px;font-size:12px;color:var(--blue);font-family:var(--font-mono);">MODEL CONFIDENCE: 87%</div>
+          <div style="background:var(--blue-dim);border:1px solid rgba(59,158,255,0.2);border-radius:var(--radius-sm);padding:8px 16px;font-size:12px;color:var(--blue);font-family:var(--font-mono);">MODEL CONFIDENCE: 87%</div><div class="ai-loader" id="ai-loader"><span class="spinner"></span><span id="ai-loader-text">Neural engine is processing fresh telemetry…</span></div>
         </div>
         <div class="insight-card critical">
           <div class="insight-header">
@@ -1181,7 +1161,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
           </div>
           <div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px;">
             <div style="font-size:12px;color:var(--text2);">ROI of Action: <span style="color:var(--green)">+₸ 2.4M estimated yield preservation</span></div>
-            <div style="display:flex;gap:8px;"><button class="btn-action primary">▶ Activate Irrigation Now</button><button class="btn-action">📋 Schedule Later</button></div>
+            <div style="display:flex;gap:8px;"><button class="btn-action primary" onclick="openCommandModal('irrigation')">▶ Activate Irrigation Now</button><button class="btn-action" onclick="openCommandModal('schedule')">📋 Schedule Later</button></div>
           </div>
         </div>
         <div class="insight-card high">
@@ -1197,7 +1177,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
             <div class="chain-item"><div class="chain-label">Expected Impact</div><div class="chain-value highlight">Fire containment, pasture regeneration in 3 weeks</div></div>
             <div class="chain-item"><div class="chain-label">Risk if Ignored</div><div class="chain-value warn">Potential wildfire spread, pasture degradation</div></div>
           </div>
-          <div style="display:flex;gap:8px;margin-top:12px;"><button class="btn-action primary">🚁 Dispatch Inspection</button><button class="btn-action">🐄 Relocate Cattle</button><button class="btn-action">📊 View Analysis</button></div>
+          <div style="display:flex;gap:8px;margin-top:12px;"><button class="btn-action primary" onclick="openCommandModal('drone')">🚁 Dispatch Inspection</button><button class="btn-action" onclick="openCommandModal('relocate')">🐄 Relocate Cattle</button><button class="btn-action" id="ai-analyze-btn" onclick="runAIAnalysis()">📊 AI Анализ</button></div>
         </div>
         <div class="insight-card">
           <div class="insight-header">
@@ -1212,7 +1192,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
             <div class="chain-item"><div class="chain-label">Expected Impact</div><div class="chain-value highlight">+18% germination rate vs average conditions</div></div>
             <div class="chain-item"><div class="chain-label">Risk if Ignored</div><div class="chain-value">Next optimal window in 3–4 weeks</div></div>
           </div>
-          <div style="display:flex;gap:8px;margin-top:12px;"><button class="btn-action primary">📅 Schedule Seeding</button><button class="btn-action">📊 Full Analysis</button></div>
+          <div style="display:flex;gap:8px;margin-top:12px;"><button class="btn-action primary" onclick="openCommandModal('seeding')">📅 Schedule Seeding</button><button class="btn-action" onclick="runAIAnalysis()">📊 Full Analysis</button></div>
         </div>
       </div>
 
@@ -1243,7 +1223,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
             <div class="alert-actions">
               <button class="alert-btn ack">✓ Acknowledge</button>
               <button class="alert-btn" onclick="showPage('zones')">🗺 View on Map</button>
-              <button class="alert-btn">🚁 Drone Dispatch</button>
+              <button class="alert-btn" onclick="openCommandModal('drone')">🚁 Drone Dispatch</button>
               <button class="alert-btn">📞 Call Supervisor</button>
             </div>
           </div>
@@ -1262,7 +1242,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
             <div class="alert-actions">
               <button class="alert-btn ack">✓ Acknowledge</button>
               <button class="alert-btn" onclick="showPage('zones')">🗺 View on Map</button>
-              <button class="alert-btn">💧 Activate Irrigation</button>
+              <button class="alert-btn" onclick="openCommandModal('irrigation')">💧 Activate Irrigation</button>
               <button class="alert-btn" onclick="showPage('insights')">✦ AI Recommendation</button>
             </div>
           </div>
@@ -1539,11 +1519,79 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
   </div>
 </div>
 
+
+<div class="mobile-tabbar" id="mobile-tabbar">
+  <button class="active" onclick="showPage('overview');syncMobileTab(this)">Главное</button>
+  <button onclick="showPage('zones');syncMobileTab(this)">Зоны</button>
+  <button onclick="showPage('sensors');syncMobileTab(this)">Датчики</button>
+  <button onclick="showPage('alerts');syncMobileTab(this)">Предупр.</button>
+</div>
+<div class="modal-overlay" id="command-modal">
+  <div class="modal-card">
+    <div class="modal-title" id="command-modal-title">Подтвердить действие</div>
+    <div class="modal-sub" id="command-modal-sub">Команда будет отправлена на оборудование.</div>
+    <div class="modal-actions">
+      <button class="btn-outline" onclick="closeCommandModal()">Отмена</button>
+      <button class="btn-primary" onclick="confirmCommand()">Подтвердить</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // ── STATE ──
 let obSelections={type:null,region:null,size:null};
 let activePage='overview';
-let activeNavItem=null;
+let currentLang='RU';
+let currentCommand='';
+let chartsInitialized=false;
+
+const labels = {
+  type:{crop:{RU:'Растениеводство',KZ:'Өсімдік шаруашылығы',EN:'Crop Farming'},livestock:{RU:'Животноводство',KZ:'Мал шаруашылығы',EN:'Livestock'},mixed:{RU:'Смешанное хозяйство',KZ:'Аралас шаруашылық',EN:'Mixed Farm'}},
+  region:{almaty:{RU:'Алматинская область',KZ:'Алматы облысы',EN:'Almaty Region'},astana:{RU:'Астана',KZ:'Астана',EN:'Astana'},kostanay:{RU:'Костанайская область',KZ:'Қостанай облысы',EN:'Kostanay Region'},akmola:{RU:'Акмолинская область',KZ:'Ақмола облысы',EN:'Akmola Region'},shymkent:{RU:'Шымкент',KZ:'Шымкент',EN:'Shymkent'},karaganda:{RU:'Карагандинская область',KZ:'Қарағанды облысы',EN:'Karaganda Region'},atyrau:{RU:'Атырауская область',KZ:'Атырау облысы',EN:'Atyrau Region'},pavlodar:{RU:'Павлодарская область',KZ:'Павлодар облысы',EN:'Pavlodar Region'},other:{RU:'Другой регион',KZ:'Басқа өңір',EN:'Other Region'}},
+  size:{small:{RU:'Малое',KZ:'Шағын',EN:'Small'},medium:{RU:'Среднее',KZ:'Орта',EN:'Medium'},large:{RU:'Крупное',KZ:'Ірі',EN:'Large'},enterprise:{RU:'Корпоративное',KZ:'Корпоративтік',EN:'Enterprise'}}
+};
+
+const translations = {
+  RU:{
+    navOverview:'Главное',navZones:'Зоны',navSensors:'Датчики',navInsights:'AI-аналитика',navAlerts:'Предупреждения',navReports:'Отчёты',navSettings:'Настройки',
+    liveMap:'Карта',allSystems:'Все системы онлайн',search:'Поиск зон, датчиков, тревог…',
+    weatherInt:'Погодная аналитика',liveAlerts:'Живые предупреждения',systemStatus:'Статус системы',askAI:'Спросить AI ассистента',
+    aiHello:'Здравствуйте! Я AgroSense AI. Спросите меня о состоянии фермы, рекомендациях или рисках по зонам.',
+    pageOverview:'Интеллектуальная агроаналитика',pageOverviewSub:'для Казахстана · мониторинг в реальном времени по 12 активным зонам',
+    export:'Экспорт отчёта',addZone:'Добавить зону',
+    kpi1:'Всего зон',kpi2:'Индекс здоровья культур',kpi3:'Эффективность воды',kpi4:'Риск пожара',kpi5:'Стабильность почвы',kpi6:'Уверенность AI',kpi7:'Средняя влажность',kpi8:'Прогноз роста урожая',
+    aiCenter:'AgroSense AI Control Center',aiCenterSub:'Обновлено 4 минуты назад · обработано 847 телеметрических точек',highUrgency:'⚡ ВЫСОКИЙ ПРИОРИТЕТ',
+    aiMessage:'<strong style="color:var(--green);">3 зоны требуют немедленного внимания.</strong> Основная угроза: засуха в кластере пшеницы A1–A3 — влажность почвы 22%, что критично ниже допустимого диапазона для пшеницы 20–35% при текущей жаре. <strong>Рекомендуемое действие: точечный капельный полив в ближайшие 6 часов</strong>. Дополнительно: в Potato East зафиксирован статус <strong>Smoke Detected</strong>, поэтому риск пожара автоматически повышен до 91%.',
+    openZone:'Открыть Wheat Zone A1',droneView:'Запустить дрон',genReport:'Сформировать отчёт',dismiss:'Скрыть предупреждение',
+    chartHealth:'Тренд здоровья культур',chartHealthSub:'Последние 30 дней по всем зонам',chartDist:'Распределение здоровья зон',chartDistSub:'Текущее состояние',
+    smartRec:'Рекомендации нейросети',aiGenerated:'Сгенерировано AI',
+    pageZones:'Зоны хозяйства',pageZonesSub:'Схематичная премиальная карта без внешних API',
+    pageSensors:'Сеть датчиков',pageSensorsSub:'Операционные показатели и статус устройств по ферме',
+    pageInsights:'AI-аналитика',pageInsightsSub:'Прогнозные рекомендации нейросети AgroSense Neural Engine',
+    pageAlerts:'Центр предупреждений',pageAlertsSub:'4 активных сигнала · 2 критических · 1 закрыт сегодня',
+    pageAnalytics:'Аналитика и отчёты',pageAnalyticsSub:'Сезонная динамика, урожайность и водопотребление',
+    pageSettings:'Настройки платформы',pageSettingsSub:'Управление фермой, командой и интеграциями',
+    modalTitle:'Подтвердить действие',modalSent:'Команда отправлена на оборудование',modalPrompt:'Команда будет передана в исполнительный контур AgroSense.',
+    aiLoader:'Нейросеть анализирует свежую телеметрию…',
+    aiUpdated:'Новая рекомендация: из-за ветра 18 км/ч и сухой кромки в Potato East лучше сначала отправить дрон на верификацию, затем включить локальный водяной барьер. Для Wheat A1 желательно дать импульсный полив 14 мм сегодня и повторную проверку через 2 часа.',
+    chatbotReplies:['По ферме сейчас два критических риска: засуха в Wheat A1 и пожарная тревога в Potato East.','Общий индекс здоровья держится стабильно, но пшеница в A1 требует немедленного полива.','Система видит хорошую картину по воде, однако Smoke Detected удерживает пожарный риск в красной зоне.'],
+    regionsLabel:'Регион',farmTypeLabel:'Тип хозяйства'
+  },
+  KZ:{
+    navOverview:'Басты бет',navZones:'Аймақтар',navSensors:'Датчиктер',navInsights:'AI-талдау',navAlerts:'Ескертулер',navReports:'Есептер',navSettings:'Баптаулар',
+    liveMap:'Карта',allSystems:'Барлық жүйе онлайн',search:'Аймақтар, датчиктер, дабылдар бойынша іздеу…',weatherInt:'Ауа райы аналитикасы',liveAlerts:'Тікелей ескертулер',systemStatus:'Жүйе күйі',askAI:'AI көмекшіден сұрау',
+    aiHello:'Сәлем! Мен AgroSense AI. Ферма жағдайы, ұсыныстар немесе тәуекелдер туралы сұраңыз.',
+    pageOverview:'Зияткерлік агроаналитика',pageOverviewSub:'Қазақстан үшін · 12 белсенді аймақ бойынша нақты уақыт мониторингі',export:'Есепті экспорттау',addZone:'Аймақ қосу',
+    kpi1:'Барлық аймақ',kpi2:'Дақыл денсаулығы индексі',kpi3:'Су тиімділігі',kpi4:'Өрт қаупі',kpi5:'Топырақ тұрақтылығы',kpi6:'AI сенімділігі',kpi7:'Орташа ылғал',kpi8:'Өнім өсімі болжамы',
+    aiCenter:'AgroSense AI басқару орталығы',aiCenterSub:'4 минут бұрын жаңартылды · 847 телеметрия нүктесі өңделді',highUrgency:'⚡ ЖОҒАРЫ БАСЫМДЫҚ',
+    aiMessage:'<strong style="color:var(--green);">3 аймақ шұғыл назарды қажет етеді.</strong> Негізгі қауіп: A1–A3 бидай кластерінде құрғақшылық стрессі — топырақ ылғалы 22%, бұл бидай үшін 20–35% аралығынан төмен. <strong>Ұсынылатын әрекет: келесі 6 сағат ішінде нысаналы тамшылатып суару</strong>. Қосымша: Potato East аймағында <strong>Smoke Detected</strong> анықталды, сондықтан өрт қаупі автоматты түрде 91%-ға көтерілді.',
+    openZone:'Wheat Zone A1 ашу',droneView:'Дронды іске қосу',genReport:'Есеп құру',dismiss:'Ескертуді жабу',chartHealth:'Дақыл денсаулығы тренді',chartHealthSub:'Соңғы 30 күн',chartDist:'Аймақ денсаулығы таралуы',chartDistSub:'Ағымдағы жағдай',smartRec:'Нейрожелі ұсыныстары',aiGenerated:'AI жасаған',
+    pageZones:'Шаруашылық аймақтары',pageZonesSub:'Сыртқы API қолданбайтын премиум схема-карта',pageSensors:'Датчиктер желісі',pageSensorsSub:'Ферма бойынша құрылғылар күйі мен көрсеткіштер',pageInsights:'AI-талдау',pageInsightsSub:'AgroSense Neural Engine нейрожелісінің болжамды ұсыныстары',pageAlerts:'Ескерту орталығы',pageAlertsSub:'4 белсенді сигнал · 2 сыни · 1 бүгін жабылды',pageAnalytics:'Аналитика және есептер',pageAnalyticsSub:'Маусымдық динамика, өнім және су тұтыну',pageSettings:'Платформа баптаулары',pageSettingsSub:'Ферма, команда және интеграциялар басқаруы',modalTitle:'Әрекетті растау',modalSent:'Команда жабдыққа жіберілді',modalPrompt:'Команда AgroSense орындау контурына жіберіледі.',aiLoader:'Нейрожелі жаңа телеметрияны талдап жатыр…',aiUpdated:'Жаңа ұсыныс: жел 18 км/сағ болғандықтан Potato East аймағында алдымен дрондық тексеру, кейін локалды су тосқауылын қосу керек. Wheat A1 үшін бүгін 14 мм импульстік суару және 2 сағаттан кейін қайта тексеру ұсынылады.',chatbotReplies:['Фермада қазір екі сыни қауіп бар: Wheat A1 құрғақшылығы және Potato East өрт дабылы.','Жалпы денсаулық индексі тұрақты, бірақ A1 бидайына шұғыл суару қажет.','Жүйе су бойынша жақсы динамиканы көреді, алайда Smoke Detected өрт қаупін қызыл аймақта ұстап тұр.'],regionsLabel:'Өңір',farmTypeLabel:'Шаруашылық түрі'
+  },
+  EN:{
+    navOverview:'Overview',navZones:'Zones',navSensors:'Sensors',navInsights:'AI Insights',navAlerts:'Alerts',navReports:'Reports',navSettings:'Settings',liveMap:'Live Map',allSystems:'All systems online',search:'Search zones, sensors, alerts…',weatherInt:'Weather Intelligence',liveAlerts:'Live Alerts',systemStatus:'System Status',askAI:'Ask AI Assistant',aiHello:'Hello! I am AgroSense AI. Ask me about farm status, recommendations, or zone risks.',pageOverview:'Smart Agricultural Intelligence',pageOverviewSub:'for Kazakhstan · real-time monitoring across 12 active zones',export:'Export Report',addZone:'Add Zone',kpi1:'Total Zones',kpi2:'Crop Health Index',kpi3:'Water Efficiency',kpi4:'Fire Risk',kpi5:'Soil Stability',kpi6:'AI Confidence',kpi7:'Average Moisture',kpi8:'Estimated Yield Growth',aiCenter:'AgroSense AI Control Center',aiCenterSub:'Updated 4 minutes ago · processing 847 telemetry points',highUrgency:'⚡ HIGH URGENCY',aiMessage:'<strong style="color:var(--green);">3 zones require immediate attention.</strong> Main threat: drought stress in Wheat cluster A1–A3 — soil moisture is 22%, which is critical under the realistic wheat range of 20–35% moisture. <strong>Recommended action: targeted drip irrigation within the next 6 hours</strong>. Secondary issue: Potato East reports <strong>Smoke Detected</strong>, so fire risk is automatically escalated to 91%.',openZone:'Open Wheat Zone A1',droneView:'Launch Drone',genReport:'Generate Report',dismiss:'Dismiss Alert',chartHealth:'Crop Health Trend',chartHealthSub:'Last 30 days across all zones',chartDist:'Zone Health Distribution',chartDistSub:'Current status',smartRec:'Neural Recommendations',aiGenerated:'AI Generated',pageZones:'Farm Zones',pageZonesSub:'Premium schematic map without external APIs',pageSensors:'Sensor Network',pageSensorsSub:'Operational metrics and device status across the farm',pageInsights:'AI Insights',pageInsightsSub:'Predictive recommendations from AgroSense Neural Engine',pageAlerts:'Alert Center',pageAlertsSub:'4 active signals · 2 critical · 1 resolved today',pageAnalytics:'Analytics & Reports',pageAnalyticsSub:'Season trends, yields, and water use',pageSettings:'Platform Settings',pageSettingsSub:'Manage farm, team, and integrations',modalTitle:'Confirm action',modalSent:'Command sent to equipment',modalPrompt:'The command will be passed to the AgroSense execution layer.',aiLoader:'Neural engine is analyzing fresh telemetry…',aiUpdated:'Updated recommendation: due to 18 km/h wind and a dry edge in Potato East, send a drone for visual verification first, then enable a local water barrier. For Wheat A1, apply a 14 mm pulse irrigation today and re-check in 2 hours.',chatbotReplies:['The farm currently has two critical risks: drought in Wheat A1 and a fire alert in Potato East.','Overall health is stable, but Wheat A1 needs immediate irrigation.','The system sees good water efficiency, but Smoke Detected keeps fire risk in the red zone.'],regionsLabel:'Region',farmTypeLabel:'Farm Type'
+  }
+};
 
 // ── ONBOARDING ──
 function selectCard(el,field,val){
@@ -1554,150 +1602,208 @@ function selectCard(el,field,val){
   const map={type:'next1',region:'next2',size:'next3'};
   document.getElementById(map[field]).disabled=false;
 }
-
 function nextStep(n){
   document.querySelectorAll('.ob-step').forEach(s=>s.classList.remove('active'));
   document.getElementById('step'+n).classList.add('active');
-  document.querySelectorAll('.ob-dot').forEach((d,i)=>{
-    d.classList.toggle('active',i<n);
-  });
+  document.querySelectorAll('.ob-dot').forEach((d,i)=>d.classList.toggle('active',i<n));
 }
-
 function generateDashboard(){
   document.querySelectorAll('.ob-step').forEach(s=>s.classList.remove('active'));
   document.getElementById('step-gen').classList.add('active');
-  const msgs=['Connecting to regional satellite feeds...','Calibrating AI models for your farm type...','Loading sensor network topology...','Generating smart zone configurations...','Preparing your personalized dashboard...'];
-  let i=0;
-  const el=document.getElementById('gen-status');
-  const iv=setInterval(()=>{
-    if(i<msgs.length){el.textContent=msgs[i++];}
-    else{clearInterval(iv);launchApp();}
-  },700);
+  const msgs=['Connecting to regional satellite feeds...','Calibrating AI models for your farm type...','Loading sensor network topology...','Generating premium field topology...','Preparing multilingual dashboard...'];
+  let i=0; const el=document.getElementById('gen-status');
+  const iv=setInterval(()=>{ if(i<msgs.length){el.textContent=msgs[i++];} else {clearInterval(iv);launchApp();} },650);
 }
-
 function launchApp(){
   document.getElementById('onboarding').style.display='none';
-  const app=document.getElementById('app');
-  app.classList.add('ready');
-  setTimeout(initCharts,200);
+  document.getElementById('app').classList.add('ready');
+  applyProfileContext();
+  applyTranslations();
+  applyConsistencyLogic();
+  setTimeout(initCharts,160);
 }
 
 // ── NAVIGATION ──
 function showPage(page,navEl){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  const pg=document.getElementById('page-'+page);
-  if(pg)pg.classList.add('active');
+  const pg=document.getElementById('page-'+page); if(pg) pg.classList.add('active');
   activePage=page;
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   if(navEl){navEl.classList.add('active');}
-  else{
+  else {
     const map={overview:0,zones:1,sensors:2,insights:3,alerts:4,analytics:5,settings:6};
     const items=document.querySelectorAll('.nav-item');
-    if(items[map[page]])items[map[page]].classList.add('active');
+    if(items[map[page]]) items[map[page]].classList.add('active');
   }
-  if(page==='analytics')setTimeout(initAnalyticsCharts,100);
+  document.querySelectorAll('#mobile-tabbar button').forEach(btn=>btn.classList.remove('active'));
+  const mobileMap={overview:0,zones:1,sensors:2,alerts:3};
+  const mbtns=document.querySelectorAll('#mobile-tabbar button');
+  if(mbtns[mobileMap[page]]) mbtns[mobileMap[page]].classList.add('active');
+  if(page==='analytics') setTimeout(initAnalyticsCharts,120);
 }
+function syncMobileTab(btn){ document.querySelectorAll('#mobile-tabbar button').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); }
+function setLang(el,lang){ document.querySelectorAll('.nav-lang button').forEach(b=>b.classList.remove('active')); el.classList.add('active'); currentLang=lang; applyTranslations(); }
+function toggleFilter(el){ el.classList.toggle('active'); }
+function filterAlerts(el){ document.querySelectorAll('.af-btn').forEach(b=>b.classList.remove('active')); el.classList.add('active'); }
+function switchSettings(el,section){ document.querySelectorAll('.settings-nav-item').forEach(s=>s.classList.remove('active')); el.classList.add('active'); document.querySelectorAll('[id^="sfarm"],[id^="steam"],[id^="sdevices"],[id^="sintegrations"],[id^="snotif"],[id^="sapi"]').forEach(s=>s.style.display='none'); const el2=document.getElementById(section); if(el2)el2.style.display='block'; }
 
-function setLang(el,lang){
-  document.querySelectorAll('.nav-lang button').forEach(b=>b.classList.remove('active'));
-  el.classList.add('active');
-}
-
-function toggleFilter(el){
-  el.classList.toggle('active');
-}
-
-function filterAlerts(el,type){
-  document.querySelectorAll('.af-btn').forEach(b=>b.classList.remove('active'));
-  el.classList.add('active');
-}
-
-function switchSettings(el,section){
-  document.querySelectorAll('.settings-nav-item').forEach(s=>s.classList.remove('active'));
-  el.classList.add('active');
-  document.querySelectorAll('[id^="sfarm"],[id^="steam"],[id^="sdevices"],[id^="sintegrations"],[id^="snotif"],[id^="sapi"]').forEach(s=>s.style.display='none');
-  const el2=document.getElementById(section);
-  if(el2)el2.style.display='block';
-}
-
-function selectZone(el,name,crop,area,water,status,moisture,ph,date){
+function selectZone(el,name,crop,area,water,status,moisture,ph,date,scoreOverride){
   document.querySelectorAll('.zone-item').forEach(z=>z.classList.remove('active'));
-  if(el)el.classList.add('active');
-  document.getElementById('zp-name').textContent=name;
-  document.getElementById('zp-crop').textContent=crop;
-  document.getElementById('zp-area').textContent=area;
-  document.getElementById('zp-water').textContent=water;
-  document.getElementById('zp-moisture').textContent=moisture+'%';
-  document.getElementById('zp-ph').textContent=ph;
-  document.getElementById('zp-date').textContent=date;
-  document.getElementById('zp-meta').textContent=`${crop} · ${status} · ${area}`;
-  const score=Math.round(parseInt(moisture)||50);
-  document.getElementById('zp-score-val').textContent=score;
+  if(el) el.classList.add('active');
+  updateZonePanel(name,crop,area,water,status,moisture,ph,date,scoreOverride);
+}
+function selectZoneFromMap(el,name,crop,area,water,status,moisture,ph,date,scoreOverride){
+  document.querySelectorAll('.field-block').forEach(z=>z.classList.remove('active'));
+  if(el) el.classList.add('active');
+  updateZonePanel(name,crop,area,water,status,moisture,ph,date,scoreOverride);
+}
+function updateZonePanel(name,crop,area,water,status,moisture,ph,date,scoreOverride){
+  const byId=(id,val)=>{ const e=document.getElementById(id); if(e) e.textContent=val; };
+  byId('zp-name',name); byId('zp-crop',crop); byId('zp-area',area); byId('zp-water',water); byId('zp-moisture',moisture+'%'); byId('zp-ph',ph); byId('zp-date',date);
+  byId('zp-meta',`${crop} · ${status} · ${area}`);
+  const score= scoreOverride ?? Math.round(parseInt(moisture)||50);
+  byId('zp-score-val',score);
   const arc=document.getElementById('score-arc');
-  const c=2*Math.PI*20;
-  arc.setAttribute('stroke-dasharray',`${score/100*c} ${c}`);
+  if(arc){ const c=2*Math.PI*20; arc.setAttribute('stroke-dasharray',`${score/100*c} ${c}`); }
   const col=score<35?'var(--red)':score<60?'var(--amber)':'var(--green)';
-  arc.setAttribute('stroke',col);
-  document.getElementById('zp-score-val').style.color=col;
-  const statusEl=document.getElementById('zp-status');
-  statusEl.textContent=score<35?'Critical':score<60?'Warning':'Healthy';
-  statusEl.style.color=col;
-  document.getElementById('zp-moisture').style.color=parseInt(moisture)<35?'var(--red)':parseInt(moisture)<50?'var(--amber)':'var(--green)';
+  if(arc) arc.setAttribute('stroke',col);
+  const scoreEl=document.getElementById('zp-score-val'); if(scoreEl) scoreEl.style.color=col;
+  const statusEl=document.getElementById('zp-status'); if(statusEl){ statusEl.textContent=score<35?'Critical':score<60?'Warning':'Healthy'; statusEl.style.color=col; }
+  const moist=document.getElementById('zp-moisture'); if(moist) moist.style.color=parseInt(moisture)<35?'var(--red)':parseInt(moisture)<50?'var(--amber)':'var(--green)';
 }
 
+function applyProfileContext(){
+  const type = labels.type[obSelections.type]?.[currentLang] || labels.type.mixed[currentLang];
+  const region = labels.region[obSelections.region]?.[currentLang] || labels.region.almaty[currentLang];
+  const sizeMap = {small:'420 га',medium:'3,200 га',large:'18,400 га',enterprise:'52,000 га'};
+  const title = `${region} Agro`;
+  const farmName=document.getElementById('farm-name'); if(farmName) farmName.textContent=title;
+  const farmMeta=document.getElementById('farm-meta'); if(farmMeta) farmMeta.textContent=`${type} · ${sizeMap[obSelections.size] || '3,200 га'}`;
+  document.querySelector('.nav-weather .loc').textContent=region;
+}
+
+function applyTranslations(){
+  const t=translations[currentLang];
+  document.documentElement.lang=currentLang.toLowerCase();
+  const navItems=document.querySelectorAll('.nav-item');
+  if(navItems[0]) navItems[0].childNodes[1].textContent=' '+t.navOverview;
+  if(navItems[1]) navItems[1].childNodes[1].textContent=' '+t.navZones;
+  if(navItems[2]) navItems[2].childNodes[1].textContent=' '+t.navSensors;
+  if(navItems[3]) navItems[3].childNodes[1].textContent=' '+t.navInsights;
+  if(navItems[4]) navItems[4].childNodes[1].textContent=' '+t.navAlerts;
+  if(navItems[5]) navItems[5].childNodes[1].textContent=' '+t.navReports;
+  if(navItems[6]) navItems[6].childNodes[1].textContent=' '+t.navSettings;
+  const mobileBtns=document.querySelectorAll('#mobile-tabbar button');
+  if(mobileBtns[0]) mobileBtns[0].textContent=t.navOverview;
+  if(mobileBtns[1]) mobileBtns[1].textContent=t.navZones;
+  if(mobileBtns[2]) mobileBtns[2].textContent=t.navSensors;
+  if(mobileBtns[3]) mobileBtns[3].textContent=t.navAlerts;
+  const search=document.querySelector('.nav-search input'); if(search) search.placeholder=t.search;
+  const conn=document.querySelector('.nav-conn span'); if(conn) conn.textContent=t.allSystems;
+  const topBtn=document.querySelector('.nav-btn.primary'); if(topBtn) topBtn.innerHTML=`<span>🗺</span> ${t.liveMap}`;
+  const pageTitles=document.querySelectorAll('.page-title');
+  const pageSubs=document.querySelectorAll('.page-sub');
+  if(pageTitles[0]) pageTitles[0].textContent=t.pageOverview;
+  if(pageSubs[0]) pageSubs[0].textContent=t.pageOverviewSub;
+  if(pageTitles[1]) pageTitles[1].textContent=t.pageZones;
+  if(pageSubs[1]) pageSubs[1].textContent=t.pageZonesSub;
+  if(pageTitles[2]) pageTitles[2].textContent=t.pageSensors;
+  if(pageSubs[2]) pageSubs[2].textContent=t.pageSensorsSub;
+  if(pageTitles[3]) pageTitles[3].textContent=t.pageInsights;
+  if(pageSubs[3]) pageSubs[3].textContent=t.pageInsightsSub;
+  if(pageTitles[4]) pageTitles[4].textContent=t.pageAlerts;
+  if(pageSubs[4]) pageSubs[4].textContent=t.pageAlertsSub;
+  if(pageTitles[5]) pageTitles[5].textContent=t.pageAnalytics;
+  if(pageSubs[5]) pageSubs[5].textContent=t.pageAnalyticsSub;
+  if(pageTitles[6]) pageTitles[6].textContent=t.pageSettings;
+  if(pageSubs[6]) pageSubs[6].textContent=t.pageSettingsSub;
+  const btns=document.querySelectorAll('.page-header .btn-outline');
+  if(btns[0]) btns[0].innerHTML=`<span>↓</span> ${t.export}`;
+  if(btns[1]) btns[1].innerHTML=`⊕ ${t.addZone}`;
+  const kpiLabels=document.querySelectorAll('.kpi-label');
+  [t.kpi1,t.kpi2,t.kpi3,t.kpi4,t.kpi5,t.kpi6,t.kpi7,t.kpi8].forEach((label,i)=>{ if(kpiLabels[i]) kpiLabels[i].textContent=label; });
+  const aiTitle=document.querySelector('.ai-title'); if(aiTitle) aiTitle.textContent=t.aiCenter;
+  const aiSub=document.querySelector('.ai-sub'); if(aiSub) aiSub.textContent=t.aiCenterSub;
+  const urgency=document.querySelector('.urgency-badge.urgency-high'); if(urgency) urgency.textContent=t.highUrgency;
+  const aiMsg=document.querySelector('.ai-message'); if(aiMsg) aiMsg.innerHTML=t.aiMessage;
+  const aiActions=document.querySelectorAll('.ai-actions .btn-action');
+  if(aiActions[0]) aiActions[0].innerHTML='▶ '+t.openZone;
+  if(aiActions[1]) aiActions[1].innerHTML='🚁 '+t.droneView;
+  if(aiActions[2]) aiActions[2].innerHTML='📄 '+t.genReport;
+  if(aiActions[3]) aiActions[3].innerHTML='🔕 '+t.dismiss;
+  const chartTitles=document.querySelectorAll('.chart-title'); const chartSubs=document.querySelectorAll('.chart-sub');
+  if(chartTitles[0]) chartTitles[0].textContent=t.chartHealth; if(chartSubs[0]) chartSubs[0].textContent=t.chartHealthSub;
+  if(chartTitles[1]) chartTitles[1].textContent=t.chartDist; if(chartSubs[1]) chartSubs[1].textContent=t.chartDistSub;
+  const sec=document.querySelector('.section-title'); if(sec) sec.childNodes[0].textContent=t.smartRec+' ';
+  const aiBadge=document.querySelector('.section-title .badge-ai'); if(aiBadge) aiBadge.textContent=t.aiGenerated;
+  const panelTitles=document.querySelectorAll('.panel-title');
+  if(panelTitles[0]) panelTitles[0].textContent=t.weatherInt;
+  if(panelTitles[1]) panelTitles[1].textContent=t.liveAlerts;
+  if(panelTitles[2]) panelTitles[2].textContent=t.systemStatus;
+  if(panelTitles[3]) panelTitles[3].textContent=t.askAI;
+  const chatMsg=document.querySelector('.ai-chat-msg'); if(chatMsg) chatMsg.textContent=t.aiHello;
+  const aiInput=document.getElementById('ai-input'); if(aiInput) aiInput.placeholder=t.askAI+'…';
+  const modalTitle=document.getElementById('command-modal-title'); if(modalTitle) modalTitle.textContent=t.modalTitle;
+  const modalSub=document.getElementById('command-modal-sub'); if(modalSub) modalSub.textContent=t.modalPrompt;
+  const loader=document.getElementById('ai-loader-text'); if(loader) loader.textContent=t.aiLoader;
+  applyProfileContext();
+}
+
+function applyConsistencyLogic(){
+  const fireKpiValue=document.querySelectorAll('.kpi-value')[3];
+  const fireKpiBar=document.querySelectorAll('.kpi-bar-fill')[3];
+  const fireTrend=document.querySelectorAll('.kpi-trend')[3];
+  const smokePresent=[...document.querySelectorAll('.alert-title,.mini-alert-text,.rec-title,.sensor-name,.zone-item,.field-meta')].some(el=>/Smoke Detected|Smoke|дым/i.test(el.textContent));
+  if(smokePresent){
+    if(fireKpiValue){ fireKpiValue.textContent='91%'; fireKpiValue.className='kpi-value red'; fireKpiValue.parentElement.classList.add('fire-critical'); }
+    if(fireKpiBar){ fireKpiBar.style.width='91%'; fireKpiBar.className='kpi-bar-fill red'; }
+    if(fireTrend){ fireTrend.innerHTML='<span class="trend-down">↑ 18%</span><span style="color:var(--text3)"> smoke detected</span>'; }
+    document.querySelectorAll('.alert-item.critical,.mini-alert').forEach(el=>{ if(/Smoke|Fire Risk|дым/i.test(el.textContent)) el.classList.add('fire-critical'); });
+    document.querySelectorAll('.sensor-card').forEach(card=>{ if(/Smoke/i.test(card.textContent)) card.classList.add('fire-critical'); });
+  }
+  document.querySelectorAll('.zone-item').forEach(item=>{
+    item.setAttribute('onclick', item.getAttribute('onclick').replace("'3.1'","'6.4'").replace("'7.8'","'6.8'"));
+  });
+}
+
+function openCommandModal(command){ currentCommand=command; document.getElementById('command-modal').classList.add('show'); }
+function closeCommandModal(){ document.getElementById('command-modal').classList.remove('show'); }
+function confirmCommand(){ const t=translations[currentLang]; const sub=document.getElementById('command-modal-sub'); sub.textContent=t.modalSent; setTimeout(closeCommandModal,900); }
+function runAIAnalysis(){
+  const loader=document.getElementById('ai-loader'); const msg=document.querySelector('.ai-message');
+  if(loader) loader.classList.add('show');
+  setTimeout(()=>{ if(loader) loader.classList.remove('show'); if(msg) msg.innerHTML=translations[currentLang].aiUpdated; },3000);
+}
 function askAI(){
-  const inp=document.getElementById('ai-input');
-  const q=inp.value.trim();
-  if(!q)return;
-  inp.value='';
-  showPage('insights');
+  const inp=document.getElementById('ai-input'); const q=inp.value.trim(); if(!q) return; inp.value='';
+  const replies=translations[currentLang].chatbotReplies; const reply=replies[Math.floor(Math.random()*replies.length)];
+  const box=document.querySelector('.ai-chat-msg'); if(box) box.textContent=reply;
 }
 
 // ── CHARTS ──
-Chart.defaults.color='rgba(122,144,184,0.8)';
+Chart.defaults.color='rgba(122,144,184,0.85)';
 Chart.defaults.borderColor='rgba(255,255,255,0.05)';
-Chart.defaults.font.family="'Outfit',sans-serif";
-
+Chart.defaults.font.family="'Inter',sans-serif";
 function initCharts(){
+  if(chartsInitialized) return; chartsInitialized=true;
   const months=['Jan','Feb','Mar','Apr','May','Jun'];
   const ctx1=document.getElementById('healthChart');
-  if(!ctx1||ctx1._chartjs)return;
-  new Chart(ctx1,{type:'line',data:{labels:months,datasets:[
-    {label:'Wheat',data:[72,74,76,78,75,78],borderColor:'#00D68F',backgroundColor:'rgba(0,214,143,0.05)',tension:0.4,pointRadius:3,pointBackgroundColor:'#00D68F'},
-    {label:'Corn',data:[68,70,74,80,82,84],borderColor:'#3B9EFF',backgroundColor:'rgba(59,158,255,0.05)',tension:0.4,pointRadius:3,pointBackgroundColor:'#3B9EFF'},
-    {label:'Potato',data:[65,68,70,72,69,71],borderColor:'#F5B731',backgroundColor:'rgba(245,183,49,0.05)',tension:0.4,pointRadius:3,pointBackgroundColor:'#F5B731'}
-  ]},options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(255,255,255,0.03)'}},y:{min:60,max:90,grid:{color:'rgba(255,255,255,0.03)'}}}}});
-
+  if(ctx1){ new Chart(ctx1,{type:'line',data:{labels:months,datasets:[{label:'Wheat',data:[72,74,76,78,75,78],borderColor:'#00D68F',backgroundColor:'rgba(0,214,143,0.05)',tension:0.42,pointRadius:3,pointBackgroundColor:'#00D68F',fill:true},{label:'Corn',data:[68,70,74,80,82,84],borderColor:'#3B9EFF',backgroundColor:'rgba(59,158,255,0.05)',tension:0.42,pointRadius:3,pointBackgroundColor:'#3B9EFF',fill:true},{label:'Potato',data:[65,68,70,72,69,71],borderColor:'#F5B731',backgroundColor:'rgba(245,183,49,0.05)',tension:0.42,pointRadius:3,pointBackgroundColor:'#F5B731',fill:true}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(255,255,255,0.03)'}},y:{min:60,max:90,grid:{color:'rgba(255,255,255,0.03)'}}}}}); }
   const ctx2=document.getElementById('zoneChart');
-  if(!ctx2||ctx2._chartjs)return;
-  new Chart(ctx2,{type:'doughnut',data:{labels:['Healthy','Warning','Critical'],datasets:[{data:[7,3,2],backgroundColor:['rgba(0,214,143,0.8)','rgba(245,183,49,0.8)','rgba(255,92,107,0.8)'],borderColor:'rgba(0,0,0,0)',borderWidth:0}]},options:{responsive:true,cutout:'70%',plugins:{legend:{position:'bottom',labels:{padding:12,font:{size:11}}}}}});
+  if(ctx2){ new Chart(ctx2,{type:'doughnut',data:{labels:['Healthy','Warning','Critical'],datasets:[{data:[7,3,2],backgroundColor:['rgba(0,214,143,0.85)','rgba(245,183,49,0.82)','rgba(255,92,107,0.85)'],borderWidth:0}]},options:{responsive:true,cutout:'70%',plugins:{legend:{position:'bottom',labels:{padding:12,font:{size:11}}}}}}); }
 }
-
 function initAnalyticsCharts(){
   const months=['Oct','Nov','Dec','Jan','Feb','Mar','Apr'];
-  const t1=document.getElementById('trendChart');
-  if(t1&&!t1._chartjs){
-    new Chart(t1,{type:'line',data:{labels:months,datasets:[{data:[65,68,72,75,73,76,78],borderColor:'#00D68F',backgroundColor:'rgba(0,214,143,0.08)',fill:true,tension:0.4,pointRadius:4,pointBackgroundColor:'#00D68F'}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(255,255,255,0.03)'}},y:{min:60,max:85,grid:{color:'rgba(255,255,255,0.03)'}}}}}); 
-  }
-  const t2=document.getElementById('yieldChart');
-  if(t2&&!t2._chartjs){
-    new Chart(t2,{type:'bar',data:{labels:['W-A1','W-A2','Corn B1','Corn B2','Potato E','Barley Z5'],datasets:[{label:'AgroSense',data:[28,84,90,75,82,86],backgroundColor:'rgba(0,214,143,0.7)'},{label:'Regional Avg',data:[72,72,72,72,72,72],backgroundColor:'rgba(59,158,255,0.4)'}]},options:{responsive:true,plugins:{legend:{position:'bottom',labels:{font:{size:10}}}},scales:{x:{grid:{color:'rgba(255,255,255,0.03)'}},y:{grid:{color:'rgba(255,255,255,0.03)'}}}}}); 
-  }
-  const t3=document.getElementById('irrChart');
-  if(t3&&!t3._chartjs){
-    new Chart(t3,{type:'line',data:{labels:months,datasets:[{label:'m³/ha',data:[320,310,290,280,265,250,240],borderColor:'#3B9EFF',backgroundColor:'rgba(59,158,255,0.08)',fill:true,tension:0.4,pointRadius:3}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(255,255,255,0.03)'}},y:{grid:{color:'rgba(255,255,255,0.03)'}}}}}); 
-  }
-  const t4=document.getElementById('zoneCompChart');
-  if(t4&&!t4._chartjs){
-    new Chart(t4,{type:'bar',data:{labels:['A1','A2','B1','B2','P-E','P-W','Z5','PA','PC'],datasets:[{data:[28,72,90,75,65,85,86,88,55],backgroundColor:d=>['rgba(255,92,107,0.7)','rgba(245,183,49,0.7)','rgba(0,214,143,0.7)','rgba(245,183,49,0.7)','rgba(255,92,107,0.7)','rgba(0,214,143,0.7)','rgba(0,214,143,0.7)','rgba(0,214,143,0.7)','rgba(245,183,49,0.7)'][d.dataIndex]}]},options:{responsive:true,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{min:0,max:100,grid:{color:'rgba(255,255,255,0.03)'}},y:{grid:{color:'rgba(255,255,255,0.03)'}}}}}); 
-  }
+  const def=(id, cfg)=>{const el=document.getElementById(id); if(el && !el._chartjs) new Chart(el,cfg); };
+  def('trendChart',{type:'line',data:{labels:months,datasets:[{data:[65,68,72,75,73,76,78],borderColor:'#00D68F',backgroundColor:'rgba(0,214,143,0.08)',fill:true,tension:0.4,pointRadius:4,pointBackgroundColor:'#00D68F'}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(255,255,255,0.03)'}},y:{min:60,max:85,grid:{color:'rgba(255,255,255,0.03)'}}}}});
+  def('yieldChart',{type:'bar',data:{labels:['W-A1','W-A2','Corn B1','Corn B2','Potato E','Barley Z5'],datasets:[{label:'AgroSense',data:[28,84,90,75,82,86],backgroundColor:'rgba(0,214,143,0.75)'},{label:'Regional Avg',data:[72,72,72,72,72,72],backgroundColor:'rgba(59,158,255,0.35)'}]},options:{responsive:true,plugins:{legend:{position:'bottom',labels:{font:{size:10}}}},scales:{x:{grid:{color:'rgba(255,255,255,0.03)'}},y:{grid:{color:'rgba(255,255,255,0.03)'}}}}});
+  def('irrChart',{type:'line',data:{labels:months,datasets:[{label:'m³/ha',data:[320,310,290,280,265,250,240],borderColor:'#3B9EFF',backgroundColor:'rgba(59,158,255,0.08)',fill:true,tension:0.4,pointRadius:3}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(255,255,255,0.03)'}},y:{grid:{color:'rgba(255,255,255,0.03)'}}}}});
+  def('zoneCompChart',{type:'bar',data:{labels:['A1','A2','B1','B2','P-E','P-W','Z5','PA','PC'],datasets:[{data:[28,72,90,75,65,85,86,88,55],backgroundColor:['rgba(255,92,107,0.7)','rgba(245,183,49,0.7)','rgba(0,214,143,0.7)','rgba(245,183,49,0.7)','rgba(255,92,107,0.7)','rgba(0,214,143,0.7)','rgba(0,214,143,0.7)','rgba(0,214,143,0.7)','rgba(245,183,49,0.7)']}]},options:{responsive:true,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{min:0,max:100,grid:{color:'rgba(255,255,255,0.03)'}},y:{grid:{color:'rgba(255,255,255,0.03)'}}}}});
 }
 
-// ── LIVE CLOCK update ──
-setInterval(()=>{
-  const conn=document.querySelector('.nav-conn span');
-  if(conn){const secs=Math.floor(Date.now()/1000);conn.textContent=secs%6===0?'Syncing data...':'All Systems Online';}
-},3000);
+setInterval(()=>{ const conn=document.querySelector('.nav-conn span'); if(conn && !/Syncing|Синхр|Синх/.test(conn.textContent)){ conn.textContent=translations[currentLang].allSystems; } }, 3000);
+document.addEventListener('click', e=>{ if(e.target.id==='command-modal') closeCommandModal(); });
+document.addEventListener('DOMContentLoaded', ()=>{ applyTranslations(); applyConsistencyLogic(); });
 </script>
 </body>
 </html>
