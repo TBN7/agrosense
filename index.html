@@ -887,6 +887,115 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
   .nav-logo{font-size:15px;}
 }
  
+/* ── NORMAL RANGE DISPLAY ── */
+.sensor-range-row{
+  display:flex;align-items:center;gap:6px;
+  margin-bottom:6px;font-size:10px;color:var(--text3);
+  font-family:var(--font-mono);
+}
+.sensor-range-label{flex-shrink:0;}
+.sensor-range-bar{
+  flex:1;height:5px;background:var(--border2);border-radius:999px;
+  position:relative;overflow:visible;
+}
+.sensor-range-zone{
+  position:absolute;top:0;height:100%;
+  background:rgba(0,214,143,0.25);border-radius:999px;
+}
+.sensor-range-dot{
+  position:absolute;top:50%;transform:translate(-50%,-50%);
+  width:9px;height:9px;border-radius:50%;border:2px solid var(--bg);
+  z-index:2;
+}
+.sensor-range-vals{display:flex;justify-content:space-between;font-size:10px;color:var(--text3);margin-top:2px;}
+
+/* ── WHAT DOES THIS MEAN ── */
+.wtm-btn{
+  display:inline-flex;align-items:center;gap:4px;
+  background:none;border:1px solid var(--border2);border-radius:6px;
+  color:var(--text3);font-size:10px;font-family:var(--font-mono);
+  padding:3px 8px;cursor:pointer;transition:all 0.2s;
+  margin-top:6px;
+}
+.wtm-btn:hover{border-color:rgba(59,158,255,0.4);color:var(--blue);}
+.wtm-panel{
+  display:none;margin-top:8px;padding:10px 12px;
+  background:rgba(59,158,255,0.06);
+  border:1px solid rgba(59,158,255,0.18);
+  border-radius:var(--radius-sm);
+  font-size:11px;color:var(--text);line-height:1.6;
+  animation:fadeUp 0.2s ease;
+}
+.wtm-panel.open{display:block;}
+.wtm-panel strong{color:var(--blue);display:block;margin-bottom:4px;font-size:10px;font-family:var(--font-mono);letter-spacing:0.5px;text-transform:uppercase;}
+
+/* ── PLAN OF ACTION PAGE ── */
+.plan-header-bar{
+  display:flex;align-items:center;gap:12px;
+  background:linear-gradient(135deg,rgba(59,158,255,0.06) 0%,rgba(0,214,143,0.06) 100%);
+  border:1px solid rgba(59,158,255,0.18);border-radius:var(--radius);
+  padding:20px;margin-bottom:20px;position:relative;overflow:hidden;
+}
+.plan-header-bar::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--blue),var(--green),transparent);}
+.plan-header-icon{width:44px;height:44px;background:var(--blue-dim);border:1px solid rgba(59,158,255,0.3);border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.plan-header-text h2{font-family:var(--font-head);font-size:16px;font-weight:700;}
+.plan-header-text p{font-size:12px;color:var(--text2);margin-top:3px;}
+.plan-stat{margin-left:auto;text-align:center;}
+.plan-stat-val{font-family:var(--font-head);font-size:22px;font-weight:700;color:var(--amber);}
+.plan-stat-label{font-size:10px;color:var(--text2);font-family:var(--font-mono);}
+
+.plan-step{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:18px 20px;
+  margin-bottom:12px;display:flex;align-items:flex-start;gap:16px;
+  transition:border-color 0.2s,transform 0.15s;cursor:default;
+}
+.plan-step:hover{border-color:var(--border2);transform:translateX(2px);}
+.plan-step.priority-critical{border-left:3px solid var(--red);}
+.plan-step.priority-high{border-left:3px solid var(--amber);}
+.plan-step.priority-medium{border-left:3px solid var(--blue);}
+.plan-step.priority-low{border-left:3px solid var(--green);}
+
+.plan-step-num{
+  width:36px;height:36px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-head);font-size:15px;font-weight:700;
+  flex-shrink:0;border:2px solid var(--border2);color:var(--text2);
+}
+.plan-step.priority-critical .plan-step-num{border-color:var(--red);color:var(--red);background:var(--red-dim);}
+.plan-step.priority-high .plan-step-num{border-color:var(--amber);color:var(--amber);background:var(--amber-dim);}
+.plan-step.priority-medium .plan-step-num{border-color:var(--blue);color:var(--blue);background:var(--blue-dim);}
+.plan-step.priority-low .plan-step-num{border-color:var(--green);color:var(--green);background:var(--green-dim);}
+
+.plan-step-icon{font-size:22px;flex-shrink:0;margin-top:4px;}
+.plan-step-body{flex:1;min-width:0;}
+.plan-step-title{font-family:var(--font-head);font-size:14px;font-weight:600;margin-bottom:4px;}
+.plan-step-desc{font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:8px;}
+.plan-step-meta{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.plan-step-zone{font-size:10px;font-family:var(--font-mono);background:var(--card2);border:1px solid var(--border);color:var(--text2);padding:2px 8px;border-radius:4px;}
+.plan-step-priority{font-size:10px;font-family:var(--font-mono);padding:2px 8px;border-radius:10px;}
+.plan-step-priority.critical{background:var(--red-dim);color:var(--red);}
+.plan-step-priority.high{background:var(--amber-dim);color:var(--amber);}
+.plan-step-priority.medium{background:var(--blue-dim);color:var(--blue);}
+.plan-step-priority.low{background:var(--green-dim);color:var(--green);}
+.plan-step-time{font-size:10px;color:var(--text3);font-family:var(--font-mono);margin-left:auto;}
+
+.plan-done-btn{
+  background:var(--card2);border:1px solid var(--border);
+  border-radius:var(--radius-sm);padding:5px 12px;
+  font-size:11px;color:var(--text2);cursor:pointer;
+  font-family:var(--font-mono);transition:all 0.2s;
+}
+.plan-done-btn:hover{border-color:rgba(0,214,143,0.4);color:var(--green);}
+.plan-step.done{opacity:0.5;}
+.plan-step.done .plan-step-title{text-decoration:line-through;}
+
+.plan-section-label{
+  font-size:10px;font-family:var(--font-mono);letter-spacing:1.5px;
+  text-transform:uppercase;color:var(--text3);
+  margin:20px 0 10px;padding-left:4px;
+}
+
 /* ── ZONE INSIGHT REPORT CARD ── */
 .zone-insight-report{
   margin-top:24px;
@@ -1248,6 +1357,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
       <div class="nav-item" onclick="showPage('sensors',this)"><span class="nav-icon">◉</span> Sensors<span class="nav-badge">2</span></div>
       <div class="nav-item" onclick="showPage('insights',this)"><span class="nav-icon">✦</span> AI Insights<span class="nav-badge green">AI</span></div>
       <div class="nav-item" onclick="showPage('alerts',this)"><span class="nav-icon">⚠</span> Alerts<span class="nav-badge">4</span></div>
+      <div class="nav-item" onclick="showPage('plan',this)"><span class="nav-icon">📋</span> Plan of Action</div>
       <div class="sidebar-section">Analytics</div>
       <div class="nav-item" onclick="showPage('analytics',this)"><span class="nav-icon">📊</span> Reports</div>
       <div class="sidebar-section">System</div>
@@ -1777,7 +1887,117 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
           <div class="alert-time">09:15<br>Yesterday</div>
         </div>
       </div>
- 
+
+      <!-- ═══ PLAN OF ACTION ═══ -->
+      <div class="page" id="page-plan">
+        <div class="page-header">
+          <div>
+            <div class="page-title" data-i18n-plan="plan_title">Plan of Action</div>
+            <div class="page-sub" data-i18n-plan="plan_sub">Priority-sorted steps to improve your farm right now</div>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn-outline" onclick="markAllDone()">✓ Mark All Done</button>
+            <button class="btn-outline" onclick="resetPlan()">⟳ Reset</button>
+          </div>
+        </div>
+        <div class="plan-header-bar">
+          <div class="plan-header-icon">📋</div>
+          <div class="plan-header-text">
+            <h2 data-i18n-plan="plan_ai_title">AI-Generated Action Plan</h2>
+            <p data-i18n-plan="plan_ai_sub">Updated based on current sensor readings · 9 actions queued</p>
+          </div>
+          <div style="display:flex;gap:20px;margin-left:auto;">
+            <div class="plan-stat"><div class="plan-stat-val" style="color:var(--red)">2</div><div class="plan-stat-label" data-i18n-plan="plan_stat_critical">CRITICAL</div></div>
+            <div class="plan-stat"><div class="plan-stat-val" style="color:var(--amber)">3</div><div class="plan-stat-label" data-i18n-plan="plan_stat_high">HIGH</div></div>
+            <div class="plan-stat"><div class="plan-stat-val" style="color:var(--blue)">4</div><div class="plan-stat-label" data-i18n-plan="plan_stat_routine">ROUTINE</div></div>
+          </div>
+        </div>
+        <div class="plan-section-label" data-i18n-plan="plan_section_urgent">🔴 Urgent — Act Within 6 Hours</div>
+        <div class="plan-step priority-critical" id="pstep-1">
+          <div class="plan-step-num">1</div><div class="plan-step-icon">💧</div>
+          <div class="plan-step-body">
+            <div class="plan-step-title" data-i18n-plan="ps1_title">Activate drip irrigation in Wheat Zone A1</div>
+            <div class="plan-step-desc" data-i18n-plan="ps1_desc">Soil moisture at 22% is critically below the 40% minimum threshold. Temperature at 31°C is accelerating evaporation. Immediate drip irrigation is required to prevent irreversible drought stress and protect an estimated ₸ 2.4M of crop value.</div>
+            <div class="plan-step-meta"><span class="plan-step-zone">Wheat Zone A1</span><span class="plan-step-priority critical" data-i18n-plan="plan_critical">CRITICAL</span><span class="plan-step-time" data-i18n-plan="ps1_time">⏱ Do within 6 hours</span></div>
+          </div>
+          <button class="plan-done-btn" onclick="markStepDone('pstep-1',this)" data-i18n-plan="plan_done">✓ Done</button>
+        </div>
+        <div class="plan-step priority-critical" id="pstep-2">
+          <div class="plan-step-num">2</div><div class="plan-step-icon">🚁</div>
+          <div class="plan-step-body">
+            <div class="plan-step-title" data-i18n-plan="ps2_title">Dispatch drone to Potato Field East — smoke anomaly</div>
+            <div class="plan-step-desc" data-i18n-plan="ps2_desc">Smoke particle concentration at 148 µg/m³ — hazardous level. NNE wind at 18 km/h is spreading particles toward adjacent pastures. Drone inspection must confirm whether this is an active fire, burning stubble, or industrial smoke before escalation.</div>
+            <div class="plan-step-meta"><span class="plan-step-zone">Potato Field East</span><span class="plan-step-priority critical" data-i18n-plan="plan_critical">CRITICAL</span><span class="plan-step-time" data-i18n-plan="ps2_time">⏱ Immediately</span></div>
+          </div>
+          <button class="plan-done-btn" onclick="markStepDone('pstep-2',this)" data-i18n-plan="plan_done">✓ Done</button>
+        </div>
+        <div class="plan-section-label" data-i18n-plan="plan_section_today">🟡 Today — Complete by End of Day</div>
+        <div class="plan-step priority-high" id="pstep-3">
+          <div class="plan-step-num">3</div><div class="plan-step-icon">🐄</div>
+          <div class="plan-step-body">
+            <div class="plan-step-title" data-i18n-plan="ps3_title">Relocate portion of herd from Cattle Pasture C</div>
+            <div class="plan-step-desc" data-i18n-plan="ps3_desc">Grass density at 39%, below the 50% sustainable grazing threshold. 691 head remain concentrated in the area. Move at least 200 head to Pasture A (81% grass density) to allow Pasture C a minimum 3-week recovery rest period.</div>
+            <div class="plan-step-meta"><span class="plan-step-zone">Cattle Pasture C</span><span class="plan-step-priority high" data-i18n-plan="plan_high">HIGH</span><span class="plan-step-time" data-i18n-plan="ps3_time">⏱ Today</span></div>
+          </div>
+          <button class="plan-done-btn" onclick="markStepDone('pstep-3',this)" data-i18n-plan="plan_done">✓ Done</button>
+        </div>
+        <div class="plan-step priority-high" id="pstep-4">
+          <div class="plan-step-num">4</div><div class="plan-step-icon">🧪</div>
+          <div class="plan-step-body">
+            <div class="plan-step-title" data-i18n-plan="ps4_title">Apply lime to correct pH in Corn Zone B2</div>
+            <div class="plan-step-desc" data-i18n-plan="ps4_desc">Soil pH at 5.1 is significantly below the 6.0–7.0 optimal range for corn. Acidic soil reduces nutrient absorption — especially phosphorus and calcium — leading to stunted growth. Apply agricultural lime at 2–3 t/ha. Re-test in 2 weeks.</div>
+            <div class="plan-step-meta"><span class="plan-step-zone">Corn Zone B2</span><span class="plan-step-priority high" data-i18n-plan="plan_high">HIGH</span><span class="plan-step-time" data-i18n-plan="ps4_time">⏱ Within 48 hours</span></div>
+          </div>
+          <button class="plan-done-btn" onclick="markStepDone('pstep-4',this)" data-i18n-plan="plan_done">✓ Done</button>
+        </div>
+        <div class="plan-step priority-high" id="pstep-5">
+          <div class="plan-step-num">5</div><div class="plan-step-icon">🚰</div>
+          <div class="plan-step-body">
+            <div class="plan-step-title" data-i18n-plan="ps5_title">Refill water tank at Cattle Pasture C</div>
+            <div class="plan-step-desc" data-i18n-plan="ps5_desc">Water tank level at 42% and dropping. With 691 head and dry conditions (humidity 46%), the tank will reach critical level within 18–24 hours. Arrange emergency tanker refill or pipeline top-up today to prevent livestock dehydration.</div>
+            <div class="plan-step-meta"><span class="plan-step-zone">Cattle Pasture C</span><span class="plan-step-priority high" data-i18n-plan="plan_high">HIGH</span><span class="plan-step-time" data-i18n-plan="ps5_time">⏱ Within 24 hours</span></div>
+          </div>
+          <button class="plan-done-btn" onclick="markStepDone('pstep-5',this)" data-i18n-plan="plan_done">✓ Done</button>
+        </div>
+        <div class="plan-section-label" data-i18n-plan="plan_section_routine">🟢 This Week — Routine Maintenance</div>
+        <div class="plan-step priority-medium" id="pstep-6">
+          <div class="plan-step-num">6</div><div class="plan-step-icon">🌾</div>
+          <div class="plan-step-body">
+            <div class="plan-step-title" data-i18n-plan="ps6_title">Begin seeding operations in Barley Zone Z5</div>
+            <div class="plan-step-desc" data-i18n-plan="ps6_desc">Soil temperature at 18°C and moisture at 49% represent an optimal germination window with 92% AI confidence. Start seeding within 72 hours to capture the +18% germination rate advantage before temperatures rise.</div>
+            <div class="plan-step-meta"><span class="plan-step-zone">Barley Zone Z5</span><span class="plan-step-priority medium" data-i18n-plan="plan_opportunity">OPPORTUNITY</span><span class="plan-step-time" data-i18n-plan="ps6_time">⏱ Within 72 hours</span></div>
+          </div>
+          <button class="plan-done-btn" onclick="markStepDone('pstep-6',this)" data-i18n-plan="plan_done">✓ Done</button>
+        </div>
+        <div class="plan-step priority-medium" id="pstep-7">
+          <div class="plan-step-num">7</div><div class="plan-step-icon">🧬</div>
+          <div class="plan-step-body">
+            <div class="plan-step-title" data-i18n-plan="ps7_title">Apply nitrogen fertilizer to Wheat A1 and Corn B2</div>
+            <div class="plan-step-desc" data-i18n-plan="ps7_desc">Nitrogen at 41 ppm (Wheat A1) and 37 ppm (Corn B2) — below the 50–100 ppm optimal range. Schedule foliar spray or soil application this week. Do not apply during active irrigation to avoid runoff loss.</div>
+            <div class="plan-step-meta"><span class="plan-step-zone">Wheat A1 · Corn B2</span><span class="plan-step-priority medium" data-i18n-plan="plan_medium">MEDIUM</span><span class="plan-step-time" data-i18n-plan="ps7_time">⏱ This week</span></div>
+          </div>
+          <button class="plan-done-btn" onclick="markStepDone('pstep-7',this)" data-i18n-plan="plan_done">✓ Done</button>
+        </div>
+        <div class="plan-step priority-medium" id="pstep-8">
+          <div class="plan-step-num">8</div><div class="plan-step-icon">💨</div>
+          <div class="plan-step-body">
+            <div class="plan-step-title" data-i18n-plan="ps8_title">Raise humidity via morning misting in Wheat A1 and Corn B2</div>
+            <div class="plan-step-desc" data-i18n-plan="ps8_desc">Humidity at 38% (Wheat A1) and 44% (Corn B2) is below the 45–70% optimal range. Consider overhead misting irrigation during early morning (6–8 AM) to raise ambient humidity and reduce crop heat stress without excessive water use.</div>
+            <div class="plan-step-meta"><span class="plan-step-zone">Wheat A1 · Corn B2</span><span class="plan-step-priority medium" data-i18n-plan="plan_medium">MEDIUM</span><span class="plan-step-time" data-i18n-plan="ps8_time">⏱ This week</span></div>
+          </div>
+          <button class="plan-done-btn" onclick="markStepDone('pstep-8',this)" data-i18n-plan="plan_done">✓ Done</button>
+        </div>
+        <div class="plan-step priority-low" id="pstep-9">
+          <div class="plan-step-num">9</div><div class="plan-step-icon">🔋</div>
+          <div class="plan-step-body">
+            <div class="plan-step-title" data-i18n-plan="ps9_title">Check GPS collar batteries and calibrate all sensors</div>
+            <div class="plan-step-desc" data-i18n-plan="ps9_desc">Routine maintenance — verify GPS collar batteries on all 847 + 691 head across Pastures A and C. Calibrate smoke and temperature sensors in all zones. Schedule system-wide sensor audit for accurate readings entering the peak growing season.</div>
+            <div class="plan-step-meta"><span class="plan-step-zone">All Zones</span><span class="plan-step-priority low" data-i18n-plan="plan_low">ROUTINE</span><span class="plan-step-time" data-i18n-plan="ps9_time">⏱ This week</span></div>
+          </div>
+          <button class="plan-done-btn" onclick="markStepDone('pstep-9',this)" data-i18n-plan="plan_done">✓ Done</button>
+        </div>
+      </div>
+
       <!-- ═══ ANALYTICS ═══ -->
       <div class="page" id="page-analytics">
         <div class="page-header">
@@ -2029,6 +2249,9 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
     <span class="mob-icon">⚠</span>Alerts
     <span class="mob-badge">4</span>
   </div>
+  <div class="mob-nav-item" id="mob-plan" onclick="showPage('plan',null);setMobActive('mob-plan')">
+    <span class="mob-icon">📋</span>Plan
+  </div>
   <div class="mob-nav-item" id="mob-insights" onclick="showPage('insights',null);setMobActive('mob-insights')">
     <span class="mob-icon">✦</span>AI
   </div>
@@ -2220,7 +2443,7 @@ function showPage(page,navEl){
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   if(navEl){navEl.classList.add('active');}
   else{
-    const map={overview:0,zones:1,sensors:2,insights:3,alerts:4,analytics:5,settings:6};
+    const map={overview:0,zones:1,sensors:2,insights:3,alerts:4,plan:5,analytics:6,settings:7};
     const items=document.querySelectorAll('.nav-item');
     if(items[map[page]])items[map[page]].classList.add('active');
   }
@@ -2284,6 +2507,7 @@ const I18N = {
     sys_sensors:'Sensors Online', sys_ai:'AI Engine', sys_satellite:'Satellite Feed',
     sys_drone:'Drone Status', sys_latency:'Data Latency', sys_scan:'Last AI Scan',
     sys_op:'Operational', sys_active:'Active', sys_standby:'Standby',
+    nav_plan:'Plan of Action',
   },
   RU: {
     nav_overview:'Обзор', nav_zones:'Зоны', nav_sensors:'Датчики',
@@ -2327,6 +2551,7 @@ const I18N = {
     sys_sensors:'Датчики онлайн', sys_ai:'ИИ Движок', sys_satellite:'Спутник',
     sys_drone:'Дрон', sys_latency:'Задержка', sys_scan:'Последний скан',
     sys_op:'Работает', sys_active:'Активен', sys_standby:'Ожидание',
+    nav_plan:'План действий',
   },
   KZ: {
     nav_overview:'Шолу', nav_zones:'Аймақтар', nav_sensors:'Сенсорлар',
@@ -2370,6 +2595,7 @@ const I18N = {
     sys_sensors:'Желідегі сенсорлар', sys_ai:'ЖИ қозғалтқышы', sys_satellite:'Жерсерік',
     sys_drone:'Дрон', sys_latency:'Кідіріс', sys_scan:'Соңғы скан',
     sys_op:'Жұмыс істейді', sys_active:'Белсенді', sys_standby:'Күту режимі',
+    nav_plan:'Іс-қимыл жоспары',
   }
 };
  
@@ -2380,6 +2606,9 @@ function setLang(el, lang){
   el.classList.add('active');
   currentLang = lang;
   applyI18n(lang);
+  applyPlanI18n(lang);
+  // Re-render sensor panel to update WTM and range labels
+  if(activeZoneKey) renderSensorPanel(activeZoneKey);
 }
  
 function t(key){ return (I18N[currentLang]||I18N.EN)[key] || (I18N.EN[key] || key); }
@@ -2391,7 +2620,7 @@ function applyI18n(lang){
   const setT = (id, key) => { const el=document.getElementById(id); if(el) el.textContent=d[key]||el.textContent; };
   // Nav items (sidebar)
   const navItems = document.querySelectorAll('.nav-item');
-  const navKeys  = ['nav_overview','nav_zones','nav_sensors','nav_insights','nav_alerts','nav_reports','nav_settings'];
+  const navKeys  = ['nav_overview','nav_zones','nav_sensors','nav_insights','nav_alerts','nav_plan','nav_reports','nav_settings'];
   navItems.forEach((el,i)=>{
     if(!navKeys[i]) return;
     const icon = el.querySelector('.nav-icon');
@@ -2470,8 +2699,20 @@ function applyI18n(lang){
   const sysKeys = ['sys_sensors','sys_ai','sys_satellite','sys_drone','sys_latency','sys_scan'];
   sysLabels.forEach((el,i)=>{ if(sysKeys[i]) el.textContent=d[sysKeys[i]]||el.textContent; });
  
+  // Mobile bottom nav labels
+  const mobLabels = {EN:['Home','Zones','Sensors','Alerts','Plan','AI'],RU:['Главная','Зоны','Датчики','Оповещ.','План','ИИ'],KZ:['Басты','Аймақтар','Сенсорлар','Ескерту','Жоспар','ЖИ']};
+  const mobIds = ['mob-overview','mob-zones','mob-sensors','mob-alerts','mob-plan','mob-insights'];
+  const mls = mobLabels[lang]||mobLabels.EN;
+  mobIds.forEach((id,i)=>{
+    const mel=document.getElementById(id);
+    if(!mel) return;
+    mel.childNodes.forEach(n=>{if(n.nodeType===3&&n.textContent.trim()){n.textContent=mls[i]||n.textContent.trim();}});
+  });
+
   // Update html lang attr
   document.documentElement.lang = lang.toLowerCase();
+  // Apply plan page translations
+  applyPlanI18n(lang);
 }
  
  
@@ -2570,7 +2811,377 @@ setInterval(()=>{
   const conn=document.querySelector('.nav-conn span');
   if(conn){const secs=Math.floor(Date.now()/1000);conn.textContent=secs%6===0?'Syncing data...':'All Systems Online';}
 },3000);
-const SENSOR_ZONE_DATA = {
+
+// ══════════════════════════════════════════
+// ── SENSOR NORMAL RANGES ──
+// ══════════════════════════════════════════
+const SENSOR_RANGES = {
+  soil_moisture: { min:40, max:65,   unit:'%',    label:{EN:'Normal: 40–65%', RU:'Норма: 40–65%', KZ:'Норма: 40–65%'} },
+  temperature:   { min:18, max:26,   unit:'°C',   label:{EN:'Normal: 18–26°C', RU:'Норма: 18–26°C', KZ:'Норма: 18–26°C'} },
+  smoke:         { min:0,  max:10,   unit:'ppm',  label:{EN:'Normal: 0–10 ppm', RU:'Норма: 0–10 ppm', KZ:'Норма: 0–10 ppm'} },
+  salinity:      { min:0,  max:2.0,  unit:'dS/m', label:{EN:'Normal: 0–2.0 dS/m', RU:'Норма: 0–2.0 dS/m', KZ:'Норма: 0–2.0 dS/m'} },
+  water_flow:    { min:3.0,max:5.5,  unit:'m³/h', label:{EN:'Normal: 3.0–5.5 m³/h', RU:'Норма: 3.0–5.5 м³/ч', KZ:'Норма: 3.0–5.5 м³/с'} },
+  ph:            { min:6.0,max:7.0,  unit:'pH',   label:{EN:'Normal: 6.0–7.0 pH', RU:'Норма: 6.0–7.0 pH', KZ:'Норма: 6.0–7.0 pH'} },
+  humidity:      { min:45, max:70,   unit:'%',    label:{EN:'Normal: 45–70%', RU:'Норма: 45–70%', KZ:'Норма: 45–70%'} },
+  wind:          { min:0,  max:25,   unit:'km/h', label:{EN:'Normal: 0–25 km/h', RU:'Норма: 0–25 км/ч', KZ:'Норма: 0–25 км/с'} },
+  nitrogen:      { min:50, max:100,  unit:'ppm',  label:{EN:'Normal: 50–100 ppm', RU:'Норма: 50–100 ppm', KZ:'Норма: 50–100 ppm'} },
+  solar:         { min:300,max:900,  unit:'W/m²', label:{EN:'Normal: 300–900 W/m²', RU:'Норма: 300–900 Вт/м²', KZ:'Норма: 300–900 Вт/м²'} },
+  gps:           { min:0,  max:1200, unit:'head', label:{EN:'All collars tracked', RU:'Все ошейники отслеживаются', KZ:'Барлық жағалар бақыланады'} },
+  body_temp:     { min:38.0,max:39.5,unit:'°C',   label:{EN:'Normal: 38.0–39.5°C', RU:'Норма: 38.0–39.5°C', KZ:'Норма: 38.0–39.5°C'} },
+  water_tank:    { min:40, max:100,  unit:'%',    label:{EN:'Normal: >40%', RU:'Норма: >40%', KZ:'Норма: >40%'} },
+  fence_voltage: { min:5.0,max:10.0, unit:'kV',   label:{EN:'Normal: 5.0–10.0 kV', RU:'Норма: 5.0–10.0 кВ', KZ:'Норма: 5.0–10.0 кВ'} },
+  grass_density: { min:50, max:100,  unit:'%',    label:{EN:'Normal: >50%', RU:'Норма: >50%', KZ:'Норма: >50%'} },
+  motion:        { min:null,max:null,unit:'',      label:{EN:'Normal: Regular movement', RU:'Норма: Обычное движение', KZ:'Норма: Қалыпты қозғалыс'} },
+  feed_level:    { min:30, max:100,  unit:'%',    label:{EN:'Normal: >30%', RU:'Норма: >30%', KZ:'Норма: >30%'} },
+};
+
+// ── SENSOR EXPLANATIONS (multilingual) ──
+const SENSOR_EXPLANATIONS = {
+  EN: {
+    soil_moisture: (v,s)=> s==='alert' ? `⚠ At ${v}%, soil is severely dry — crops are under drought stress. The root zone cannot absorb nutrients properly. Immediate irrigation is critical to prevent yield loss.`
+      : s==='watch' ? `At ${v}%, moisture is slightly below the 40–65% optimal range. Plants are beginning to experience mild stress. Monitor closely and consider irrigation soon.`
+      : `At ${v}%, soil moisture is within the ideal 40–65% range. Roots have good access to water and nutrients. Maintain current irrigation schedule.`,
+    temperature:   (v,s)=> s==='alert' ? `At ${v}°C, temperature is dangerously high for crops. Heat stress is accelerating evapotranspiration and can cause irreversible damage above 30°C. Activate cooling irrigation and shade if possible.`
+      : s==='watch' ? `At ${v}°C, temperature is slightly elevated above the 18–26°C optimal range. Monitor for signs of heat stress — wilting, leaf roll, or color change.`
+      : `At ${v}°C, temperature is within the ideal 18–26°C range. Optimal photosynthesis and growth conditions are maintained.`,
+    smoke:         (v,s)=> s==='alert' ? `At ${v} µg/m³, smoke concentration is at a hazardous level. This may indicate an active fire or severe burning nearby. Evacuate personnel, dispatch drone inspection immediately, and alert emergency services.`
+      : s==='watch' ? `At ${v} ppm, mild smoke particles are detected. This could be agricultural burning or distant smoke. Monitor for rapid increase and identify the source.`
+      : `At ${v} ppm, air quality is clear with no smoke anomaly. The zone is safe from fire-related hazards.`,
+    salinity:      (v,s)=> s==='alert' ? `At ${v} dS/m, salt concentration is dangerously high. High salinity prevents plant roots from absorbing water (osmotic stress) and leads to leaf burn and crop failure. Apply leaching irrigation.`
+      : s==='watch' ? `At ${v} dS/m, salinity is approaching the upper limit. Some salt-sensitive crops may show reduced growth. Avoid using high-salt water sources.`
+      : `At ${v} dS/m, salinity is within the safe range (0–2.0 dS/m). Soil chemistry supports healthy root function.`,
+    water_flow:    (v,s)=> s==='alert' ? `At ${v} m³/h, water flow is outside normal operating range. This may indicate a pipe burst, valve malfunction, or unauthorized use. Inspect the irrigation system immediately.`
+      : s==='watch' ? `At ${v} m³/h, flow is above the baseline. This could indicate a minor leak or unscheduled irrigation. Check for pipe integrity and zone valve status.`
+      : `At ${v} m³/h, water flow is within the 3.0–5.5 m³/h normal range. Irrigation is operating efficiently.`,
+    ph:            (v,s)=> s==='alert' ? (parseFloat(v)<6 ? `At pH ${v}, soil is too acidic (optimal: 6.0–7.0). Acidic soil locks up phosphorus, calcium, and magnesium — crops cannot absorb these nutrients even if they are present. Apply agricultural lime to raise pH.`
+        : `At pH ${v}, soil is too alkaline (optimal: 6.0–7.0). High pH reduces availability of iron, manganese, and zinc. Apply sulfur or acidifying fertilizers to lower pH.`)
+      : s==='watch' ? `At pH ${v}, soil is slightly outside the 6.0–7.0 optimal range. Minor nutrient availability issues may occur. Consider pH amendment if trend continues.`
+      : `At pH ${v}, soil acidity is within the ideal 6.0–7.0 range. Nutrient availability is maximized for healthy crop growth.`,
+    humidity:      (v,s)=> s==='alert' ? `At ${v}% humidity, conditions are extremely stressful. Very low humidity causes rapid leaf water loss (transpiration) faster than roots can supply. Very high humidity promotes fungal disease. Take corrective action.`
+      : s==='watch' ? `At ${v}%, humidity is outside the 45–70% optimal range. ${parseFloat(v)<45?'Low humidity is increasing plant water stress and evaporation.':'High humidity may promote fungal disease. Ensure good air circulation.'}`
+      : `At ${v}%, relative humidity is within the ideal 45–70% range. Atmospheric moisture supports healthy transpiration and crop growth.`,
+    wind:          (v,s)=> s==='alert' ? `At ${v} km/h, wind speed is very high. Strong winds cause mechanical damage to crops, increase water evaporation, and may spread fire or disease spores. Consider windbreak deployment.`
+      : s==='watch' ? `At ${v} km/h, wind is above moderate levels. May accelerate soil drying and pollen disruption during flowering. Monitor crop stability.`
+      : `At ${v} km/h, wind speed is within the normal 0–25 km/h range. Conditions are suitable for field operations.`,
+    nitrogen:      (v,s)=> s==='alert' ? `At ${v} ppm, nitrogen is critically low. Nitrogen deficiency causes yellowing leaves (chlorosis), stunted growth, and significantly reduces yield. Apply nitrogen fertilizer immediately.`
+      : s==='watch' ? `At ${v} ppm, nitrogen is below the 50–100 ppm optimal range. Early signs of deficiency may appear. Schedule fertilizer application soon.`
+      : `At ${v} ppm, nitrogen levels are within the ideal 50–100 ppm range. Crops have sufficient nutrients for healthy vegetative growth.`,
+    solar:         (v,s)=> s==='alert' ? `At ${v} W/m², solar radiation is outside the optimal range. ${parseFloat(v)<300?'Very low radiation limits photosynthesis and slows growth.':'Extreme radiation combined with heat may cause sunscald and increase water demand.'}` 
+      : s==='watch' ? `At ${v} W/m², solar radiation is at an elevated level. High radiation increases crop water demand and evaporation.`
+      : `At ${v} W/m², solar radiation is within the optimal 300–900 W/m² range. Photosynthesis conditions are excellent for crop growth.`,
+    gps:           (v,s)=> s==='watch' ? `${v} collars are responding, but density is elevated. Livestock may be clustering in a small area, which could indicate overgrazing or a water/feed shortage. Inspect the pasture.`
+      : `All ${v} GPS collars are responding. Livestock distribution across the pasture is normal and balanced.`,
+    body_temp:     (v,s)=> s==='alert' ? `At ${v}°C, livestock body temperature is outside the safe 38.0–39.5°C range. ${parseFloat(v)>39.5?'Fever may indicate infection, heat stress, or disease. Isolate affected animals and call a vet.':'Hypothermia risk — animals may be cold-stressed. Check shelter and bedding.'}`
+      : s==='watch' ? `At ${v}°C, body temperature is slightly elevated. Monitor animals for signs of respiratory distress or reduced feed intake.`
+      : `At ${v}°C, livestock body temperature is within the healthy 38.0–39.5°C range. No health concerns detected.`,
+    water_tank:    (v,s)=> s==='alert' ? `At ${v}%, the water tank is critically low. Livestock may not have enough water to survive the day. Arrange emergency water supply immediately.`
+      : s==='watch' ? `At ${v}%, the tank is approaching low levels. Schedule a refill within the next 24 hours to avoid running out during peak drinking hours.`
+      : `At ${v}%, the water tank is sufficiently full. Livestock water supply is secure.`,
+    fence_voltage: (v,s)=> s==='alert' ? `At ${v} kV, fence voltage is outside the safe 5.0–10.0 kV range. ${parseFloat(v)<5?'Low voltage means the fence may not deter livestock breakout or predator entry — inspect for faults.':'Dangerously high voltage could harm animals. Check the energizer settings.'}`
+      : s==='watch' ? `At ${v} kV, fence voltage is slightly below optimal. It may still deter animals but a fault could cause failure. Inspect the line.`
+      : `At ${v} kV, fence is fully energized within the 5.0–10.0 kV safe range. The perimeter is secure.`,
+    grass_density: (v,s)=> s==='alert' ? `At ${v}%, grass density is critically low — well below the 50% sustainable grazing threshold. The pasture is being overgrazed and will not regenerate without rest. Relocate livestock immediately.`
+      : s==='watch' ? `At ${v}%, grass cover is declining toward the minimum threshold. Reduce grazing pressure and consider rotational grazing to allow recovery.`
+      : `At ${v}%, grass density is excellent. The pasture supports healthy grazing with plenty of cover for natural regrowth.`,
+    motion:        (v,s)=> s==='watch' ? `Unusual movement pattern detected. Animals may be clustering, showing distress behavior, or reacting to a threat. Investigate the pasture.`
+      : `Animal movement is normal and balanced across the pasture. No clustering or distress behavior detected.`,
+    feed_level:    (v,s)=> s==='alert' ? `At ${v}%, feed reserves are critically low. Livestock may not receive adequate nutrition. Arrange emergency feed delivery immediately.`
+      : s==='watch' ? `At ${v}%, feed is running low. Schedule a top-up delivery within the next few days to avoid shortages.`
+      : `At ${v}%, feed reserves are in a healthy state. Livestock nutrition is well-supported.`,
+  },
+  RU: {
+    soil_moisture: (v,s)=> s==='alert' ? `⚠ При ${v}% почва критически сухая — культуры испытывают засухный стресс. Корни не могут нормально поглощать питательные вещества. Срочный полив необходим для предотвращения потери урожая.`
+      : s==='watch' ? `При ${v}% влажность немного ниже оптимального диапазона 40–65%. Растения начинают испытывать лёгкий стресс. Следите и рассмотрите полив в ближайшее время.`
+      : `При ${v}% влажность почвы находится в идеальном диапазоне 40–65%. Корни имеют хороший доступ к воде и питательным веществам.`,
+    temperature:   (v,s)=> s==='alert' ? `При ${v}°C температура опасно высокая для культур. Тепловой стресс ускоряет испарение и может вызвать необратимый ущерб выше 30°C. Активируйте охлаждающий полив.`
+      : s==='watch' ? `При ${v}°C температура немного выше оптимального диапазона 18–26°C. Следите за признаками теплового стресса — увяданием, скручиванием листьев.`
+      : `При ${v}°C температура находится в оптимальном диапазоне 18–26°C. Условия для фотосинтеза и роста идеальны.`,
+    smoke:         (v,s)=> s==='alert' ? `При ${v} мкг/м³ концентрация дыма на опасном уровне. Возможен активный пожар поблизости. Немедленно эвакуируйте персонал и запустите дрон для инспекции.`
+      : s==='watch' ? `При ${v} ppm обнаружены лёгкие частицы дыма. Возможно сельскохозяйственное сжигание или отдалённый дым. Следите за развитием ситуации.`
+      : `При ${v} ppm качество воздуха чистое, аномалий дыма нет. Зона в безопасности.`,
+    salinity:      (v,s)=> s==='alert' ? `При ${v} дС/м концентрация соли опасно высокая. Высокая солёность препятствует поглощению воды корнями и приводит к ожогу листьев. Применяйте промывной полив.`
+      : s==='watch' ? `При ${v} дС/м солёность приближается к верхней границе. Рассмотрите использование воды с меньшим содержанием соли.`
+      : `При ${v} дС/м солёность в безопасном диапазоне (0–2.0 дС/м). Почвенная химия поддерживает здоровую корневую функцию.`,
+    water_flow:    (v,s)=> s==='alert' ? `При ${v} м³/ч поток воды выходит за пределы нормального рабочего диапазона. Возможна утечка трубы или неисправность клапана. Немедленно проверьте систему орошения.`
+      : s==='watch' ? `При ${v} м³/ч поток выше базового. Проверьте целостность труб и состояние клапанов зоны.`
+      : `При ${v} м³/ч поток воды в нормальном диапазоне 3.0–5.5 м³/ч. Орошение работает эффективно.`,
+    ph:            (v,s)=> s==='alert' ? (parseFloat(v)<6 ? `При pH ${v} почва слишком кислая (оптимум: 6.0–7.0). Кислая почва блокирует фосфор, кальций и магний — культуры не могут усвоить эти питательные вещества. Внесите известь.`
+        : `При pH ${v} почва слишком щелочная (оптимум: 6.0–7.0). Высокий pH снижает доступность железа и марганца. Внесите серу или подкисляющие удобрения.`)
+      : s==='watch' ? `При pH ${v} почва немного за пределами оптимального диапазона 6.0–7.0. Возможны незначительные проблемы с усвоением питательных веществ.`
+      : `При pH ${v} кислотность почвы в идеальном диапазоне 6.0–7.0. Доступность питательных веществ максимальна для здорового роста культур.`,
+    humidity:      (v,s)=> s==='alert' ? `При ${v}% влажности условия крайне стрессовые для культур. Примите корректирующие меры.`
+      : s==='watch' ? `При ${v}%, влажность вне оптимального диапазона 45–70%. ${parseFloat(v)<45?'Низкая влажность усиливает водный стресс растений.':'Высокая влажность может способствовать грибковым заболеваниям.'}`
+      : `При ${v}%, относительная влажность в идеальном диапазоне 45–70%. Условия поддерживают здоровый рост культур.`,
+    wind:          (v,s)=> s==='alert' ? `При ${v} км/ч скорость ветра очень высокая. Сильный ветер может повредить культуры, ускорить высыхание почвы и распространять споры болезней.`
+      : s==='watch' ? `При ${v} км/ч ветер выше умеренного. Может ускорить высыхание почвы и нарушить опыление.`
+      : `При ${v} км/ч скорость ветра в нормальном диапазоне 0–25 км/ч. Условия подходят для полевых работ.`,
+    nitrogen:      (v,s)=> s==='alert' ? `При ${v} ppm азот критически низкий. Дефицит азота вызывает пожелтение листьев, угнетение роста и значительно снижает урожай. Немедленно внесите азотное удобрение.`
+      : s==='watch' ? `При ${v} ppm азот ниже оптимального диапазона 50–100 ppm. Запланируйте внесение удобрений в ближайшее время.`
+      : `При ${v} ppm уровень азота в идеальном диапазоне 50–100 ppm. Культуры обеспечены питательными веществами для здорового роста.`,
+    solar:         (v,s)=> s==='alert' ? `При ${v} Вт/м² солнечная радиация вне оптимального диапазона. ${parseFloat(v)<300?'Очень низкая радиация ограничивает фотосинтез.':'Экстремальная радиация может вызвать солнечный ожог и увеличить потребление воды.'}`
+      : s==='watch' ? `При ${v} Вт/м² солнечная радиация повышенная. Высокая радиация увеличивает потребность культур в воде.`
+      : `При ${v} Вт/м² солнечная радиация в оптимальном диапазоне 300–900 Вт/м². Условия для фотосинтеза отличные.`,
+    gps:           (v,s)=> s==='watch' ? `${v} ошейников отвечает, но плотность повышена. Животные могут скапливаться в небольшом районе — возможно, из-за чрезмерного выпаса или нехватки воды/корма.`
+      : `Все ${v} GPS-ошейников отвечают. Распределение скота по пастбищу нормальное и сбалансированное.`,
+    body_temp:     (v,s)=> s==='alert' ? `При ${v}°C температура тела скота за пределами безопасного диапазона 38.0–39.5°C. ${parseFloat(v)>39.5?'Возможна лихорадка или тепловой стресс. Изолируйте животных и вызовите ветеринара.':'Риск переохлаждения. Проверьте укрытие и подстилку.'}`
+      : s==='watch' ? `При ${v}°C температура тела немного повышена. Следите за признаками дыхательного дистресса или снижения потребления корма.`
+      : `При ${v}°C температура тела скота в здоровом диапазоне 38.0–39.5°C. Проблем со здоровьем не обнаружено.`,
+    water_tank:    (v,s)=> s==='alert' ? `При ${v}% резервуар с водой критически мал. Организуйте аварийную поставку воды немедленно.`
+      : s==='watch' ? `При ${v}% резервуар приближается к низкому уровню. Запланируйте пополнение в течение 24 часов.`
+      : `При ${v}% резервуар достаточно полон. Водоснабжение скота обеспечено.`,
+    fence_voltage: (v,s)=> s==='alert' ? `При ${v} кВ напряжение ограждения вне безопасного диапазона 5.0–10.0 кВ. ${parseFloat(v)<5?'Низкое напряжение — ограждение может не удержать скот. Проверьте на неисправности.':'Опасно высокое напряжение может навредить животным. Проверьте настройки зарядного устройства.'}`
+      : s==='watch' ? `При ${v} кВ напряжение ограждения немного ниже оптимального. Проверьте линию.`
+      : `При ${v} кВ ограждение полностью заряжено в безопасном диапазоне 5.0–10.0 кВ. Периметр защищён.`,
+    grass_density: (v,s)=> s==='alert' ? `При ${v}% плотность травы критически низкая — значительно ниже порога устойчивого выпаса 50%. Пастбище деградирует. Немедленно переведите скот.`
+      : s==='watch' ? `При ${v}% травяной покров снижается к минимальному порогу. Уменьшите пастбищную нагрузку и рассмотрите ротационный выпас.`
+      : `При ${v}% плотность травы отличная. Пастбище поддерживает здоровый выпас с хорошим покровом для восстановления.`,
+    motion:        (v,s)=> s==='watch' ? `Обнаружен необычный характер движения. Животные могут скапливаться или проявлять стрессовое поведение. Обследуйте пастбище.`
+      : `Движение животных нормальное и сбалансированное по пастбищу. Скопления или стрессового поведения не обнаружено.`,
+    feed_level:    (v,s)=> s==='alert' ? `При ${v}% запасы корма критически низкие. Организуйте аварийную поставку корма немедленно.`
+      : s==='watch' ? `При ${v}% корм заканчивается. Запланируйте пополнение в ближайшие дни.`
+      : `При ${v}% запасы корма в здоровом состоянии. Питание скота хорошо обеспечено.`,
+  },
+  KZ: {
+    soil_moisture: (v,s)=> s==='alert' ? `⚠ ${v}%-да топырақ өте құрғақ — дақылдар қуаңшылық стрессін бастан кешіруде. Тамырлар қоректік заттарды дұрыс сіңіре алмайды. Өнімді сақтау үшін жедел суару қажет.`
+      : s==='watch' ? `${v}%-да ылғалдылық 40–65% оптималды диапазонынан сәл төмен. Өсімдіктер жеңіл стресс бастан кешіруде. Жақын арада суаруды қарастырыңыз.`
+      : `${v}%-да топырақ ылғалдылығы 40–65% идеалды диапазонда. Тамырлар суға және қоректік заттарға жақсы қол жетімді.`,
+    temperature:   (v,s)=> s==='alert' ? `${v}°C-та температура дақылдар үшін қауіпті жоғары. Жылу стрессі булануды жеделдетеді. Суарудың суыту режимін іске қосыңыз.`
+      : s==='watch' ? `${v}°C-та температура 18–26°C оптималды диапазонынан сәл жоғары. Жылу стрессінің белгілерін бақылаңыз.`
+      : `${v}°C-та температура 18–26°C идеалды диапазонда. Фотосинтез және өсу жағдайлары оптималды.`,
+    smoke:         (v,s)=> s==='alert' ? `${v} мкг/м³-да түтін концентрациясы қауіпті деңгейде. Жақын жерде белсенді өрт болуы мүмкін. Персоналды жедел эвакуациялаңыз және дронды инспекцияға жіберіңіз.`
+      : s==='watch' ? `${v} ppm-де жеңіл түтін бөлшектері анықталды. Жағдайдың дамуын бақылаңыз.`
+      : `${v} ppm-де ауа сапасы таза, түтін аномалиясы жоқ. Аймақ қауіпсіз.`,
+    salinity:      (v,s)=> s==='alert' ? `${v} дС/м-де тұз концентрациясы қауіпті жоғары. Жоғары тұздылық тамырдың су сіңіруіне кедергі жасайды және жапырақтың күюіне әкеледі. Жуу суаруын қолданыңыз.`
+      : s==='watch' ? `${v} дС/м-де тұздылық жоғарғы шекке жақындауда. Тұз мөлшері аз су көздерін пайдалануды қарастырыңыз.`
+      : `${v} дС/м-де тұздылық қауіпсіз диапазонда (0–2.0 дС/м). Топырақ химиясы тамырдың сау жұмысын қолдайды.`,
+    water_flow:    (v,s)=> s==='alert' ? `${v} м³/с-та су ағыны қалыпты жұмыс диапазонынан тыс. Құбыр жарылуы немесе клапан ақауы болуы мүмкін. Суару жүйесін жедел тексеріңіз.`
+      : s==='watch' ? `${v} м³/с-та ағын базалық мәннен жоғары. Құбыр бүтіндігін және клапан күйін тексеріңіз.`
+      : `${v} м³/с-та су ағыны 3.0–5.5 м³/с қалыпты диапазонда. Суару тиімді жұмыс істеуде.`,
+    ph:            (v,s)=> s==='alert' ? (parseFloat(v)<6 ? `pH ${v}-де топырақ тым қышқылды (оптималды: 6.0–7.0). Қышқыл топырақ фосфор, кальций және магнийді бұғаттайды. Ауыл шаруашылығы әкін енгізіңіз.`
+        : `pH ${v}-де топырақ тым сілтілі (оптималды: 6.0–7.0). Жоғары pH темір мен марганецтің қол жетімділігін азайтады. Күкірт немесе қышқылдандырушы тыңайтқыштар енгізіңіз.`)
+      : s==='watch' ? `pH ${v}-де топырақ 6.0–7.0 оптималды диапазоннан сәл тыс. Қоректік заттардың сіңірілуінде незначительды мәселелер болуы мүмкін.`
+      : `pH ${v}-де топырақтың қышқылдығы 6.0–7.0 идеалды диапазонда. Дақылдардың сау өсуі үшін қоректік заттардың қол жетімділігі максималды.`,
+    humidity:      (v,s)=> s==='alert' ? `${v}% ылғалдылықта жағдайлар өсімдіктер үшін өте стрессті. Түзету шараларын қолданыңыз.`
+      : s==='watch' ? `${v}%-да ылғалдылық 45–70% оптималды диапазоннан тыс. ${parseFloat(v)<45?'Төмен ылғалдылық өсімдіктердің су стрессін күшейтеді.':'Жоғары ылғалдылық саңырауқұлақ ауруларына себеп болуы мүмкін.'}`
+      : `${v}%-да салыстырмалы ылғалдылық 45–70% идеалды диапазонда. Жағдайлар дақылдардың сау өсуін қолдайды.`,
+    wind:          (v,s)=> s==='alert' ? `${v} км/с жел жылдамдығы өте жоғары. Күшті жел дақылдарға механикалық зиян тигізуі, топырақтың кебуін тездетуі және ауру споралларын таратуы мүмкін.`
+      : s==='watch' ? `${v} км/с жел орташа деңгейден жоғары. Топырақтың кебуін тездетуі және тозаңданудың бұзылуы мүмкін.`
+      : `${v} км/с жел жылдамдығы 0–25 км/с қалыпты диапазонда. Дала жұмыстары үшін жағдайлар қолайлы.`,
+    nitrogen:      (v,s)=> s==='alert' ? `${v} ppm-де азот сыни деңгейде төмен. Азот тапшылығы жапырақтардың сарғаюына, өсудің тежелуіне және өнімнің айтарлықтай төмендеуіне әкеледі. Азотты тыңайтқышты жедел енгізіңіз.`
+      : s==='watch' ? `${v} ppm-де азот 50–100 ppm оптималды диапазонынан төмен. Жақын арада тыңайтқыш енгізуді жоспарлаңыз.`
+      : `${v} ppm-де азот деңгейі 50–100 ppm идеалды диапазонда. Дақылдар сау өсу үшін жеткілікті қоректік заттармен қамтамасыз етілген.`,
+    solar:         (v,s)=> s==='alert' ? `${v} Вт/м²-де күн радиациясы оптималды диапазоннан тыс. ${parseFloat(v)<300?'Өте төмен радиация фотосинтезді шектейді.':'Экстремалды радиация күн күйігін тудырып, су тұтынуды арттыруы мүмкін.'}`
+      : s==='watch' ? `${v} Вт/м²-де күн радиациясы жоғарылатылған. Жоғары радиация дақылдардың суға деген қажеттілігін арттырады.`
+      : `${v} Вт/м²-де күн радиациясы 300–900 Вт/м² оптималды диапазонда. Фотосинтез жағдайлары тамаша.`,
+    gps:           (v,s)=> s==='watch' ? `${v} жаға жауап береді, бірақ тығыздық жоғарылатылған. Малдар шоғырлануы немесе су/жем тапшылығы болуы мүмкін. Жайылымды тексеріңіз.`
+      : `Барлық ${v} GPS-жаға жауап береді. Жайылымдағы мал бөлінуі қалыпты және тепе-тең.`,
+    body_temp:     (v,s)=> s==='alert' ? `${v}°C-та мал денесінің температурасы 38.0–39.5°C қауіпсіз диапазонынан тыс. ${parseFloat(v)>39.5?'Қызба немесе жылу стрессі болуы мүмкін. Ветеринарды шақырыңыз.':'Суықтату қаупі. Баспана мен төсеніштерді тексеріңіз.'}`
+      : s==='watch' ? `${v}°C-та дене температурасы сәл жоғарылатылған. Тыныс алу дистрессінің немесе жем тұтынудың азаюының белгілерін бақылаңыз.`
+      : `${v}°C-та мал денесінің температурасы 38.0–39.5°C сау диапазонда. Денсаулық мәселелері анықталмады.`,
+    water_tank:    (v,s)=> s==='alert' ? `${v}%-да су резервуары сыни деңгейде төмен. Жедел су жеткізуді ұйымдастырыңыз.`
+      : s==='watch' ? `${v}%-да резервуар төмен деңгейге жақындауда. 24 сағат ішінде толтыруды жоспарлаңыз.`
+      : `${v}%-да су резервуары жеткілікті деңгейде. Малдың су жабдықтауы қамтамасыз етілген.`,
+    fence_voltage: (v,s)=> s==='alert' ? `${v} кВ-та қоршаудың кернеуі 5.0–10.0 кВ қауіпсіз диапазонынан тыс. ${parseFloat(v)<5?'Төмен кернеу — қоршау малды ұстай алмауы мүмкін. Ақауларды тексеріңіз.':'Қауіпті жоғары кернеу малға зиян тигізуі мүмкін. Зарядтаушының баптауларын тексеріңіз.'}`
+      : s==='watch' ? `${v} кВ-та қоршаудың кернеуі оптималдыдан сәл төмен. Желіні тексеріңіз.`
+      : `${v} кВ-та қоршау 5.0–10.0 кВ қауіпсіз диапазонда толық зарядталған. Периметр қауіпсіз.`,
+    grass_density: (v,s)=> s==='alert' ? `${v}%-да шөп тығыздығы сыни деңгейде төмен — тұрақты жайылым шегі 50%-дан әлдеқайда төмен. Жайылым деградацияланып жатыр. Малды жедел аударыңыз.`
+      : s==='watch' ? `${v}%-да шөп жабыны минималды шекке қарай азаюда. Жайылым қысымын азайтыңыз.`
+      : `${v}%-да шөп тығыздығы тамаша. Жайылым сау жайылымды қолдайды.`,
+    motion:        (v,s)=> s==='watch' ? `Ерекше қозғалыс үлгісі анықталды. Малдар шоғырлануы немесе стресс мінез-құлқын көрсетуі мүмкін. Жайылымды тексеріңіз.`
+      : `Мал қозғалысы жайылым бойынша қалыпты және тепе-тең. Шоғырлану немесе стресс мінез-құлқы анықталмады.`,
+    feed_level:    (v,s)=> s==='alert' ? `${v}%-да жем қоры сыни деңгейде төмен. Жедел жем жеткізуді ұйымдастырыңыз.`
+      : s==='watch' ? `${v}%-да жем азаюда. Бірнеше күн ішінде толтыруды жоспарлаңыз.`
+      : `${v}%-да жем қоры сау күйде. Малдың тамақтануы жақсы қамтамасыз етілген.`,
+  }
+};
+
+function getSensorExplanation(sensorKey, value, status) {
+  const lang = currentLang || 'EN';
+  const explanations = SENSOR_EXPLANATIONS[lang] || SENSOR_EXPLANATIONS.EN;
+  const fn = explanations[sensorKey];
+  if (!fn) return '';
+  return fn(value, status);
+}
+
+function toggleWTM(btn, sensorKey, value, status) {
+  const panel = btn.nextElementSibling;
+  const isOpen = panel.classList.contains('open');
+  // Close all others
+  document.querySelectorAll('.wtm-panel.open').forEach(p=>p.classList.remove('open'));
+  document.querySelectorAll('.wtm-btn').forEach(b=>{b.textContent = wtmLabel();});
+  if (!isOpen) {
+    panel.classList.add('open');
+    panel.innerHTML = `<strong>${wtmMeans()}</strong>${getSensorExplanation(sensorKey,value,status)}`;
+    btn.textContent = '▲ ' + wtmClose();
+  }
+}
+
+function wtmLabel(){ const d={EN:'💡 What does this mean?',RU:'💡 Что это значит?',KZ:'💡 Бұл не білдіреді?'}; return d[currentLang]||d.EN; }
+function wtmMeans(){ const d={EN:'INTERPRETATION',RU:'ИНТЕРПРЕТАЦИЯ',KZ:'ТҮСІНДІРУ'}; return d[currentLang]||d.EN; }
+function wtmClose(){ const d={EN:'Close',RU:'Закрыть',KZ:'Жабу'}; return d[currentLang]||d.EN; }
+function wtmNormal(){ const d={EN:'Normal range:',RU:'Норма:',KZ:'Норма:'}; return d[currentLang]||d.EN; }
+
+// ── PLAN OF ACTION FUNCTIONS ──
+function markStepDone(stepId, btn) {
+  const step = document.getElementById(stepId);
+  if (!step) return;
+  step.classList.add('done');
+  btn.textContent = '✓';
+  btn.disabled = true;
+}
+
+function markAllDone() {
+  document.querySelectorAll('.plan-step').forEach(step=>{
+    step.classList.add('done');
+    const btn = step.querySelector('.plan-done-btn');
+    if(btn){btn.textContent='✓';btn.disabled=true;}
+  });
+}
+
+function resetPlan() {
+  document.querySelectorAll('.plan-step').forEach(step=>{
+    step.classList.remove('done');
+    const btn = step.querySelector('.plan-done-btn');
+    if(btn){
+      btn.disabled=false;
+      const d=I18N_PLAN[currentLang]||I18N_PLAN.EN;
+      btn.textContent=d['plan_done']||'✓ Done';
+    }
+  });
+}
+
+// ── PLAN i18n DATA ──
+const I18N_PLAN = {
+  EN: {
+    plan_title:'Plan of Action',
+    plan_sub:'Priority-sorted steps to improve your farm right now',
+    plan_ai_title:'AI-Generated Action Plan',
+    plan_ai_sub:'Updated based on current sensor readings across all zones · 9 actions queued',
+    plan_stat_critical:'CRITICAL', plan_stat_high:'HIGH', plan_stat_routine:'ROUTINE',
+    plan_section_urgent:'🔴 Urgent — Act Within 6 Hours',
+    plan_section_today:'🟡 Today — Complete by End of Day',
+    plan_section_routine:'🟢 This Week — Routine Maintenance',
+    plan_critical:'CRITICAL', plan_high:'HIGH', plan_medium:'MEDIUM', plan_low:'ROUTINE', plan_opportunity:'OPPORTUNITY',
+    plan_done:'✓ Done', plan_done_all:'✓ Mark All Done',
+    ps1_title:'Activate drip irrigation in Wheat Zone A1',
+    ps1_desc:'Soil moisture at 22% is critically below the 40% minimum. Temperature at 31°C is accelerating evaporation. Immediate irrigation required to prevent irreversible drought stress.',
+    ps1_time:'⏱ Do within 6 hours',
+    ps2_title:'Dispatch drone to Potato Field East — smoke anomaly',
+    ps2_desc:'Smoke at 148 µg/m³ — hazardous level. NNE wind at 18 km/h is spreading particles toward pastures. Confirm fire source before escalation.',
+    ps2_time:'⏱ Immediately',
+    ps3_title:'Relocate portion of herd from Cattle Pasture C',
+    ps3_desc:'Grass density at 39%, below the 50% sustainable threshold. Move 200+ head to Pasture A to allow Pasture C a 3-week recovery period.',
+    ps3_time:'⏱ Today',
+    ps4_title:'Apply lime to correct pH in Corn Zone B2',
+    ps4_desc:'Soil pH at 5.1 — below the 6.0–7.0 optimal range. Apply agricultural lime at 2–3 t/ha. Re-test in 2 weeks.',
+    ps4_time:'⏱ Within 48 hours',
+    ps5_title:'Refill water tank at Cattle Pasture C',
+    ps5_desc:'Water tank at 42% and dropping. Arrange refill to prevent livestock dehydration within 18–24 hours.',
+    ps5_time:'⏱ Within 24 hours',
+    ps6_title:'Begin seeding operations in Barley Zone Z5',
+    ps6_desc:'Optimal germination window: soil 18°C, moisture 49%, AI confidence 92%. Start seeding within 72 hours for +18% germination rate.',
+    ps6_time:'⏱ Within 72 hours',
+    ps7_title:'Apply nitrogen fertilizer to Wheat A1 and Corn B2',
+    ps7_desc:'Nitrogen at 41 ppm (Wheat A1) and 37 ppm (Corn B2) — below the 50–100 ppm optimal. Schedule fertilizer application this week.',
+    ps7_time:'⏱ This week',
+    ps8_title:'Raise humidity via morning misting in Wheat A1 and Corn B2',
+    ps8_desc:'Humidity at 38% and 44% — below the 45–70% optimal. Consider overhead misting at 6–8 AM to reduce heat stress.',
+    ps8_time:'⏱ This week',
+    ps9_title:'Check GPS collar batteries and calibrate all sensors',
+    ps9_desc:'Routine maintenance across all pastures and crop zones. Schedule system-wide sensor audit for peak season.',
+    ps9_time:'⏱ This week',
+  },
+  RU: {
+    plan_title:'План действий',
+    plan_sub:'Шаги по приоритету для улучшения вашего хозяйства прямо сейчас',
+    plan_ai_title:'ИИ-генерированный план действий',
+    plan_ai_sub:'Обновлено на основе текущих показаний датчиков · 9 действий в очереди',
+    plan_stat_critical:'КРИТИЧЕСКИХ', plan_stat_high:'ВАЖНЫХ', plan_stat_routine:'ПЛАНОВЫХ',
+    plan_section_urgent:'🔴 Срочно — выполнить в течение 6 часов',
+    plan_section_today:'🟡 Сегодня — выполнить до конца дня',
+    plan_section_routine:'🟢 Эта неделя — плановое обслуживание',
+    plan_critical:'КРИТИЧНО', plan_high:'ВАЖНО', plan_medium:'СРЕДНЕ', plan_low:'ПЛАНОВОЕ', plan_opportunity:'ВОЗМОЖНОСТЬ',
+    plan_done:'✓ Готово', plan_done_all:'✓ Отметить всё выполненным',
+    ps1_title:'Активировать капельный полив в Зоне Пшеницы A1',
+    ps1_desc:'Влажность почвы 22% — критически ниже минимума 40%. Температура 31°C ускоряет испарение. Немедленный полив необходим для предотвращения необратимого засухного стресса.',
+    ps1_time:'⏱ В течение 6 часов',
+    ps2_title:'Запустить дрон на Картофельное поле Восток — аномалия дыма',
+    ps2_desc:'Дым 148 мкг/м³ — опасный уровень. Ветер NNE 18 км/ч распространяет частицы к пастбищам. Определите источник перед эскалацией.',
+    ps2_time:'⏱ Немедленно',
+    ps3_title:'Перевести часть стада с Пастбища C',
+    ps3_desc:'Плотность травы 39% — ниже порога устойчивого выпаса 50%. Переведите 200+ голов на Пастбище A для 3-недельного восстановления Пастбища C.',
+    ps3_time:'⏱ Сегодня',
+    ps4_title:'Внести известь для коррекции pH в Кукурузной зоне B2',
+    ps4_desc:'pH почвы 5.1 — ниже оптимального диапазона 6.0–7.0. Внесите сельскохозяйственную известь 2–3 т/га. Повторный тест через 2 недели.',
+    ps4_time:'⏱ В течение 48 часов',
+    ps5_title:'Пополнить резервуар воды на Пастбище C',
+    ps5_desc:'Резервуар 42% и снижается. Организуйте пополнение для предотвращения обезвоживания скота в течение 18–24 часов.',
+    ps5_time:'⏱ В течение 24 часов',
+    ps6_title:'Начать сев в Ячменной зоне Z5',
+    ps6_desc:'Оптимальное окно прорастания: температура почвы 18°C, влажность 49%, уверенность ИИ 92%. Начните сев в течение 72 часов для +18% прорастания.',
+    ps6_time:'⏱ В течение 72 часов',
+    ps7_title:'Внести азотное удобрение в Зону Пшеницы A1 и Кукурузу B2',
+    ps7_desc:'Азот 41 ppm (Пшеница A1) и 37 ppm (Кукуруза B2) — ниже оптимума 50–100 ppm. Запланируйте внесение удобрений на этой неделе.',
+    ps7_time:'⏱ На этой неделе',
+    ps8_title:'Повысить влажность с помощью утреннего орошения в Пшенице A1 и Кукурузе B2',
+    ps8_desc:'Влажность 38% и 44% — ниже оптимума 45–70%. Рассмотрите дождевание в 6–8 утра для снижения теплового стресса.',
+    ps8_time:'⏱ На этой неделе',
+    ps9_title:'Проверить батареи GPS-ошейников и откалибровать все датчики',
+    ps9_desc:'Плановое обслуживание по всем пастбищам и культурным зонам. Запланируйте полный аудит датчиков к пиковому сезону.',
+    ps9_time:'⏱ На этой неделе',
+  },
+  KZ: {
+    plan_title:'Іс-қимыл жоспары',
+    plan_sub:'Шаруашылығыңызды жақсарту үшін қазір артықшылыққа бойланған қадамдар',
+    plan_ai_title:'ЖИ жасаған іс-қимыл жоспары',
+    plan_ai_sub:'Барлық аймақтардағы ағымдағы сенсор деректеріне негізделген · 9 іс-қимыл кезекте',
+    plan_stat_critical:'СЫНИ', plan_stat_high:'МАҢЫЗДЫ', plan_stat_routine:'ЖОСПАРЛЫ',
+    plan_section_urgent:'🔴 Жедел — 6 сағат ішінде орындаңыз',
+    plan_section_today:'🟡 Бүгін — күн соңына дейін орындаңыз',
+    plan_section_routine:'🟢 Осы аптада — жоспарлы техникалық қызмет',
+    plan_critical:'СЫНИ', plan_high:'МАҢЫЗДЫ', plan_medium:'ОРТАША', plan_low:'ЖОСПАРЛЫ', plan_opportunity:'МҮМКІНДІК',
+    plan_done:'✓ Орындалды', plan_done_all:'✓ Барлығын орындалды деп белгілеу',
+    ps1_title:'Бидай аймағы A1-де тамшылатып суаруды іске қосыңыз',
+    ps1_desc:'Топырақ ылғалдылығы 22% — 40% минимумынан сыни төмен. Температура 31°C булануды тездетуде. Қайтарылмас қуаңшылық стрессін болдырмау үшін жедел суару қажет.',
+    ps1_time:'⏱ 6 сағат ішінде',
+    ps2_title:'Картоп алқабы Шығысқа дрон жіберіңіз — түтін аномалиясы',
+    ps2_desc:'Түтін 148 мкг/м³ — қауіпті деңгей. NNE желі 18 км/с жайылымдарға қарай бөлшектерді таратуда. Эскалацияға дейін от көзін анықтаңыз.',
+    ps2_time:'⏱ Дереу',
+    ps3_title:'C Жайылымынан табынның бір бөлігін аударыңыз',
+    ps3_desc:'Шөп тығыздығы 39% — тұрақты жайылым шегі 50%-дан төмен. C Жайылымының 3 аптасы демалуы үшін 200+ басты A Жайылымына аударыңыз.',
+    ps3_time:'⏱ Бүгін',
+    ps4_title:'B2 Жүгері аймағындағы pH түзету үшін әк енгізіңіз',
+    ps4_desc:'Топырақ pH-ы 5.1 — 6.0–7.0 оптималды диапазонынан төмен. 2–3 т/га ауыл шаруашылығы әгін енгізіңіз. 2 апта кейін қайта тексеріңіз.',
+    ps4_time:'⏱ 48 сағат ішінде',
+    ps5_title:'C Жайылымындағы су резервуарын толтырыңыз',
+    ps5_desc:'Резервуар 42% және азаюда. Малдың сусыздануын болдырмау үшін 18–24 сағат ішінде толтыруды ұйымдастырыңыз.',
+    ps5_time:'⏱ 24 сағат ішінде',
+    ps6_title:'Z5 Арпа аймағында егу жұмыстарын бастаңыз',
+    ps6_desc:'Оптималды өну терезесі: топырақ 18°C, ылғалдылық 49%, ЖИ сенімділігі 92%. +18% өну деңгейі үшін 72 сағат ішінде егуді бастаңыз.',
+    ps6_time:'⏱ 72 сағат ішінде',
+    ps7_title:'Бидай A1 және Жүгері B2-ге азотты тыңайтқыш енгізіңіз',
+    ps7_desc:'Азот 41 ppm (Бидай A1) және 37 ppm (Жүгері B2) — 50–100 ppm оптималдысынан төмен. Осы аптада тыңайтқыш енгізуді жоспарлаңыз.',
+    ps7_time:'⏱ Осы аптада',
+    ps8_title:'Бидай A1 және Жүгері B2-де таңертеңгілік шашырату арқылы ылғалдылықты арттырыңыз',
+    ps8_desc:'Ылғалдылық 38% және 44% — 45–70% оптималдысынан төмен. Жылу стрессін азайту үшін таңертең 6–8-де шашыратуды қарастырыңыз.',
+    ps8_time:'⏱ Осы аптада',
+    ps9_title:'GPS жаға батареяларын тексеріп, барлық сенсорларды калибрлеңіз',
+    ps9_desc:'Барлық жайылымдар мен дақыл аймақтарында жоспарлы техникалық қызмет. Шыңдық маусым алдында жүйелік сенсор аудитін жоспарлаңыз.',
+    ps9_time:'⏱ Осы аптада',
+  }
+};
+
+function applyPlanI18n(lang) {
+  const d = I18N_PLAN[lang] || I18N_PLAN.EN;
+  document.querySelectorAll('[data-i18n-plan]').forEach(el => {
+    const key = el.getAttribute('data-i18n-plan');
+    if (d[key]) el.textContent = d[key];
+  });
+  // Update WTM buttons
+  document.querySelectorAll('.wtm-btn').forEach(b=>{ if(!b.textContent.includes('▲')) b.textContent=wtmLabel(); });
+}
+
+
   wheatA1: {
     title: "Wheat Zone A1",
     kind: "crop",
@@ -3269,33 +3880,66 @@ function closeSensorHistory(){
 }
  
 // ══════════════════════════════════════════
-// ── PATCH renderSensorPanel with LIVE + CLICK-TO-HISTORY ──
+// ── PATCH renderSensorPanel with LIVE + CLICK-TO-HISTORY + RANGES + WTM ──
 // ══════════════════════════════════════════
+function buildRangeBar(sensorKey, value) {
+  const r = SENSOR_RANGES[sensorKey];
+  if (!r || r.min === null) return '';
+  const numVal = parseFloat(value);
+  if (isNaN(numVal)) return '';
+  const absMin = r.min * 0.5;
+  const absMax = r.max * 1.4;
+  const range = absMax - absMin || 1;
+  const zoneLeft = ((r.min - absMin) / range * 100).toFixed(1);
+  const zoneWidth = ((r.max - r.min) / range * 100).toFixed(1);
+  const dotLeft = Math.min(98, Math.max(2, ((numVal - absMin) / range * 100))).toFixed(1);
+  const dotColor = numVal < r.min ? 'var(--red)' : numVal > r.max ? 'var(--amber)' : 'var(--green)';
+  const lang = currentLang || 'EN';
+  const rangeLabel = (SENSOR_RANGES[sensorKey].label[lang] || SENSOR_RANGES[sensorKey].label.EN);
+  return `
+    <div style="margin-bottom:8px;">
+      <div class="sensor-range-row">
+        <span class="sensor-range-label" style="color:var(--text3);font-size:10px;">📏 ${rangeLabel}</span>
+      </div>
+      <div class="sensor-range-bar">
+        <div class="sensor-range-zone" style="left:${zoneLeft}%;width:${zoneWidth}%;"></div>
+        <div class="sensor-range-dot" style="left:${dotLeft}%;background:${dotColor};"></div>
+      </div>
+      <div class="sensor-range-vals">
+        <span>${r.min}${r.unit}</span><span style="color:${dotColor};font-weight:600;">${parseFloat(value).toFixed(r.unit==='pH'||r.unit==='dS/m'||r.unit==='kV'?1:0)}${r.unit}</span><span>${r.max}${r.unit}</span>
+      </div>
+    </div>
+  `;
+}
+
 function renderSensorPanel(zoneKey){
   activeZoneKey = zoneKey;
   const zone = SENSOR_ZONE_DATA[zoneKey];
   const labels = SENSOR_LABELS[zone.kind];
   const grid = document.getElementById("sensorGrid");
   const sub  = document.getElementById("sensorSub");
- 
+
   if(!zone||!grid) return;
   renderSensorTabs(zoneKey);
- 
-  if(sub) sub.textContent = `${zone.title} · ${zone.kind==="crop"?"Crop sensor template":"Pasture sensor template"} · All standard sensors visible`;
- 
+
+  const subTemplates = {
+    EN:`${zone.title} · ${zone.kind==="crop"?"Crop sensor template":"Pasture sensor template"} · All standard sensors visible`,
+    RU:`${zone.title} · ${zone.kind==="crop"?"Шаблон датчиков полей":"Шаблон датчиков пастбища"} · Все датчики отображены`,
+    KZ:`${zone.title} · ${zone.kind==="crop"?"Дақыл сенсор шаблоны":"Жайылым сенсор шаблоны"} · Барлық стандартты сенсорлар`,
+  };
+  if(sub) sub.textContent = subTemplates[currentLang] || subTemplates.EN;
+
   grid.innerHTML = "";
- 
+
   Object.keys(labels).forEach(sensorKey => {
     const s = zone.sensors[sensorKey];
     const lv = liveValues[zoneKey]?.[sensorKey];
     const cfg = NUDGE_CFG[sensorKey];
     const dispVal = (lv!==undefined && typeof lv==='number') ? lv.toFixed(cfg?.[3]??0) : s.value;
- 
+
     const card = document.createElement("div");
     card.className = `sensor-card-v3 ${sensorStatusClass(s.status)}`;
-    card.title = 'Click to view 7-day history';
-    card.onclick = ()=>openSensorHistory(zoneKey, sensorKey);
- 
+
     const bgIcon = s.status==='alert'?'var(--red-dim)':s.status==='watch'?'var(--amber-dim)':'var(--green-dim)';
     const valColor = s.status==='alert'?'var(--red)':s.status==='watch'?'var(--amber)':'var(--text)';
     const barColor = sensorFillColor(s.status);
@@ -3304,9 +3948,13 @@ function renderSensorPanel(zoneKey){
     const cfg2 = NUDGE_CFG[sensorKey];
     const fillPct = (lv!==undefined&&typeof lv==='number'&&cfg2) ?
       Math.min(100,Math.max(0,((lv-cfg2[1])/(cfg2[2]-cfg2[1]||1))*100)).toFixed(0) : s.fill;
- 
+
+    const rangeBarHTML = buildRangeBar(sensorKey, dispVal);
+    const wtmId = `wtm-${zoneKey}-${sensorKey}`;
+    const histLabel = {EN:'📈 History',RU:'📈 История',KZ:'📈 Тарих'}[currentLang]||'📈 History';
+
     card.innerHTML = `
-      <div class="sensor-top">
+      <div class="sensor-top" style="cursor:pointer;" onclick="openSensorHistory('${zoneKey}','${sensorKey}')">
         <div class="sensor-icon-v3" style="background:${bgIcon};">${s.icon}</div>
         <div style="flex:1;min-width:0;">
           <div class="sensor-title-v3">${labels[sensorKey]} <span class="live-tick"><span class="live-tick-dot"></span>LIVE</span></div>
@@ -3314,25 +3962,28 @@ function renderSensorPanel(zoneKey){
         </div>
         <div class="sensor-badge-v3 ${badgeClass}">${badgeLabel}</div>
       </div>
-      <div class="sensor-main-v3">
+      <div class="sensor-main-v3" style="cursor:pointer;" onclick="openSensorHistory('${zoneKey}','${sensorKey}')">
         <div class="value" style="color:${valColor};">${dispVal}</div>
         <div class="unit">${s.unit}</div>
       </div>
       <div class="sensor-desc-v3">${s.desc}</div>
+      ${rangeBarHTML}
       <div class="sensor-bar-v3">
         <div class="sensor-fill-v3" style="width:${fillPct}%;background:${barColor};"></div>
       </div>
       <div class="sensor-meta-v3">
-        <span style="color:var(--green);font-size:10px;">📈 History</span>
+        <span style="color:var(--green);font-size:10px;cursor:pointer;" onclick="openSensorHistory('${zoneKey}','${sensorKey}')">${histLabel}</span>
         <span>${badgeLabel}</span>
       </div>
+      <button class="wtm-btn" onclick="event.stopPropagation();toggleWTM(this,'${sensorKey}','${dispVal}','${s.status}')">${wtmLabel()}</button>
+      <div class="wtm-panel" id="${wtmId}"></div>
     `;
     grid.appendChild(card);
   });
- 
+
   const oldB = document.getElementById('zoneInsightBlock');
   if(oldB) oldB.remove();
- 
+
   const insightHTML = renderZoneInsight(zoneKey);
   if(insightHTML){
     const wrapper = document.createElement('div');
@@ -3341,6 +3992,7 @@ function renderSensorPanel(zoneKey){
     grid.after(wrapper);
   }
 }
+
  
 // ── BOOT ──
 document.addEventListener("DOMContentLoaded", function(){
