@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AgroSense KZ — Smart Agricultural Intelligence</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Roboto:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -31,14 +31,14 @@
   --nav-collapsed:64px;
   --right-w:300px;
   --top-h:60px;
-  --radius:16px;
-  --radius-sm:12px;
-  --font-head:'Inter',sans-serif;
-  --font-body:'Inter',sans-serif;
+  --radius:12px;
+  --radius-sm:8px;
+  --font-head:'Syne',sans-serif;
+  --font-body:'Outfit',sans-serif;
   --font-mono:'JetBrains Mono',monospace;
 }
-body{font-family:var(--font-body);background:radial-gradient(circle at top, rgba(59,158,255,0.12), transparent 25%), linear-gradient(180deg,#06101D 0%,#091426 100%);color:var(--text);min-height:100vh;overflow-x:hidden;font-size:14px;}
-
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;font-size:14px;}
+ 
 /* ── ONBOARDING ── */
 #onboarding{position:fixed;inset:0;background:var(--bg);z-index:1000;display:flex;align-items:center;justify-content:center;background-image:radial-gradient(ellipse 80% 60% at 50% -10%,rgba(0,214,143,0.08) 0%,transparent 60%),radial-gradient(ellipse 50% 40% at 80% 80%,rgba(59,158,255,0.06) 0%,transparent 60%);}
 .ob-wrap{width:560px;text-align:center;}
@@ -77,11 +77,11 @@ body{font-family:var(--font-body);background:radial-gradient(circle at top, rgba
 .ob-generating{padding:40px;text-align:center;}
 .ob-gen-ring{width:64px;height:64px;border:2px solid var(--border2);border-top-color:var(--green);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 20px;}
 @keyframes spin{to{transform:rotate(360deg);}}
-
+ 
 /* ── LAYOUT ── */
 #app{display:none;height:100vh;flex-direction:column;}
 #app.ready{display:flex;}
-
+ 
 /* TOP NAV */
 .topnav{height:var(--top-h);background:rgba(7,17,31,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:16px;z-index:100;flex-shrink:0;}
 .nav-logo{font-family:var(--font-head);font-size:17px;font-weight:800;color:var(--green);letter-spacing:-0.5px;display:flex;align-items:center;gap:8px;white-space:nowrap;}
@@ -108,10 +108,10 @@ body{font-family:var(--font-body);background:radial-gradient(circle at top, rgba
 .notif-btn:hover{border-color:var(--border2);}
 .notif-badge{position:absolute;top:-4px;right:-4px;background:var(--red);color:#fff;font-size:9px;font-family:var(--font-mono);font-weight:500;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
 .avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#00D68F,#3B9EFF);display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-size:13px;font-weight:700;color:#021A0D;cursor:pointer;flex-shrink:0;}
-
+ 
 /* BODY LAYOUT */
 .body-layout{display:flex;flex:1;overflow:hidden;}
-
+ 
 /* SIDEBAR */
 .sidebar{width:var(--nav-w);background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto;overflow-x:hidden;}
 .sidebar::-webkit-scrollbar{width:4px;}
@@ -133,7 +133,7 @@ body{font-family:var(--font-body);background:radial-gradient(circle at top, rgba
 .farm-health-fill{height:100%;background:var(--green);border-radius:2px;transition:width 1s ease;}
 .farm-health-val{font-size:11px;color:var(--green);font-family:var(--font-mono);}
 .sidebar-bottom{margin-top:auto;padding:12px;}
-
+ 
 /* MAIN CONTENT */
 .main-content{flex:1;overflow-y:auto;overflow-x:hidden;background:var(--bg);}
 .main-content::-webkit-scrollbar{width:6px;}
@@ -141,14 +141,14 @@ body{font-family:var(--font-body);background:radial-gradient(circle at top, rgba
 .main-content::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
 .page{display:none;padding:24px;}
 .page.active{display:block;animation:fadeUp 0.3s ease;}
-
+ 
 /* RIGHT PANEL */
 .right-panel{width:var(--right-w);background:var(--surface);border-left:1px solid var(--border);overflow-y:auto;flex-shrink:0;padding:16px;}
 .right-panel::-webkit-scrollbar{width:4px;}
 .right-panel::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
 .panel-section{margin-bottom:24px;}
 .panel-title{font-family:var(--font-head);font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:12px;}
-
+ 
 /* CARDS & COMPONENTS */
 .glass-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;position:relative;overflow:hidden;}
 .glass-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.05),transparent);}
@@ -178,7 +178,7 @@ body{font-family:var(--font-body);background:radial-gradient(circle at top, rgba
 .section-title .badge{font-size:10px;font-family:var(--font-mono);padding:3px 8px;border-radius:10px;font-weight:500;}
 .badge-live{background:var(--green-dim);color:var(--green);border:1px solid rgba(0,214,143,0.2);}
 .badge-ai{background:var(--blue-dim);color:var(--blue);border:1px solid rgba(59,158,255,0.2);}
-
+ 
 /* AI CONTROL CENTER */
 .ai-center{background:linear-gradient(135deg,rgba(0,214,143,0.05) 0%,rgba(59,158,255,0.05) 100%);border:1px solid rgba(0,214,143,0.15);border-radius:var(--radius);padding:24px;margin-bottom:20px;position:relative;overflow:hidden;}
 .ai-center::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--green),var(--blue),transparent);}
@@ -200,7 +200,7 @@ body{font-family:var(--font-body);background:radial-gradient(circle at top, rgba
 .btn-action:hover{border-color:rgba(0,214,143,0.3);color:var(--green);}
 .btn-action.primary{background:var(--green-dim);border-color:rgba(0,214,143,0.3);color:var(--green);}
 .btn-action.primary:hover{background:rgba(0,214,143,0.2);}
-
+ 
 /* RECS */
 .recs-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:20px;}
 .rec-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;display:flex;align-items:flex-start;gap:12px;cursor:pointer;transition:all 0.2s;}
@@ -218,7 +218,7 @@ body{font-family:var(--font-body);background:radial-gradient(circle at top, rgba
 .sev-high{background:var(--amber-dim);color:var(--amber);}
 .sev-medium{background:var(--blue-dim);color:var(--blue);}
 .sev-low{background:var(--green-dim);color:var(--green);}
-
+ 
 /* CHARTS */
 .chart-row{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:20px;}
 .chart-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;}
@@ -228,7 +228,7 @@ body{font-family:var(--font-body);background:radial-gradient(circle at top, rgba
 .chart-legend{display:flex;gap:12px;}
 .legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2);}
 .legend-dot{width:8px;height:8px;border-radius:50%;}
-
+ 
 /* ZONES PAGE */
 .zones-layout{display:grid;grid-template-columns:240px 1fr 280px;gap:0;height:calc(100vh - var(--top-h) - 48px);margin:-24px;}
 .zones-list{border-right:1px solid var(--border);overflow-y:auto;padding:16px;}
@@ -259,7 +259,7 @@ body{font-family:var(--font-body);background:radial-gradient(circle at top, rgba
 .zp-stat{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px;}
 .zp-stat-label{font-size:10px;color:var(--text2);font-family:var(--font-mono);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;}
 .zp-stat-value{font-size:14px;font-weight:500;}
-
+ 
 /* SENSORS */
 .sensors-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
 .sensor-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;transition:all 0.2s;}
@@ -279,7 +279,7 @@ body{font-family:var(--font-body);background:radial-gradient(circle at top, rgba
 .s-batt{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text2);}
 .s-signal{display:flex;gap:2px;align-items:flex-end;}
 .signal-bar{width:3px;background:var(--green);border-radius:1px;}
-
+ 
 /* AI INSIGHTS */
 .insight-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:12px;}
 .insight-card.critical{border-color:rgba(255,92,107,0.25);background:linear-gradient(135deg,rgba(255,92,107,0.03),var(--card));}
@@ -297,7 +297,7 @@ body{font-family:var(--font-body);background:radial-gradient(circle at top, rgba
 .timeline-bar{flex:1;height:3px;background:var(--border2);border-radius:2px;overflow:hidden;position:relative;}
 .timeline-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--amber),var(--red));position:absolute;left:0;top:0;}
 .timeline-marker{position:absolute;top:50%;transform:translateY(-50%);width:8px;height:8px;border-radius:50%;background:var(--amber);border:2px solid var(--bg);}
-
+ 
 /* ALERTS */
 .alerts-filters{display:flex;gap:8px;margin-bottom:16px;}
 .af-btn{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:7px 14px;font-size:12px;color:var(--text2);cursor:pointer;transition:all 0.2s;font-family:var(--font-body);}
@@ -318,7 +318,7 @@ body{font-family:var(--font-body);background:radial-gradient(circle at top, rgba
 .alert-btn:hover{border-color:var(--border2);color:var(--text);}
 .alert-btn.ack{background:var(--green-dim);border-color:rgba(0,214,143,0.3);color:var(--green);}
 .alert-time{font-family:var(--font-mono);font-size:11px;color:var(--text3);white-space:nowrap;}
-
+ 
 /* ANALYTICS */
 .analytics-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
 .analytics-chart{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;}
@@ -327,7 +327,7 @@ body{font-family:var(--font-body);background:radial-gradient(circle at top, rgba
 .exec-icon{font-size:24px;margin-bottom:8px;}
 .exec-val{font-family:var(--font-head);font-size:22px;font-weight:700;color:var(--green);margin-bottom:2px;}
 .exec-label{font-size:11px;color:var(--text2);}
-
+ 
 /* SETTINGS */
 .settings-grid{display:grid;grid-template-columns:200px 1fr;gap:0;}
 .settings-nav{border-right:1px solid var(--border);padding:8px;}
@@ -367,7 +367,7 @@ body{font-family:var(--font-body);background:radial-gradient(circle at top, rgba
 .member-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--green));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#021A0D;flex-shrink:0;}
 .member-name{font-size:13px;font-weight:500;}
 .member-email{font-size:11px;color:var(--text2);}
-
+ 
 /* RIGHT PANEL COMPONENTS */
 .mini-alert{display:flex;gap:8px;padding:10px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:8px;cursor:pointer;transition:all 0.2s;}
 .mini-alert:hover{border-color:var(--border2);}
@@ -394,12 +394,12 @@ body{font-family:var(--font-body);background:radial-gradient(circle at top, rgba
 .ai-chat-input{display:flex;gap:6px;}
 .ai-chat-input input{flex:1;background:var(--card2);border:1px solid var(--border);border-radius:6px;padding:7px 10px;color:var(--text);font-family:var(--font-body);font-size:12px;outline:none;}
 .ai-chat-input button{background:var(--green-dim);border:1px solid rgba(0,214,143,0.3);border-radius:6px;padding:7px 10px;color:var(--green);cursor:pointer;font-size:12px;}
-
+ 
 /* SVG MAP */
 .kz-map{width:100%;height:100%;object-fit:contain;}
 .map-polygon{cursor:pointer;transition:opacity 0.2s;}
 .map-polygon:hover{opacity:0.8;}
-
+ 
 /* Misc */
 .divider{height:1px;background:var(--border);margin:16px 0;}
 .tag{display:inline-block;background:var(--card2);border:1px solid var(--border);border-radius:4px;padding:2px 8px;font-size:11px;font-family:var(--font-mono);color:var(--text2);margin-right:4px;}
@@ -408,41 +408,696 @@ body{font-family:var(--font-body);background:radial-gradient(circle at top, rgba
 .empty-state{text-align:center;padding:40px;color:var(--text2);}
 .scrollbar-hide{scrollbar-width:none;}
 .scrollbar-hide::-webkit-scrollbar{display:none;}
-
-body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(circle at 15% 15%,rgba(255,255,255,.08),transparent 20%),radial-gradient(circle at 85% 10%,rgba(0,214,143,.08),transparent 18%),radial-gradient(circle at 50% 100%,rgba(59,158,255,.12),transparent 20%);opacity:.75;}
-.topnav,.sidebar,.right-panel,.glass-card,.kpi-card,.chart-card,.weather-widget,.mini-alert,.ai-chat-preview,.sensor-card,.alert-item,.insight-card,.zone-item,.sidebar-farm,.zone-profile,.zones-list,.settings-content,.settings-nav,.ob-card,.ob-region,.ob-size,.ai-center{background:rgba(15,32,64,.58);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 12px 38px rgba(0,0,0,.18);}
-.kpi-card.fire-critical,.sensor-card.fire-critical,.alert-item.fire-critical,.mini-alert.fire-critical{background:linear-gradient(135deg, rgba(255,92,107,.18), rgba(15,32,64,.8));border-color:rgba(255,92,107,.45)!important;}
-.page{opacity:0;transform:translateY(10px);pointer-events:none;}
-.page.active{display:block;opacity:1;transform:translateY(0);pointer-events:auto;animation:fadePage .35s ease;}
-@keyframes fadePage{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.map-premium{width:min(92%,920px);height:min(78vh,620px);display:grid;grid-template-columns:repeat(6,1fr);grid-template-rows:repeat(5,1fr);gap:14px;padding:22px;border-radius:28px;background:linear-gradient(180deg,rgba(7,17,31,.55),rgba(10,22,40,.88));border:1px solid rgba(255,255,255,.08);box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 20px 60px rgba(0,0,0,.3);position:relative;}
-.field-block{position:relative;border-radius:24px;border:1px solid rgba(255,255,255,.08);padding:14px;cursor:pointer;display:flex;align-items:end;min-height:100px;transition:.25s ease;overflow:hidden;background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));}
-.field-block::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.08),transparent 60%);}
-.field-block:hover{transform:translateY(-2px) scale(1.01);border-color:rgba(255,255,255,.16);}
-.field-block.active{outline:2px solid rgba(255,255,255,.18);box-shadow:0 0 0 1px rgba(255,255,255,.08),0 18px 40px rgba(0,0,0,.28);}
-.field-block .field-label{position:relative;z-index:1;font-family:var(--font-head);font-size:13px;font-weight:700;}
-.field-block .field-meta{position:relative;z-index:1;font-size:11px;color:rgba(232,240,255,.85);margin-top:4px;}
-.field-green{background:linear-gradient(145deg,rgba(0,214,143,.20),rgba(22,61,56,.65));}
-.field-amber{background:linear-gradient(145deg,rgba(245,183,49,.20),rgba(77,58,20,.65));}
-.field-red{background:linear-gradient(145deg,rgba(255,92,107,.28),rgba(77,20,27,.72));}
-.field-blue{background:linear-gradient(145deg,rgba(59,158,255,.22),rgba(20,37,77,.72));}
-.modal-overlay{position:fixed;inset:0;background:rgba(5,10,20,.64);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;z-index:3000;padding:20px;}
-.modal-overlay.show{display:flex;}
-.modal-card{width:min(460px,100%);padding:26px;border-radius:24px;background:linear-gradient(180deg,rgba(15,32,64,.92),rgba(10,20,38,.96));border:1px solid rgba(255,255,255,.08);box-shadow:0 24px 80px rgba(0,0,0,.4);}
-.modal-title{font-family:var(--font-head);font-size:22px;font-weight:700;margin-bottom:10px;}
-.modal-sub{color:var(--text2);line-height:1.6;margin-bottom:20px;}
-.modal-actions{display:flex;justify-content:flex-end;gap:10px;}
-.spinner{width:22px;height:22px;border:2px solid rgba(255,255,255,.16);border-top-color:var(--green);border-radius:50%;animation:spin 1s linear infinite;display:inline-block;vertical-align:middle;margin-right:10px;}
-.ai-loader{display:none;align-items:center;gap:10px;font-size:13px;color:var(--text2);margin:10px 0 0 0;}
-.ai-loader.show{display:flex;}
-.mobile-tabbar{display:none;}
-@media (max-width: 980px){.right-panel{display:none}.kpi-grid,.sensors-grid,.analytics-grid,.chart-row,.recs-grid,.exec-cards{grid-template-columns:1fr 1fr}.zones-layout{grid-template-columns:1fr;height:auto;margin:0}.zones-list,.zone-profile{border:none}.map-area{min-height:380px}.sidebar{display:none}.main-content{padding-bottom:90px}.mobile-tabbar{display:grid;grid-template-columns:repeat(4,1fr);position:fixed;left:12px;right:12px;bottom:12px;z-index:1500;background:rgba(12,26,46,.88);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.08);border-radius:22px;box-shadow:0 20px 50px rgba(0,0,0,.34);overflow:hidden}.mobile-tabbar button{border:none;background:transparent;color:var(--text2);padding:12px 6px;font-size:11px;font-family:var(--font-body)}.mobile-tabbar button.active{color:var(--green);background:rgba(0,214,143,.08)}.body-layout{overflow:visible}.topnav{padding:0 12px;gap:10px}.nav-search,.nav-conn,.nav-weather{display:none}}
-@media (max-width: 720px){.ob-wrap{width:min(94vw,560px)}.ob-cards,.ob-regions,.ob-sizes,.kpi-grid,.sensors-grid,.analytics-grid,.chart-row,.recs-grid,.exec-cards,.zp-grid{grid-template-columns:1fr}.page{padding:16px}.page-header{flex-direction:column;gap:12px}.ai-actions,.alert-actions,.modal-actions{flex-wrap:wrap}.map-filters{flex-wrap:wrap}.map-premium{grid-template-columns:repeat(2,1fr);grid-template-rows:auto;gap:10px;height:auto;padding:16px}.field-block{min-height:92px}}
-
+ 
+/* =========================
+   MOBILE / TABLET FIXES
+========================= */
+ 
+@media (max-width:1200px){
+  .right-panel{
+    display:none;
+  }
+ 
+  .kpi-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+ 
+  .chart-row,
+  .analytics-grid{
+    grid-template-columns:1fr;
+  }
+ 
+  .sensors-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+ 
+  .zones-layout{
+    grid-template-columns:220px 1fr;
+  }
+ 
+  .zone-profile{
+    grid-column:1 / -1;
+    border-left:none;
+    border-top:1px solid var(--border);
+  }
+}
+ 
+@media (max-width:768px){
+ 
+  body{
+    font-size:13px;
+  }
+ 
+  .topnav{
+    flex-wrap:wrap;
+    height:auto;
+    padding:10px;
+    gap:8px;
+  }
+ 
+  .nav-search{
+    order:3;
+    width:100%;
+    max-width:100%;
+  }
+ 
+  .nav-weather,
+  .nav-conn,
+  .nav-lang{
+    display:none;
+  }
+ 
+  .sidebar{
+    display:none;
+  }
+ 
+  .body-layout{
+    display:block;
+  }
+ 
+  .main-content{
+    width:100%;
+  }
+ 
+  .page{
+    padding:14px;
+  }
+ 
+  .page-header{
+    flex-direction:column;
+    gap:10px;
+    align-items:flex-start;
+  }
+ 
+  .page-title{
+    font-size:18px;
+  }
+ 
+  .kpi-grid{
+    grid-template-columns:1fr;
+  }
+ 
+  .chart-row,
+  .analytics-grid,
+  .recs-grid,
+  .sensors-grid{
+    grid-template-columns:1fr;
+  }
+ 
+  .zones-layout{
+    display:flex;
+    flex-direction:column;
+    height:auto;
+    margin:0;
+  }
+ 
+  .zones-list,
+  .zone-profile{
+    border:none;
+    padding:12px 0;
+  }
+ 
+  .map-area{
+    min-height:320px;
+    border-radius:12px;
+    overflow:hidden;
+  }
+ 
+  .map-filters{
+    flex-wrap:wrap;
+    max-width:90%;
+  }
+ 
+  .map-controls{
+    top:auto;
+    bottom:10px;
+    right:10px;
+    flex-direction:row;
+  }
+ 
+  .ai-actions{
+    flex-direction:column;
+  }
+ 
+  .btn-action,
+  .btn-outline,
+  .nav-btn{
+    width:100%;
+    justify-content:center;
+  }
+ 
+  .zp-grid{
+    grid-template-columns:1fr;
+  }
+ 
+  .insight-chain{
+    grid-template-columns:1fr;
+  }
+ 
+  .exec-cards{
+    grid-template-columns:1fr 1fr;
+  }
+}
+ 
+@media (max-width:480px){
+ 
+  .nav-logo{
+    font-size:14px;
+  }
+ 
+  .page-title{
+    font-size:16px;
+  }
+ 
+  .exec-cards{
+    grid-template-columns:1fr;
+  }
+ 
+  .sensor-value,
+  .kpi-value{
+    font-size:22px;
+  }
+}
+ 
+ 
+ 
+.zone-tabs{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:18px;
+}
+ 
+.zone-tab{
+  border:1px solid var(--border);
+  background:var(--card);
+  color:var(--text2);
+  padding:10px 14px;
+  border-radius:12px;
+  cursor:pointer;
+  font-family:var(--font-body);
+  font-size:13px;
+  transition:all 0.2s;
+}
+ 
+.zone-tab:hover{
+  border-color:rgba(0,214,143,0.35);
+  color:var(--text);
+  transform:translateY(-1px);
+}
+ 
+.zone-tab.active{
+  background:var(--green-dim);
+  border-color:rgba(0,214,143,0.4);
+  color:var(--green);
+}
+ 
+.v3-grid{
+  grid-template-columns:repeat(3,1fr);
+}
+ 
+.sensor-card-v3{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:16px;
+  transition:all 0.2s;
+}
+ 
+.sensor-card-v3:hover{
+  border-color:var(--border2);
+  transform:translateY(-1px);
+}
+ 
+.sensor-card-v3.alert{
+  border-color:rgba(255,92,107,0.28);
+}
+ 
+.sensor-card-v3.watch{
+  border-color:rgba(245,183,49,0.28);
+}
+ 
+.sensor-top{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  margin-bottom:12px;
+}
+ 
+.sensor-icon-v3{
+  width:38px;
+  height:38px;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:18px;
+  flex-shrink:0;
+}
+ 
+.sensor-title-v3{
+  font-size:13px;
+  font-weight:500;
+  line-height:1.2;
+}
+ 
+.sensor-zone-v3{
+  font-size:11px;
+  color:var(--text2);
+  margin-top:2px;
+}
+ 
+.sensor-badge-v3{
+  margin-left:auto;
+  font-size:10px;
+  font-family:var(--font-mono);
+  padding:3px 8px;
+  border-radius:999px;
+  white-space:nowrap;
+}
+ 
+.sensor-badge-v3.normal{
+  background:var(--green-dim);
+  color:var(--green);
+}
+ 
+.sensor-badge-v3.watch{
+  background:var(--amber-dim);
+  color:var(--amber);
+}
+ 
+.sensor-badge-v3.alert{
+  background:var(--red-dim);
+  color:var(--red);
+}
+ 
+.sensor-main-v3{
+  display:flex;
+  align-items:baseline;
+  gap:4px;
+  margin-bottom:6px;
+}
+ 
+.sensor-main-v3 .value{
+  font-family:var(--font-head);
+  font-size:26px;
+  font-weight:700;
+  line-height:1;
+}
+ 
+.sensor-main-v3 .unit{
+  font-size:12px;
+  color:var(--text2);
+}
+ 
+.sensor-desc-v3{
+  font-size:11px;
+  color:var(--text2);
+  margin-bottom:10px;
+}
+ 
+.sensor-bar-v3{
+  height:7px;
+  background:var(--border2);
+  border-radius:999px;
+  overflow:hidden;
+  margin-bottom:10px;
+}
+ 
+.sensor-fill-v3{
+  height:100%;
+  border-radius:999px;
+}
+ 
+.sensor-meta-v3{
+  display:flex;
+  justify-content:space-between;
+  font-size:11px;
+  color:var(--text2);
+}
+ 
+@media (max-width:1200px){
+  .v3-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+ 
+@media (max-width:768px){
+  .v3-grid{
+    grid-template-columns:1fr;
+  }
+ 
+  .zone-tabs{
+    gap:8px;
+  }
+ 
+  .zone-tab{
+    padding:8px 12px;
+    font-size:12px;
+  }
+}
+ 
+/* ── MOBILE NAV (hamburger + bottom bar) ── */
+.mobile-menu-btn{
+  display:none;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius-sm);
+  width:34px;height:34px;
+  align-items:center;justify-content:center;
+  cursor:pointer;font-size:18px;color:var(--text2);
+  flex-shrink:0;
+}
+.mobile-sidebar-overlay{
+  display:none;
+  position:fixed;inset:0;
+  background:rgba(0,0,0,0.6);
+  z-index:200;
+  backdrop-filter:blur(2px);
+}
+.mobile-sidebar-overlay.open{display:block;}
+.sidebar.mobile-open{
+  display:flex !important;
+  position:fixed;
+  top:0;left:0;bottom:0;
+  z-index:201;
+  width:260px;
+  box-shadow:4px 0 40px rgba(0,0,0,0.5);
+  animation:slideInLeft 0.25s ease;
+}
+@keyframes slideInLeft{from{transform:translateX(-100%);}to{transform:translateX(0);}}
+ 
+/* Bottom nav bar for mobile */
+.mobile-bottom-nav{
+  display:none;
+  position:fixed;bottom:0;left:0;right:0;
+  height:60px;
+  background:rgba(12,26,46,0.97);
+  backdrop-filter:blur(20px);
+  border-top:1px solid var(--border);
+  z-index:150;
+  align-items:center;
+  justify-content:space-around;
+  padding:0 4px;
+}
+.mob-nav-item{
+  display:flex;flex-direction:column;align-items:center;
+  gap:3px;padding:6px 10px;
+  cursor:pointer;color:var(--text3);
+  font-size:10px;font-family:var(--font-mono);
+  border-radius:var(--radius-sm);
+  transition:all 0.2s;
+  position:relative;
+}
+.mob-nav-item .mob-icon{font-size:18px;line-height:1;}
+.mob-nav-item.active{color:var(--green);}
+.mob-nav-item .mob-badge{
+  position:absolute;top:2px;right:4px;
+  background:var(--red);color:#fff;
+  font-size:8px;width:14px;height:14px;
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-mono);
+}
+ 
+@media (max-width:768px){
+  .mobile-menu-btn{display:flex;}
+  .mobile-bottom-nav{display:flex;}
+  .main-content{padding-bottom:60px;}
+  /* hide right panel on small screens */
+  .right-panel{display:none;}
+ 
+  /* Onboarding mobile fixes */
+  .ob-wrap{width:95%;padding:0 10px;}
+  .ob-cards{grid-template-columns:1fr;}
+  .ob-regions{grid-template-columns:1fr 1fr;}
+  .ob-sizes{grid-template-columns:1fr 1fr;}
+  .ob-step h2{font-size:22px;}
+ 
+  /* KPI grid 2 cols on mobile */
+  .kpi-grid{grid-template-columns:1fr 1fr;}
+ 
+  /* AI actions stack */
+  .ai-actions{flex-direction:column;}
+  .btn-action{width:100%;justify-content:center;}
+ 
+  /* Zones page full-column on mobile */
+  .zones-layout{
+    display:flex;flex-direction:column;
+    height:auto;margin:0;
+  }
+  .zones-list{border-right:none;border-bottom:1px solid var(--border);padding:12px;}
+  .zone-profile{border-left:none;border-top:1px solid var(--border);padding:12px;}
+  .map-area{min-height:280px;border-radius:12px;overflow:hidden;margin:0 0 12px;}
+ 
+  /* Settings stacked */
+  #page-settings > div > div:first-child,
+  .settings-grid{grid-template-columns:1fr;}
+ 
+  /* Insight chain stacked */
+  .insight-chain{grid-template-columns:1fr 1fr;}
+ 
+  /* Exec cards 2 cols */
+  .exec-cards{grid-template-columns:1fr 1fr;}
+ 
+  /* Rec grid 1 col */
+  .recs-grid{grid-template-columns:1fr;}
+ 
+  /* Alert meta wraps */
+  .alert-meta{flex-wrap:wrap;gap:6px;}
+  .alert-actions{flex-wrap:wrap;}
+  .alert-btn{font-size:11px;padding:4px 10px;}
+ 
+  /* Zone profile grid 2 cols */
+  .zp-grid{grid-template-columns:1fr 1fr;}
+ 
+  /* Page header adjustments */
+  .page-header{flex-direction:column;gap:10px;align-items:flex-start;}
+  .page-header > div:last-child{width:100%;flex-wrap:wrap;}
+  .page-header > div:last-child button{flex:1;justify-content:center;}
+}
+ 
+@media (max-width:480px){
+  .kpi-grid{grid-template-columns:1fr;}
+  .insight-chain{grid-template-columns:1fr;}
+  .exec-cards{grid-template-columns:1fr;}
+  .ob-regions{grid-template-columns:1fr;}
+  .zp-grid{grid-template-columns:1fr 1fr;}
+  .page{padding:12px;}
+  .topnav{padding:8px 12px;}
+  .nav-logo{font-size:15px;}
+}
+ 
+/* ── ZONE INSIGHT REPORT CARD ── */
+.zone-insight-report{
+  margin-top:24px;
+  background:linear-gradient(135deg,rgba(0,214,143,0.04) 0%,rgba(59,158,255,0.04) 100%);
+  border:1px solid rgba(0,214,143,0.18);
+  border-radius:var(--radius);
+  padding:20px;
+  position:relative;
+  overflow:hidden;
+}
+.zone-insight-report::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--green),var(--blue),transparent);
+}
+.zone-insight-header{
+  display:flex;align-items:center;gap:10px;margin-bottom:14px;
+}
+.zone-insight-icon{
+  width:36px;height:36px;
+  background:var(--green-dim);border:1px solid rgba(0,214,143,0.3);
+  border-radius:9px;display:flex;align-items:center;justify-content:center;
+  font-size:18px;flex-shrink:0;
+}
+.zone-insight-title{
+  font-family:var(--font-head);font-size:14px;font-weight:700;
+}
+.zone-insight-sub{font-size:11px;color:var(--text2);}
+.zone-insight-status{
+  margin-left:auto;padding:4px 10px;border-radius:20px;
+  font-size:10px;font-family:var(--font-mono);font-weight:600;
+  white-space:nowrap;
+}
+.zone-insight-status.good{background:var(--green-dim);color:var(--green);border:1px solid rgba(0,214,143,0.3);}
+.zone-insight-status.watch{background:var(--amber-dim);color:var(--amber);border:1px solid rgba(245,183,49,0.3);}
+.zone-insight-status.alert{background:var(--red-dim);color:var(--red);border:1px solid rgba(255,92,107,0.3);}
+.zone-insight-body{
+  font-size:13px;color:var(--text);line-height:1.75;
+  padding:14px 16px;
+  background:rgba(0,0,0,0.18);
+  border-radius:var(--radius-sm);
+  border-left:3px solid var(--green);
+  margin-bottom:14px;
+}
+.zone-insight-body.alert{border-left-color:var(--red);}
+.zone-insight-body.watch{border-left-color:var(--amber);}
+.zone-insight-actions-row{
+  display:flex;gap:8px;flex-wrap:wrap;align-items:center;
+}
+.zone-insight-tag{
+  font-size:10px;font-family:var(--font-mono);
+  padding:3px 9px;border-radius:999px;
+  background:var(--card2);border:1px solid var(--border2);color:var(--text2);
+}
+.zone-insight-tag.red{background:var(--red-dim);border-color:rgba(255,92,107,0.25);color:var(--red);}
+.zone-insight-tag.amber{background:var(--amber-dim);border-color:rgba(245,183,49,0.25);color:var(--amber);}
+.zone-insight-tag.green{background:var(--green-dim);border-color:rgba(0,214,143,0.25);color:var(--green);}
+.zone-insight-tag.blue{background:var(--blue-dim);border-color:rgba(59,158,255,0.25);color:var(--blue);}
+ 
+/* ── SENSOR HISTORY MODAL ── */
+.sensor-history-modal{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,0.75);
+  z-index:600;
+  align-items:center;justify-content:center;
+  backdrop-filter:blur(5px);
+}
+.sensor-history-modal.open{display:flex;}
+.sh-box{
+  background:var(--surface);
+  border:1px solid var(--border2);
+  border-radius:var(--radius);
+  width:min(680px,96vw);
+  max-height:90vh;
+  overflow-y:auto;
+  animation:fadeUp 0.25s ease;
+  box-shadow:0 32px 80px rgba(0,0,0,0.7);
+}
+.sh-box::-webkit-scrollbar{width:4px;}
+.sh-box::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+.sh-header{
+  display:flex;align-items:center;gap:12px;
+  padding:18px 22px 14px;
+  border-bottom:1px solid var(--border);
+  position:sticky;top:0;background:var(--surface);z-index:2;
+}
+.sh-title{font-family:var(--font-head);font-size:16px;font-weight:700;}
+.sh-sub{font-size:11px;color:var(--text2);margin-top:2px;}
+.sh-close{
+  margin-left:auto;background:none;border:1px solid var(--border);
+  border-radius:6px;width:30px;height:30px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--text2);font-size:16px;transition:all 0.2s;
+}
+.sh-close:hover{border-color:var(--border2);color:var(--text);}
+.sh-body{padding:20px 22px;}
+.sh-stats-row{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:10px;
+  margin-bottom:18px;
+}
+.sh-stat{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius-sm);padding:10px 12px;text-align:center;
+}
+.sh-stat-val{font-family:var(--font-head);font-size:18px;font-weight:700;line-height:1.2;}
+.sh-stat-label{font-size:10px;color:var(--text2);font-family:var(--font-mono);text-transform:uppercase;margin-top:3px;}
+.sh-chart-wrap{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;}
+.sh-chart-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.sh-chart-title{font-family:var(--font-head);font-size:13px;font-weight:600;}
+.sh-range-btns{display:flex;gap:4px;}
+.sh-range-btn{
+  background:none;border:1px solid var(--border);border-radius:5px;
+  padding:4px 9px;font-size:10px;font-family:var(--font-mono);
+  color:var(--text3);cursor:pointer;transition:all 0.2s;
+}
+.sh-range-btn:hover{border-color:var(--border2);color:var(--text2);}
+.sh-range-btn.active{background:var(--green-dim);border-color:rgba(0,214,143,0.35);color:var(--green);}
+@media(max-width:560px){
+  .sh-stats-row{grid-template-columns:1fr 1fr;}
+  .sh-body{padding:14px;}
+  .sh-header{padding:14px;}
+}
+ 
+/* ── LIVE TICK INDICATOR ── */
+.live-tick{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:10px;font-family:var(--font-mono);
+  color:var(--green);
+  background:var(--green-dim);border:1px solid rgba(0,214,143,0.2);
+  border-radius:999px;padding:2px 8px;
+  margin-left:8px;
+  vertical-align:middle;
+}
+.live-tick-dot{
+  width:5px;height:5px;border-radius:50%;
+  background:var(--green);
+  animation:pulse 1.5s infinite;
+}
+.sensor-card-v3{cursor:pointer;}
+.sensor-card-v3:hover .sensor-title-v3{color:var(--green);}
+ 
+/* ── ADD ZONE MODAL ── */
+.modal-overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,0.7);
+  z-index:500;
+  align-items:center;justify-content:center;
+  backdrop-filter:blur(4px);
+}
+.modal-overlay.open{display:flex;}
+.modal-box{
+  background:var(--surface);
+  border:1px solid var(--border2);
+  border-radius:var(--radius);
+  width:min(560px,95vw);
+  max-height:90vh;
+  overflow-y:auto;
+  position:relative;
+  animation:fadeUp 0.25s ease;
+  box-shadow:0 24px 80px rgba(0,0,0,0.6);
+}
+.modal-box::-webkit-scrollbar{width:4px;}
+.modal-box::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+.modal-header{
+  display:flex;align-items:center;gap:12px;
+  padding:20px 24px 16px;
+  border-bottom:1px solid var(--border);
+  position:sticky;top:0;background:var(--surface);z-index:2;
+}
+.modal-title{font-family:var(--font-head);font-size:17px;font-weight:700;}
+.modal-close{
+  margin-left:auto;background:none;border:1px solid var(--border);
+  border-radius:6px;width:30px;height:30px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--text2);font-size:16px;transition:all 0.2s;
+}
+.modal-close:hover{border-color:var(--border2);color:var(--text);}
+.modal-body{padding:20px 24px;}
+.modal-footer{
+  padding:16px 24px;border-top:1px solid var(--border);
+  display:flex;gap:10px;justify-content:flex-end;
+  position:sticky;bottom:0;background:var(--surface);z-index:2;
+}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;}
+.form-row.full{grid-template-columns:1fr;}
+.form-group{display:flex;flex-direction:column;gap:6px;}
+.form-label{font-size:11px;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:0.5px;color:var(--text2);}
+.form-input,.form-select{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius-sm);padding:9px 12px;
+  color:var(--text);font-family:var(--font-body);font-size:13px;
+  outline:none;transition:border-color 0.2s;width:100%;
+}
+.form-input:focus,.form-select:focus{border-color:rgba(0,214,143,0.4);}
+.form-select option{background:var(--card);}
+.form-input::placeholder{color:var(--text3);}
+.modal-section-label{
+  font-size:11px;font-family:var(--font-mono);text-transform:uppercase;
+  letter-spacing:1px;color:var(--text3);margin-bottom:10px;
+  padding-bottom:6px;border-bottom:1px solid var(--border);
+}
+@media (max-width:480px){
+  .form-row{grid-template-columns:1fr;}
+  .modal-body{padding:16px;}
+  .modal-header{padding:16px;}
+  .modal-footer{padding:12px 16px;flex-direction:column;}
+  .modal-footer button{width:100%;justify-content:center;}
+}
 </style>
 </head>
 <body>
-
+ 
 <!-- ══ ONBOARDING ══ -->
 <div id="onboarding">
   <div class="ob-wrap">
@@ -453,7 +1108,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;background:ra
       <div class="ob-dot" id="dot2"></div>
       <div class="ob-dot" id="dot3"></div>
     </div>
-
+ 
     <!-- STEP 1 -->
     <div class="ob-step active" id="step1">
       <h2>What type of<br><span>farm do you manage?</span></h2>
@@ -477,7 +1132,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;background:ra
       </div>
       <button class="btn-primary" id="next1" onclick="nextStep(2)" disabled>Continue →</button>
     </div>
-
+ 
     <!-- STEP 2 -->
     <div class="ob-step" id="step2">
       <h2>Select your<br><span>region in Kazakhstan</span></h2>
@@ -495,7 +1150,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;background:ra
       </div>
       <button class="btn-primary" id="next2" onclick="nextStep(3)" disabled>Continue →</button>
     </div>
-
+ 
     <!-- STEP 3 -->
     <div class="ob-step" id="step3">
       <h2>Farm size &<br><span>management goals</span></h2>
@@ -516,7 +1171,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;background:ra
       </div>
       <button class="btn-primary" id="next3" onclick="generateDashboard()" disabled>Generate My Dashboard ✦</button>
     </div>
-
+ 
     <!-- GENERATING -->
     <div class="ob-step" id="step-gen">
       <div class="ob-generating">
@@ -527,12 +1182,13 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;background:ra
     </div>
   </div>
 </div>
-
+ 
 <!-- ══ MAIN APP ══ -->
 <div id="app">
-
+ 
   <!-- TOP NAV -->
   <nav class="topnav">
+    <div class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleMobileSidebar()">☰</div>
     <div class="nav-logo">
       <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
         <rect width="28" height="28" rx="7" fill="rgba(0,214,143,0.15)"/>
@@ -573,9 +1229,9 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;background:ra
     </div>
     <div class="avatar" title="Profile">АА</div>
   </nav>
-
+ 
   <div class="body-layout">
-
+ 
     <!-- SIDEBAR -->
     <aside class="sidebar">
       <div class="sidebar-farm">
@@ -600,10 +1256,10 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;background:ra
         <div style="font-size:11px;color:var(--text3);font-family:var(--font-mono);">v2.4.1 · Last sync 2m ago</div>
       </div>
     </aside>
-
+ 
     <!-- MAIN CONTENT -->
     <main class="main-content">
-
+ 
       <!-- ═══ OVERVIEW ═══ -->
       <div class="page active" id="page-overview">
         <div class="page-header">
@@ -616,7 +1272,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;background:ra
             <button class="btn-outline" style="border-color:rgba(0,214,143,0.3);color:var(--green);">⊕ Add Zone</button>
           </div>
         </div>
-
+ 
         <!-- KPI GRID -->
         <div class="kpi-grid">
           <div class="kpi-card">
@@ -668,7 +1324,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;background:ra
             <div class="kpi-bar"><div class="kpi-bar-fill green" style="width:68%"></div></div>
           </div>
         </div>
-
+ 
         <!-- AI CONTROL CENTER -->
         <div class="ai-center">
           <div class="ai-center-header">
@@ -694,7 +1350,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;background:ra
             <button class="btn-action" onclick="showPage('alerts')">🔕 Dismiss Alert</button>
           </div>
         </div>
-
+ 
         <!-- CHART ROW -->
         <div class="chart-row">
           <div class="chart-card">
@@ -721,7 +1377,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;background:ra
             <canvas id="zoneChart" height="140"></canvas>
           </div>
         </div>
-
+ 
         <!-- RECOMMENDATIONS -->
         <div class="section-title">
           Smart Recommendations
@@ -778,13 +1434,16 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;background:ra
           </div>
         </div>
       </div>
-
+ 
       <!-- ═══ ZONES ═══ -->
       <div class="page" id="page-zones">
         <div class="zones-layout">
           <!-- Zone List -->
           <div class="zones-list scrollbar-hide">
-            <div style="font-family:var(--font-head);font-size:13px;font-weight:600;margin-bottom:12px;padding:0 4px;">Farm Zones <span style="color:var(--text3);font-weight:400;">12</span></div>
+            <div style="font-family:var(--font-head);font-size:13px;font-weight:600;margin-bottom:12px;padding:0 4px;display:flex;align-items:center;justify-content:space-between;">
+              <span>Farm Zones <span style="color:var(--text3);font-weight:400;" id="zoneCount">12</span></span>
+              <button class="btn-outline" style="border-color:rgba(0,214,143,0.3);color:var(--green);font-size:11px;padding:5px 10px;" onclick="openAddZoneModal()">⊕ Add Zone</button>
+            </div>
             <div class="zone-item active" onclick="selectZone(this,'Wheat Zone A1','Wheat','847 ha','Drip Irrigation','Critical — Drought Stress','22','3.1','2024-03-15')">
               <div class="zone-item-header"><div class="zone-dot" style="background:var(--red)"></div><div class="zone-name">Wheat Zone A1</div><div class="zone-status" style="color:var(--red)">⚠ Critical</div></div>
               <div class="zone-meta">847 ha · Wheat · Sector A</div>
@@ -822,7 +1481,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;background:ra
               <div class="zone-meta">520 ha · Barley · Sector Z</div>
             </div>
           </div>
-
+ 
           <!-- MAP -->
           <div class="map-area">
             <div class="map-filters">
@@ -838,19 +1497,70 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;background:ra
               <div class="map-btn">⟳</div>
               <div class="map-btn">⤢</div>
             </div>
-            <div class="map-premium" id="premium-map">
-              <div class="field-block field-red active" data-zone="Wheat Zone A1" style="grid-column:1 / span 2;grid-row:1 / span 2" onclick="selectZoneFromMap(this,'Wheat Zone A1','Wheat','847 ha','Drip Irrigation','Critical — Drought Stress','22','6.4','2024-03-15',28)"><div><div class="field-label">Wheat A1</div><div class="field-meta">Moisture 22% · pH 6.4</div></div></div>
-              <div class="field-block field-amber" style="grid-column:3 / span 2;grid-row:1 / span 2" onclick="selectZoneFromMap(this,'Wheat Zone A2','Wheat','620 ha','Sprinkler','Watchlist','31','6.8','2024-03-15',63)"><div><div class="field-label">Wheat A2</div><div class="field-meta">Moisture 31% · pH 6.8</div></div></div>
-              <div class="field-block field-blue" style="grid-column:5 / span 2;grid-row:1 / span 2" onclick="selectZoneFromMap(this,'Corn Zone B1','Corn','410 ha','Drip Irrigation','Healthy','58','6.6','2024-02-20',88)"><div><div class="field-label">Corn B1</div><div class="field-meta">Moisture 58% · pH 6.6</div></div></div>
-              <div class="field-block field-green" style="grid-column:1 / span 2;grid-row:3 / span 2" onclick="selectZoneFromMap(this,'Corn Zone B2','Corn','380 ha','Drip Irrigation','Warning — pH low','38','5.8','2024-02-20',71)"><div><div class="field-label">Corn B2</div><div class="field-meta">Moisture 38% · pH 5.8</div></div></div>
-              <div class="field-block field-red" style="grid-column:3 / span 2;grid-row:3 / span 2" onclick="selectZoneFromMap(this,'Potato Field East','Potato','290 ha','Flood Irrigation','Smoke Detected','61','6.9','2024-04-01',91)"><div><div class="field-label">Potato East</div><div class="field-meta">Smoke detected · Fire risk 91%</div></div></div>
-              <div class="field-block field-green" style="grid-column:5 / span 2;grid-row:3 / span 1" onclick="selectZoneFromMap(this,'Potato Field West','Potato','310 ha','Drip Irrigation','Healthy','55','7.0','2024-04-01',83)"><div><div class="field-label">Potato West</div><div class="field-meta">Moisture 55% · pH 7.0</div></div></div>
-              <div class="field-block field-green" style="grid-column:5 / span 2;grid-row:4 / span 2" onclick="selectZoneFromMap(this,'Barley Zone Z5','Barley','520 ha','Drip Irrigation','Healthy','49','6.8','2024-03-28',86)"><div><div class="field-label">Barley Z5</div><div class="field-meta">Seeding window open</div></div></div>
-              <div class="field-block field-amber" style="grid-column:1 / span 3;grid-row:5 / span 1" onclick="selectZoneFromMap(this,'Cattle Pasture C','Pasture','980 ha','Natural','Overgrazing Risk','41','N/A','–',55)"><div><div class="field-label">Pasture C</div><div class="field-meta">Load 140% · rotation needed</div></div></div>
-              <div class="field-block field-green" style="grid-column:4 / span 1;grid-row:5 / span 1" onclick="selectZoneFromMap(this,'Cattle Pasture A','Pasture','1,200 ha','Natural','Healthy','72','N/A','–',84)"><div><div class="field-label">Pasture A</div><div class="field-meta">Stable vegetation</div></div></div>
-            </div>
+            <svg viewBox="0 0 600 400" style="width:100%;height:100%;max-height:calc(100vh - 120px);">
+              <defs>
+                <radialGradient id="grd1" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#0F2040"/><stop offset="100%" stop-color="#070F1A"/></radialGradient>
+                <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/></pattern>
+              </defs>
+              <rect width="600" height="400" fill="url(#grd1)"/>
+              <rect width="600" height="400" fill="url(#grid)"/>
+              <!-- KZ outline (simplified) -->
+              <path d="M80,120 L180,80 L300,70 L420,90 L520,110 L540,180 L520,260 L460,310 L380,340 L280,350 L180,320 L100,280 L70,210 Z" fill="rgba(0,100,60,0.08)" stroke="rgba(0,214,143,0.15)" stroke-width="1.5"/>
+              <!-- Farm Zones Polygons -->
+              <g class="map-polygon" onclick="selectZone(null,'Wheat Zone A1','Wheat','847 ha','Drip Irrigation','Critical — Drought Stress','22','3.1','2024-03-15')">
+                <path d="M160,150 L210,140 L230,180 L185,195 Z" fill="rgba(255,92,107,0.25)" stroke="#FF5C6B" stroke-width="1.5"/>
+                <text x="190" y="170" fill="#FF5C6B" font-size="9" font-family="'JetBrains Mono'" text-anchor="middle">A1</text>
+              </g>
+              <g class="map-polygon" onclick="selectZone(null,'Wheat Zone A2','Wheat','620 ha','Sprinkler','Healthy','45','7.8','2024-03-15')">
+                <path d="M215,140 L265,132 L280,168 L232,178 Z" fill="rgba(245,183,49,0.2)" stroke="#F5B731" stroke-width="1.5"/>
+                <text x="248" y="158" fill="#F5B731" font-size="9" font-family="'JetBrains Mono'" text-anchor="middle">A2</text>
+              </g>
+              <g class="map-polygon" onclick="selectZone(null,'Corn Zone B1','Corn','410 ha','Drip Irrigation','Healthy','58','8.5','2024-02-20')">
+                <path d="M300,155 L350,148 L360,185 L308,192 Z" fill="rgba(0,214,143,0.2)" stroke="#00D68F" stroke-width="1.5"/>
+                <text x="330" y="173" fill="#00D68F" font-size="9" font-family="'JetBrains Mono'" text-anchor="middle">B1</text>
+              </g>
+              <g class="map-polygon" onclick="selectZone(null,'Corn Zone B2','Corn','380 ha','Drip Irrigation','Warning — pH low','38','5.1','2024-02-20')">
+                <path d="M308,195 L358,188 L365,220 L315,228 Z" fill="rgba(245,183,49,0.2)" stroke="#F5B731" stroke-width="1.5"/>
+                <text x="336" y="210" fill="#F5B731" font-size="9" font-family="'JetBrains Mono'" text-anchor="middle">B2</text>
+              </g>
+              <g class="map-polygon" onclick="selectZone(null,'Potato Field East','Potato','290 ha','Flood Irrigation','Alert — Smoke','61','7.2','2024-04-01')">
+                <path d="M390,200 L440,193 L448,228 L397,235 Z" fill="rgba(255,92,107,0.25)" stroke="#FF5C6B" stroke-width="1.5"/>
+                <text x="419" y="215" fill="#FF5C6B" font-size="9" font-family="'JetBrains Mono'" text-anchor="middle">PE</text>
+              </g>
+              <g class="map-polygon" onclick="selectZone(null,'Potato Field West','Potato','310 ha','Drip Irrigation','Healthy','55','7.0','2024-04-01')">
+                <path d="M350,200 L390,193 L397,228 L356,235 Z" fill="rgba(0,214,143,0.15)" stroke="#00D68F" stroke-width="1.5"/>
+                <text x="373" y="215" fill="#00D68F" font-size="9" font-family="'JetBrains Mono'" text-anchor="middle">PW</text>
+              </g>
+              <g class="map-polygon">
+                <path d="M150,230 L260,215 L270,285 L155,295 Z" fill="rgba(0,214,143,0.08)" stroke="rgba(0,214,143,0.3)" stroke-width="1" stroke-dasharray="4,3"/>
+                <text x="208" y="255" fill="rgba(0,214,143,0.6)" font-size="9" font-family="'JetBrains Mono'" text-anchor="middle">Pasture A</text>
+              </g>
+              <g class="map-polygon">
+                <path d="M265,220 L340,210 L348,270 L270,280 Z" fill="rgba(245,183,49,0.1)" stroke="rgba(245,183,49,0.4)" stroke-width="1" stroke-dasharray="4,3"/>
+                <text x="305" y="248" fill="rgba(245,183,49,0.7)" font-size="9" font-family="'JetBrains Mono'" text-anchor="middle">Pasture C</text>
+              </g>
+              <g class="map-polygon">
+                <path d="M160,125 L210,115 L218,140 L166,148 Z" fill="rgba(59,158,255,0.2)" stroke="#3B9EFF" stroke-width="1.5"/>
+                <text x="190" y="132" fill="#3B9EFF" font-size="9" font-family="'JetBrains Mono'" text-anchor="middle">Z5</text>
+              </g>
+              <!-- Sensor dots -->
+              <circle cx="190" cy="168" r="4" fill="#FF5C6B" opacity="0.9"><animate attributeName="r" values="4;7;4" dur="2s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.9;0.3;0.9" dur="2s" repeatCount="indefinite"/></circle>
+              <circle cx="419" cy="213" r="4" fill="#FF5C6B" opacity="0.9"><animate attributeName="r" values="4;7;4" dur="2.5s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.9;0.3;0.9" dur="2.5s" repeatCount="indefinite"/></circle>
+              <circle cx="330" cy="173" r="3" fill="#00D68F" opacity="0.8"/>
+              <circle cx="248" cy="158" r="3" fill="#F5B731" opacity="0.8"/>
+              <!-- Legend -->
+              <rect x="10" y="350" width="280" height="38" rx="6" fill="rgba(12,26,46,0.9)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+              <circle cx="28" cy="369" r="5" fill="rgba(255,92,107,0.3)" stroke="#FF5C6B" stroke-width="1"/>
+              <text x="38" y="373" fill="rgba(255,255,255,0.5)" font-size="10" font-family="'Outfit'">Critical</text>
+              <circle cx="90" cy="369" r="5" fill="rgba(245,183,49,0.3)" stroke="#F5B731" stroke-width="1"/>
+              <text x="100" y="373" fill="rgba(255,255,255,0.5)" font-size="10" font-family="'Outfit'">Warning</text>
+              <circle cx="160" cy="369" r="5" fill="rgba(0,214,143,0.3)" stroke="#00D68F" stroke-width="1"/>
+              <text x="170" y="373" fill="rgba(255,255,255,0.5)" font-size="10" font-family="'Outfit'">Healthy</text>
+              <circle cx="228" cy="369" r="5" fill="rgba(0,0,0,0)" stroke="#FF5C6B" stroke-width="1.5"><animate attributeName="r" values="5;8;5" dur="2s" repeatCount="indefinite"/></circle>
+              <text x="240" y="373" fill="rgba(255,255,255,0.5)" font-size="10" font-family="'Outfit'">Live alert</text>
+            </svg>
           </div>
-
+ 
           <!-- ZONE PROFILE -->
           <div class="zone-profile scrollbar-hide">
             <div class="zp-header">
@@ -892,255 +1602,37 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;background:ra
           </div>
         </div>
       </div>
-
+ 
       <!-- ═══ SENSORS ═══ -->
       <div class="page" id="page-sensors">
         <div class="page-header">
           <div>
             <div class="page-title">Sensor Intelligence</div>
-            <div class="page-sub">48 active sensors · 2 anomalies detected · Last sync 90s ago</div>
+            <div class="page-sub" id="sensorSub">Unified sensor system across all zones</div>
           </div>
           <div style="display:flex;gap:8px;">
-            <select style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 12px;color:var(--text2);font-family:var(--font-body);font-size:13px;outline:none;cursor:pointer;">
-              <option>Sort by: Risk</option>
-              <option>Sort by: Location</option>
-              <option>Sort by: Battery</option>
-              <option>Sort by: Anomalies</option>
-            </select>
             <button class="btn-outline">+ Add Sensor</button>
           </div>
         </div>
-        <div class="sensors-grid">
-          <div class="sensor-card alert">
-            <div class="sensor-header">
-              <div class="sensor-icon" style="background:var(--amber-dim);">💧</div>
-              <div><div class="sensor-name">Soil Moisture<br>Sensor</div><div class="sensor-loc">Wheat Zone A1</div></div>
-              <div class="sev-badge sev-critical" style="margin-left:auto">CRITICAL</div>
-            </div>
-            <div class="sensor-value" style="color:var(--red)">22<span class="sensor-unit">%</span></div>
-            <div style="font-size:11px;color:var(--text2);margin-bottom:8px;">Optimal: 40–65%</div>
-            <div class="sensor-bars" id="bars-moisture">
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:45%;background:var(--green)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:42%;background:var(--green)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:38%;background:var(--amber)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:35%;background:var(--amber)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:28%;background:var(--red)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:24%;background:var(--red)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:22%;background:var(--red)"></div></div>
-            </div>
-            <div class="sensor-stats"><span>7 days</span><span>↓ 23%</span></div>
-            <div class="sensor-status">
-              <div class="s-batt">🔋 78%</div>
-              <div class="s-signal">
-                <div class="signal-bar" style="height:5px"></div><div class="signal-bar" style="height:9px"></div><div class="signal-bar" style="height:13px"></div>
-              </div>
-              <div style="font-size:11px;font-family:var(--font-mono);color:var(--green);">Online</div>
-            </div>
-          </div>
-          <div class="sensor-card">
-            <div class="sensor-header">
-              <div class="sensor-icon" style="background:var(--red-dim);">🌡️</div>
-              <div><div class="sensor-name">Temperature<br>Sensor</div><div class="sensor-loc">Wheat Zone A1</div></div>
-              <div class="sev-badge sev-high" style="margin-left:auto">ALERT</div>
-            </div>
-            <div class="sensor-value" style="color:var(--amber)">31<span class="sensor-unit">°C</span></div>
-            <div style="font-size:11px;color:var(--text2);margin-bottom:8px;">Optimal: 18–26°C</div>
-            <div class="sensor-bars">
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:55%;background:var(--green)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:60%;background:var(--green)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:65%;background:var(--amber)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:70%;background:var(--amber)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:75%;background:var(--amber)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:78%;background:var(--red)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:80%;background:var(--red)"></div></div>
-            </div>
-            <div class="sensor-stats"><span>7 days</span><span>↑ +8°C</span></div>
-            <div class="sensor-status">
-              <div class="s-batt">🔋 92%</div>
-              <div class="s-signal"><div class="signal-bar" style="height:5px"></div><div class="signal-bar" style="height:9px"></div><div class="signal-bar" style="height:13px"></div><div class="signal-bar" style="height:17px"></div></div>
-              <div style="font-size:11px;font-family:var(--font-mono);color:var(--green);">Online</div>
-            </div>
-          </div>
-          <div class="sensor-card">
-            <div class="sensor-header">
-              <div class="sensor-icon" style="background:var(--blue-dim);">🧪</div>
-              <div><div class="sensor-name">pH Sensor</div><div class="sensor-loc">Corn Zone B2</div></div>
-              <div class="sev-badge sev-medium" style="margin-left:auto">WATCH</div>
-            </div>
-            <div class="sensor-value" style="color:var(--amber)">5.1<span class="sensor-unit">pH</span></div>
-            <div style="font-size:11px;color:var(--text2);margin-bottom:8px;">Optimal: 6.0–7.0</div>
-            <div class="sensor-bars">
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:65%;background:var(--green)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:63%;background:var(--green)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:60%;background:var(--green)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:56%;background:var(--amber)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:53%;background:var(--amber)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:51%;background:var(--amber)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:51%;background:var(--amber)"></div></div>
-            </div>
-            <div class="sensor-stats"><span>7 days</span><span>↓ −0.9</span></div>
-            <div class="sensor-status">
-              <div class="s-batt">🔋 55%</div>
-              <div class="s-signal"><div class="signal-bar" style="height:5px"></div><div class="signal-bar" style="height:9px"></div><div class="signal-bar" style="height:13px;background:var(--border2)"></div></div>
-              <div style="font-size:11px;font-family:var(--font-mono);color:var(--green);">Online</div>
-            </div>
-          </div>
-          <div class="sensor-card alert">
-            <div class="sensor-header">
-              <div class="sensor-icon" style="background:var(--red-dim);">🔥</div>
-              <div><div class="sensor-name">Smoke Sensor</div><div class="sensor-loc">Potato Field East</div></div>
-              <div class="sev-badge sev-critical" style="margin-left:auto">FIRE</div>
-            </div>
-            <div class="sensor-value" style="color:var(--red)">HIGH<span class="sensor-unit"></span></div>
-            <div style="font-size:11px;color:var(--text2);margin-bottom:8px;">Particle density: 148 µg/m³</div>
-            <div class="sensor-bars">
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:5%;background:var(--green)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:5%;background:var(--green)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:5%;background:var(--green)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:5%;background:var(--green)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:5%;background:var(--green)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:5%;background:var(--green)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:90%;background:var(--red)"><animate attributeName="height" values="90%;100%;90%" dur="1s" repeatCount="indefinite"/></div></div>
-            </div>
-            <div class="sensor-stats"><span>Today</span><span>⚠ Spike</span></div>
-            <div class="sensor-status">
-              <div class="s-batt">🔋 88%</div>
-              <div class="s-signal"><div class="signal-bar" style="height:5px"></div><div class="signal-bar" style="height:9px"></div><div class="signal-bar" style="height:13px"></div><div class="signal-bar" style="height:17px"></div></div>
-              <div style="font-size:11px;font-family:var(--font-mono);color:var(--red);">ALERT</div>
-            </div>
-          </div>
-          <div class="sensor-card">
-            <div class="sensor-header">
-              <div class="sensor-icon" style="background:var(--blue-dim);">🧂</div>
-              <div><div class="sensor-name">Salinity Sensor</div><div class="sensor-loc">Corn Zone B1</div></div>
-              <div class="sev-badge sev-low" style="margin-left:auto">NORMAL</div>
-            </div>
-            <div class="sensor-value" style="color:var(--green)">1.2<span class="sensor-unit">dS/m</span></div>
-            <div style="font-size:11px;color:var(--text2);margin-bottom:8px;">Optimal: &lt; 2.0 dS/m</div>
-            <div class="sensor-bars">
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:30%;background:var(--green)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:28%;background:var(--green)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:30%;background:var(--green)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:29%;background:var(--green)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:31%;background:var(--green)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:30%;background:var(--green)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:30%;background:var(--green)"></div></div>
-            </div>
-            <div class="sensor-stats"><span>7 days</span><span>Stable</span></div>
-            <div class="sensor-status">
-              <div class="s-batt">🔋 41%</div>
-              <div class="s-signal"><div class="signal-bar" style="height:5px"></div><div class="signal-bar" style="height:9px"></div><div class="signal-bar" style="height:13px"></div></div>
-              <div style="font-size:11px;font-family:var(--font-mono);color:var(--green);">Online</div>
-            </div>
-          </div>
-          <div class="sensor-card">
-            <div class="sensor-header">
-              <div class="sensor-icon" style="background:var(--green-dim);">💨</div>
-              <div><div class="sensor-name">Wind Sensor</div><div class="sensor-loc">Station North</div></div>
-              <div class="sev-badge sev-low" style="margin-left:auto">NORMAL</div>
-            </div>
-            <div class="sensor-value" style="color:var(--blue)">14<span class="sensor-unit">km/h</span></div>
-            <div style="font-size:11px;color:var(--text2);margin-bottom:8px;">Direction: NNE · Gusts: 22 km/h</div>
-            <div class="sensor-bars">
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:40%;background:var(--blue)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:55%;background:var(--blue)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:30%;background:var(--blue)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:45%;background:var(--blue)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:60%;background:var(--amber)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:35%;background:var(--blue)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:35%;background:var(--blue)"></div></div>
-            </div>
-            <div class="sensor-stats"><span>7 days</span><span>Variable</span></div>
-            <div class="sensor-status">
-              <div class="s-batt">🔋 96%</div>
-              <div class="s-signal"><div class="signal-bar" style="height:5px"></div><div class="signal-bar" style="height:9px"></div><div class="signal-bar" style="height:13px"></div><div class="signal-bar" style="height:17px"></div></div>
-              <div style="font-size:11px;font-family:var(--font-mono);color:var(--green);">Online</div>
-            </div>
-          </div>
-          <div class="sensor-card">
-            <div class="sensor-header">
-              <div class="sensor-icon" style="background:var(--amber-dim);">🐄</div>
-              <div><div class="sensor-name">Livestock<br>Movement</div><div class="sensor-loc">Cattle Pasture A</div></div>
-              <div class="sev-badge sev-low" style="margin-left:auto">NORMAL</div>
-            </div>
-            <div class="sensor-value" style="color:var(--green)">847<span class="sensor-unit"> head</span></div>
-            <div style="font-size:11px;color:var(--text2);margin-bottom:8px;">All within designated area</div>
-            <div class="sensor-bars">
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:70%;background:var(--green)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:72%;background:var(--green)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:68%;background:var(--green)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:74%;background:var(--green)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:71%;background:var(--green)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:70%;background:var(--green)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:69%;background:var(--green)"></div></div>
-            </div>
-            <div class="sensor-stats"><span>7 days</span><span>Stable</span></div>
-            <div class="sensor-status">
-              <div class="s-batt">🔋 67%</div>
-              <div class="s-signal"><div class="signal-bar" style="height:5px"></div><div class="signal-bar" style="height:9px"></div></div>
-              <div style="font-size:11px;font-family:var(--font-mono);color:var(--green);">Online</div>
-            </div>
-          </div>
-          <div class="sensor-card">
-            <div class="sensor-header">
-              <div class="sensor-icon" style="background:var(--blue-dim);">🚰</div>
-              <div><div class="sensor-name">Water Flow<br>Meter</div><div class="sensor-loc">Irrigation Line 3</div></div>
-              <div class="sev-badge sev-high" style="margin-left:auto">WATCH</div>
-            </div>
-            <div class="sensor-value" style="color:var(--amber)">4.8<span class="sensor-unit">m³/h</span></div>
-            <div style="font-size:11px;color:var(--text2);margin-bottom:8px;">Baseline: 4.2 m³/h (+15%)</div>
-            <div class="sensor-bars">
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:50%;background:var(--green)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:52%;background:var(--green)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:51%;background:var(--green)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:54%;background:var(--green)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:60%;background:var(--amber)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:62%;background:var(--amber)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:60%;background:var(--amber)"></div></div>
-            </div>
-            <div class="sensor-stats"><span>7 days</span><span>↑ +15%</span></div>
-            <div class="sensor-status">
-              <div class="s-batt">🔋 82%</div>
-              <div class="s-signal"><div class="signal-bar" style="height:5px"></div><div class="signal-bar" style="height:9px"></div><div class="signal-bar" style="height:13px"></div></div>
-              <div style="font-size:11px;font-family:var(--font-mono);color:var(--green);">Online</div>
-            </div>
-          </div>
-          <div class="sensor-card">
-            <div class="sensor-header">
-              <div class="sensor-icon" style="background:var(--green-dim);">☀️</div>
-              <div><div class="sensor-name">Solar Radiation<br>Sensor</div><div class="sensor-loc">Station Central</div></div>
-              <div class="sev-badge sev-low" style="margin-left:auto">NORMAL</div>
-            </div>
-            <div class="sensor-value" style="color:var(--blue)">682<span class="sensor-unit">W/m²</span></div>
-            <div style="font-size:11px;color:var(--text2);margin-bottom:8px;">Peak today: 820 W/m²</div>
-            <div class="sensor-bars">
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:80%;background:var(--blue)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:75%;background:var(--blue)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:85%;background:var(--blue)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:78%;background:var(--blue)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:82%;background:var(--blue)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:60%;background:var(--blue)"></div></div>
-              <div class="sensor-mini-bar"><div class="sensor-mini-fill" style="height:68%;background:var(--blue)"></div></div>
-            </div>
-            <div class="sensor-stats"><span>7 days</span><span>High season</span></div>
-            <div class="sensor-status">
-              <div class="s-batt">⚡ Solar</div>
-              <div class="s-signal"><div class="signal-bar" style="height:5px"></div><div class="signal-bar" style="height:9px"></div><div class="signal-bar" style="height:13px"></div><div class="signal-bar" style="height:17px"></div></div>
-              <div style="font-size:11px;font-family:var(--font-mono);color:var(--green);">Online</div>
-            </div>
-          </div>
-        </div>
+        
+        <div class="zone-tabs" id="zoneTabs"></div>
+        
+        <div class="sensors-grid v3-grid" id="sensorGrid"></div>
+        
       </div>
-
+ 
       <!-- ═══ AI INSIGHTS ═══ -->
       <div class="page" id="page-insights">
         <div class="page-header">
           <div>
             <div class="page-title">AI Insights</div>
-            <div class="page-sub">Predictive analytics powered by AgroSense Neural Engine v3.1</div>
+            <div class="page-sub">Simple AI decisions: Problem → Cause → Action → Profit</div>
           </div>
-          <div style="background:var(--blue-dim);border:1px solid rgba(59,158,255,0.2);border-radius:var(--radius-sm);padding:8px 16px;font-size:12px;color:var(--blue);font-family:var(--font-mono);">MODEL CONFIDENCE: 87%</div><div class="ai-loader" id="ai-loader"><span class="spinner"></span><span id="ai-loader-text">Neural engine is processing fresh telemetry…</span></div>
+          <div style="background:var(--blue-dim);border:1px solid rgba(59,158,255,0.2);border-radius:var(--radius-sm);padding:8px 16px;font-size:12px;color:var(--blue);font-family:var(--font-mono);">
+            MODEL CONFIDENCE: 87%
+          </div>
         </div>
+ 
         <div class="insight-card critical">
           <div class="insight-header">
             <div class="urgency-badge urgency-critical">⚠ CRITICAL</div>
@@ -1161,7 +1653,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;background:ra
           </div>
           <div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px;">
             <div style="font-size:12px;color:var(--text2);">ROI of Action: <span style="color:var(--green)">+₸ 2.4M estimated yield preservation</span></div>
-            <div style="display:flex;gap:8px;"><button class="btn-action primary" onclick="openCommandModal('irrigation')">▶ Activate Irrigation Now</button><button class="btn-action" onclick="openCommandModal('schedule')">📋 Schedule Later</button></div>
+            <div style="display:flex;gap:8px;"><button class="btn-action primary">▶ Activate Irrigation Now</button><button class="btn-action">📋 Schedule Later</button></div>
           </div>
         </div>
         <div class="insight-card high">
@@ -1177,7 +1669,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;background:ra
             <div class="chain-item"><div class="chain-label">Expected Impact</div><div class="chain-value highlight">Fire containment, pasture regeneration in 3 weeks</div></div>
             <div class="chain-item"><div class="chain-label">Risk if Ignored</div><div class="chain-value warn">Potential wildfire spread, pasture degradation</div></div>
           </div>
-          <div style="display:flex;gap:8px;margin-top:12px;"><button class="btn-action primary" onclick="openCommandModal('drone')">🚁 Dispatch Inspection</button><button class="btn-action" onclick="openCommandModal('relocate')">🐄 Relocate Cattle</button><button class="btn-action" id="ai-analyze-btn" onclick="runAIAnalysis()">📊 AI Анализ</button></div>
+          <div style="display:flex;gap:8px;margin-top:12px;"><button class="btn-action primary">🚁 Dispatch Inspection</button><button class="btn-action">🐄 Relocate Cattle</button><button class="btn-action">📊 View Analysis</button></div>
         </div>
         <div class="insight-card">
           <div class="insight-header">
@@ -1192,10 +1684,10 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;background:ra
             <div class="chain-item"><div class="chain-label">Expected Impact</div><div class="chain-value highlight">+18% germination rate vs average conditions</div></div>
             <div class="chain-item"><div class="chain-label">Risk if Ignored</div><div class="chain-value">Next optimal window in 3–4 weeks</div></div>
           </div>
-          <div style="display:flex;gap:8px;margin-top:12px;"><button class="btn-action primary" onclick="openCommandModal('seeding')">📅 Schedule Seeding</button><button class="btn-action" onclick="runAIAnalysis()">📊 Full Analysis</button></div>
+          <div style="display:flex;gap:8px;margin-top:12px;"><button class="btn-action primary">📅 Schedule Seeding</button><button class="btn-action">📊 Full Analysis</button></div>
         </div>
       </div>
-
+ 
       <!-- ═══ ALERTS ═══ -->
       <div class="page" id="page-alerts">
         <div class="page-header">
@@ -1223,7 +1715,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;background:ra
             <div class="alert-actions">
               <button class="alert-btn ack">✓ Acknowledge</button>
               <button class="alert-btn" onclick="showPage('zones')">🗺 View on Map</button>
-              <button class="alert-btn" onclick="openCommandModal('drone')">🚁 Drone Dispatch</button>
+              <button class="alert-btn">🚁 Drone Dispatch</button>
               <button class="alert-btn">📞 Call Supervisor</button>
             </div>
           </div>
@@ -1242,7 +1734,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;background:ra
             <div class="alert-actions">
               <button class="alert-btn ack">✓ Acknowledge</button>
               <button class="alert-btn" onclick="showPage('zones')">🗺 View on Map</button>
-              <button class="alert-btn" onclick="openCommandModal('irrigation')">💧 Activate Irrigation</button>
+              <button class="alert-btn">💧 Activate Irrigation</button>
               <button class="alert-btn" onclick="showPage('insights')">✦ AI Recommendation</button>
             </div>
           </div>
@@ -1285,7 +1777,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;background:ra
           <div class="alert-time">09:15<br>Yesterday</div>
         </div>
       </div>
-
+ 
       <!-- ═══ ANALYTICS ═══ -->
       <div class="page" id="page-analytics">
         <div class="page-header">
@@ -1347,7 +1839,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;background:ra
           </div>
         </div>
       </div>
-
+ 
       <!-- ═══ SETTINGS ═══ -->
       <div class="page" id="page-settings">
         <div class="page-header">
@@ -1443,9 +1935,9 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;background:ra
           </div>
         </div>
       </div>
-
+ 
     </main>
-
+ 
     <!-- RIGHT PANEL -->
     <aside class="right-panel scrollbar-hide">
       <div class="panel-section">
@@ -1472,7 +1964,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;background:ra
           </div>
         </div>
       </div>
-
+ 
       <div class="panel-section">
         <div class="panel-title">Live Alerts</div>
         <div class="mini-alert" onclick="showPage('alerts')">
@@ -1492,7 +1984,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;background:ra
           <div><div class="mini-alert-text">🧪 pH deviation — Corn B2</div><div class="mini-alert-time">Yesterday</div></div>
         </div>
       </div>
-
+ 
       <div class="panel-section">
         <div class="panel-title">System Status</div>
         <div class="sys-status">
@@ -1504,7 +1996,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;background:ra
           <div class="sys-item"><div class="sys-item-label">Last AI Scan</div><div class="sys-item-val amber">4m ago</div></div>
         </div>
       </div>
-
+ 
       <div class="panel-section">
         <div class="panel-title">Ask AI Assistant</div>
         <div class="ai-chat-preview">
@@ -1518,81 +2010,170 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;background:ra
     </aside>
   </div>
 </div>
-
-
-<div class="mobile-tabbar" id="mobile-tabbar">
-  <button class="active" onclick="showPage('overview');syncMobileTab(this)">Главное</button>
-  <button onclick="showPage('zones');syncMobileTab(this)">Зоны</button>
-  <button onclick="showPage('sensors');syncMobileTab(this)">Датчики</button>
-  <button onclick="showPage('alerts');syncMobileTab(this)">Предупр.</button>
-</div>
-<div class="modal-overlay" id="command-modal">
-  <div class="modal-card">
-    <div class="modal-title" id="command-modal-title">Подтвердить действие</div>
-    <div class="modal-sub" id="command-modal-sub">Команда будет отправлена на оборудование.</div>
-    <div class="modal-actions">
-      <button class="btn-outline" onclick="closeCommandModal()">Отмена</button>
-      <button class="btn-primary" onclick="confirmCommand()">Подтвердить</button>
+ 
+<!-- MOBILE SIDEBAR OVERLAY -->
+<div class="mobile-sidebar-overlay" id="mobileSidebarOverlay" onclick="toggleMobileSidebar()"></div>
+ 
+<!-- MOBILE BOTTOM NAV -->
+<nav class="mobile-bottom-nav">
+  <div class="mob-nav-item active" id="mob-overview" onclick="showPage('overview',null);setMobActive('mob-overview')">
+    <span class="mob-icon">◈</span>Home
+  </div>
+  <div class="mob-nav-item" id="mob-zones" onclick="showPage('zones',null);setMobActive('mob-zones')">
+    <span class="mob-icon">▣</span>Zones
+  </div>
+  <div class="mob-nav-item" id="mob-sensors" onclick="showPage('sensors',null);setMobActive('mob-sensors')">
+    <span class="mob-icon">◉</span>Sensors
+  </div>
+  <div class="mob-nav-item" id="mob-alerts" onclick="showPage('alerts',null);setMobActive('mob-alerts')">
+    <span class="mob-icon">⚠</span>Alerts
+    <span class="mob-badge">4</span>
+  </div>
+  <div class="mob-nav-item" id="mob-insights" onclick="showPage('insights',null);setMobActive('mob-insights')">
+    <span class="mob-icon">✦</span>AI
+  </div>
+</nav>
+ 
+<!-- ADD ZONE MODAL -->
+<div class="modal-overlay" id="addZoneModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div style="width:36px;height:36px;background:var(--green-dim);border:1px solid rgba(0,214,143,0.3);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;">▣</div>
+      <div>
+        <div class="modal-title">Add New Zone</div>
+        <div style="font-size:11px;color:var(--text2);">Define the parameters for your new agricultural zone</div>
+      </div>
+      <button class="modal-close" onclick="closeAddZoneModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-section-label">Zone Identity</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Zone Name</label>
+          <input class="form-input" id="zf-name" type="text" placeholder="e.g. Corn Zone C1">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Sector / ID</label>
+          <input class="form-input" id="zf-sector" type="text" placeholder="e.g. C1">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Crop / Livestock Type</label>
+          <select class="form-select" id="zf-crop">
+            <option value="">Select type…</option>
+            <option>Wheat</option>
+            <option>Corn</option>
+            <option>Barley</option>
+            <option>Potato</option>
+            <option>Sunflower</option>
+            <option>Pasture / Livestock</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Area (hectares)</label>
+          <input class="form-input" id="zf-area" type="number" placeholder="e.g. 450">
+        </div>
+      </div>
+      <div class="modal-section-label" style="margin-top:4px;">Soil & Irrigation</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Water Source</label>
+          <select class="form-select" id="zf-water">
+            <option value="">Select…</option>
+            <option>Drip Irrigation</option>
+            <option>Sprinkler</option>
+            <option>Flood Irrigation</option>
+            <option>Natural / Rain-fed</option>
+            <option>Center Pivot</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Soil Moisture (%)</label>
+          <input class="form-input" id="zf-moisture" type="number" min="0" max="100" placeholder="e.g. 52">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Soil pH</label>
+          <input class="form-input" id="zf-ph" type="number" step="0.1" min="0" max="14" placeholder="e.g. 6.5">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Seeding / Start Date</label>
+          <input class="form-input" id="zf-date" type="date">
+        </div>
+      </div>
+      <div class="modal-section-label" style="margin-top:4px;">Status</div>
+      <div class="form-row full">
+        <div class="form-group">
+          <label class="form-label">Initial Status</label>
+          <select class="form-select" id="zf-status">
+            <option value="Healthy">✓ Healthy</option>
+            <option value="Watch">⚡ Watch</option>
+            <option value="Critical">⚠ Critical</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-outline" onclick="closeAddZoneModal()">Cancel</button>
+      <button class="btn-primary" onclick="saveNewZone()">⊕ Add Zone</button>
     </div>
   </div>
 </div>
-
+ 
+<!-- SENSOR HISTORY MODAL -->
+<div class="sensor-history-modal" id="sensorHistoryModal">
+  <div class="sh-box">
+    <div class="sh-header">
+      <div id="sh-icon" style="width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;background:var(--green-dim);">💧</div>
+      <div>
+        <div class="sh-title" id="sh-title">Soil Moisture Sensor</div>
+        <div class="sh-sub" id="sh-sub">Wheat Zone A1 · 7-Day History</div>
+      </div>
+      <button class="sh-close" onclick="closeSensorHistory()">✕</button>
+    </div>
+    <div class="sh-body">
+      <div class="sh-stats-row">
+        <div class="sh-stat">
+          <div class="sh-stat-val" id="sh-current" style="color:var(--green)">—</div>
+          <div class="sh-stat-label" data-i18n="sh_current">Current</div>
+        </div>
+        <div class="sh-stat">
+          <div class="sh-stat-val" id="sh-avg" style="color:var(--blue)">—</div>
+          <div class="sh-stat-label" data-i18n="sh_avg">7d Average</div>
+        </div>
+        <div class="sh-stat">
+          <div class="sh-stat-val" id="sh-min" style="color:var(--amber)">—</div>
+          <div class="sh-stat-label" data-i18n="sh_min">7d Min</div>
+        </div>
+        <div class="sh-stat">
+          <div class="sh-stat-val" id="sh-max" style="color:var(--text)">—</div>
+          <div class="sh-stat-label" data-i18n="sh_max">7d Max</div>
+        </div>
+      </div>
+      <div class="sh-chart-wrap">
+        <div class="sh-chart-header">
+          <div class="sh-chart-title" data-i18n="sh_chart_title">7-Day Sensor Reading History</div>
+          <div class="sh-range-btns">
+            <button class="sh-range-btn active" onclick="setSHRange(this,7)" data-i18n="sh_7d">7D</button>
+            <button class="sh-range-btn" onclick="setSHRange(this,14)" data-i18n="sh_14d">14D</button>
+            <button class="sh-range-btn" onclick="setSHRange(this,30)" data-i18n="sh_30d">30D</button>
+          </div>
+        </div>
+        <canvas id="sensorHistoryChart" height="120"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+ 
 <script>
 // ── STATE ──
 let obSelections={type:null,region:null,size:null};
 let activePage='overview';
-let currentLang='RU';
-let currentCommand='';
-let chartsInitialized=false;
-
-const labels = {
-  type:{crop:{RU:'Растениеводство',KZ:'Өсімдік шаруашылығы',EN:'Crop Farming'},livestock:{RU:'Животноводство',KZ:'Мал шаруашылығы',EN:'Livestock'},mixed:{RU:'Смешанное хозяйство',KZ:'Аралас шаруашылық',EN:'Mixed Farm'}},
-  region:{almaty:{RU:'Алматинская область',KZ:'Алматы облысы',EN:'Almaty Region'},astana:{RU:'Астана',KZ:'Астана',EN:'Astana'},kostanay:{RU:'Костанайская область',KZ:'Қостанай облысы',EN:'Kostanay Region'},akmola:{RU:'Акмолинская область',KZ:'Ақмола облысы',EN:'Akmola Region'},shymkent:{RU:'Шымкент',KZ:'Шымкент',EN:'Shymkent'},karaganda:{RU:'Карагандинская область',KZ:'Қарағанды облысы',EN:'Karaganda Region'},atyrau:{RU:'Атырауская область',KZ:'Атырау облысы',EN:'Atyrau Region'},pavlodar:{RU:'Павлодарская область',KZ:'Павлодар облысы',EN:'Pavlodar Region'},other:{RU:'Другой регион',KZ:'Басқа өңір',EN:'Other Region'}},
-  size:{small:{RU:'Малое',KZ:'Шағын',EN:'Small'},medium:{RU:'Среднее',KZ:'Орта',EN:'Medium'},large:{RU:'Крупное',KZ:'Ірі',EN:'Large'},enterprise:{RU:'Корпоративное',KZ:'Корпоративтік',EN:'Enterprise'}}
-};
-
-const translations = {
-  RU:{
-    navOverview:'Главное',navZones:'Зоны',navSensors:'Датчики',navInsights:'AI-аналитика',navAlerts:'Предупреждения',navReports:'Отчёты',navSettings:'Настройки',
-    liveMap:'Карта',allSystems:'Все системы онлайн',search:'Поиск зон, датчиков, тревог…',
-    weatherInt:'Погодная аналитика',liveAlerts:'Живые предупреждения',systemStatus:'Статус системы',askAI:'Спросить AI ассистента',
-    aiHello:'Здравствуйте! Я AgroSense AI. Спросите меня о состоянии фермы, рекомендациях или рисках по зонам.',
-    pageOverview:'Интеллектуальная агроаналитика',pageOverviewSub:'для Казахстана · мониторинг в реальном времени по 12 активным зонам',
-    export:'Экспорт отчёта',addZone:'Добавить зону',
-    kpi1:'Всего зон',kpi2:'Индекс здоровья культур',kpi3:'Эффективность воды',kpi4:'Риск пожара',kpi5:'Стабильность почвы',kpi6:'Уверенность AI',kpi7:'Средняя влажность',kpi8:'Прогноз роста урожая',
-    aiCenter:'AgroSense AI Control Center',aiCenterSub:'Обновлено 4 минуты назад · обработано 847 телеметрических точек',highUrgency:'⚡ ВЫСОКИЙ ПРИОРИТЕТ',
-    aiMessage:'<strong style="color:var(--green);">3 зоны требуют немедленного внимания.</strong> Основная угроза: засуха в кластере пшеницы A1–A3 — влажность почвы 22%, что критично ниже допустимого диапазона для пшеницы 20–35% при текущей жаре. <strong>Рекомендуемое действие: точечный капельный полив в ближайшие 6 часов</strong>. Дополнительно: в Potato East зафиксирован статус <strong>Smoke Detected</strong>, поэтому риск пожара автоматически повышен до 91%.',
-    openZone:'Открыть Wheat Zone A1',droneView:'Запустить дрон',genReport:'Сформировать отчёт',dismiss:'Скрыть предупреждение',
-    chartHealth:'Тренд здоровья культур',chartHealthSub:'Последние 30 дней по всем зонам',chartDist:'Распределение здоровья зон',chartDistSub:'Текущее состояние',
-    smartRec:'Рекомендации нейросети',aiGenerated:'Сгенерировано AI',
-    pageZones:'Зоны хозяйства',pageZonesSub:'Схематичная премиальная карта без внешних API',
-    pageSensors:'Сеть датчиков',pageSensorsSub:'Операционные показатели и статус устройств по ферме',
-    pageInsights:'AI-аналитика',pageInsightsSub:'Прогнозные рекомендации нейросети AgroSense Neural Engine',
-    pageAlerts:'Центр предупреждений',pageAlertsSub:'4 активных сигнала · 2 критических · 1 закрыт сегодня',
-    pageAnalytics:'Аналитика и отчёты',pageAnalyticsSub:'Сезонная динамика, урожайность и водопотребление',
-    pageSettings:'Настройки платформы',pageSettingsSub:'Управление фермой, командой и интеграциями',
-    modalTitle:'Подтвердить действие',modalSent:'Команда отправлена на оборудование',modalPrompt:'Команда будет передана в исполнительный контур AgroSense.',
-    aiLoader:'Нейросеть анализирует свежую телеметрию…',
-    aiUpdated:'Новая рекомендация: из-за ветра 18 км/ч и сухой кромки в Potato East лучше сначала отправить дрон на верификацию, затем включить локальный водяной барьер. Для Wheat A1 желательно дать импульсный полив 14 мм сегодня и повторную проверку через 2 часа.',
-    chatbotReplies:['По ферме сейчас два критических риска: засуха в Wheat A1 и пожарная тревога в Potato East.','Общий индекс здоровья держится стабильно, но пшеница в A1 требует немедленного полива.','Система видит хорошую картину по воде, однако Smoke Detected удерживает пожарный риск в красной зоне.'],
-    regionsLabel:'Регион',farmTypeLabel:'Тип хозяйства'
-  },
-  KZ:{
-    navOverview:'Басты бет',navZones:'Аймақтар',navSensors:'Датчиктер',navInsights:'AI-талдау',navAlerts:'Ескертулер',navReports:'Есептер',navSettings:'Баптаулар',
-    liveMap:'Карта',allSystems:'Барлық жүйе онлайн',search:'Аймақтар, датчиктер, дабылдар бойынша іздеу…',weatherInt:'Ауа райы аналитикасы',liveAlerts:'Тікелей ескертулер',systemStatus:'Жүйе күйі',askAI:'AI көмекшіден сұрау',
-    aiHello:'Сәлем! Мен AgroSense AI. Ферма жағдайы, ұсыныстар немесе тәуекелдер туралы сұраңыз.',
-    pageOverview:'Зияткерлік агроаналитика',pageOverviewSub:'Қазақстан үшін · 12 белсенді аймақ бойынша нақты уақыт мониторингі',export:'Есепті экспорттау',addZone:'Аймақ қосу',
-    kpi1:'Барлық аймақ',kpi2:'Дақыл денсаулығы индексі',kpi3:'Су тиімділігі',kpi4:'Өрт қаупі',kpi5:'Топырақ тұрақтылығы',kpi6:'AI сенімділігі',kpi7:'Орташа ылғал',kpi8:'Өнім өсімі болжамы',
-    aiCenter:'AgroSense AI басқару орталығы',aiCenterSub:'4 минут бұрын жаңартылды · 847 телеметрия нүктесі өңделді',highUrgency:'⚡ ЖОҒАРЫ БАСЫМДЫҚ',
-    aiMessage:'<strong style="color:var(--green);">3 аймақ шұғыл назарды қажет етеді.</strong> Негізгі қауіп: A1–A3 бидай кластерінде құрғақшылық стрессі — топырақ ылғалы 22%, бұл бидай үшін 20–35% аралығынан төмен. <strong>Ұсынылатын әрекет: келесі 6 сағат ішінде нысаналы тамшылатып суару</strong>. Қосымша: Potato East аймағында <strong>Smoke Detected</strong> анықталды, сондықтан өрт қаупі автоматты түрде 91%-ға көтерілді.',
-    openZone:'Wheat Zone A1 ашу',droneView:'Дронды іске қосу',genReport:'Есеп құру',dismiss:'Ескертуді жабу',chartHealth:'Дақыл денсаулығы тренді',chartHealthSub:'Соңғы 30 күн',chartDist:'Аймақ денсаулығы таралуы',chartDistSub:'Ағымдағы жағдай',smartRec:'Нейрожелі ұсыныстары',aiGenerated:'AI жасаған',
-    pageZones:'Шаруашылық аймақтары',pageZonesSub:'Сыртқы API қолданбайтын премиум схема-карта',pageSensors:'Датчиктер желісі',pageSensorsSub:'Ферма бойынша құрылғылар күйі мен көрсеткіштер',pageInsights:'AI-талдау',pageInsightsSub:'AgroSense Neural Engine нейрожелісінің болжамды ұсыныстары',pageAlerts:'Ескерту орталығы',pageAlertsSub:'4 белсенді сигнал · 2 сыни · 1 бүгін жабылды',pageAnalytics:'Аналитика және есептер',pageAnalyticsSub:'Маусымдық динамика, өнім және су тұтыну',pageSettings:'Платформа баптаулары',pageSettingsSub:'Ферма, команда және интеграциялар басқаруы',modalTitle:'Әрекетті растау',modalSent:'Команда жабдыққа жіберілді',modalPrompt:'Команда AgroSense орындау контурына жіберіледі.',aiLoader:'Нейрожелі жаңа телеметрияны талдап жатыр…',aiUpdated:'Жаңа ұсыныс: жел 18 км/сағ болғандықтан Potato East аймағында алдымен дрондық тексеру, кейін локалды су тосқауылын қосу керек. Wheat A1 үшін бүгін 14 мм импульстік суару және 2 сағаттан кейін қайта тексеру ұсынылады.',chatbotReplies:['Фермада қазір екі сыни қауіп бар: Wheat A1 құрғақшылығы және Potato East өрт дабылы.','Жалпы денсаулық индексі тұрақты, бірақ A1 бидайына шұғыл суару қажет.','Жүйе су бойынша жақсы динамиканы көреді, алайда Smoke Detected өрт қаупін қызыл аймақта ұстап тұр.'],regionsLabel:'Өңір',farmTypeLabel:'Шаруашылық түрі'
-  },
-  EN:{
-    navOverview:'Overview',navZones:'Zones',navSensors:'Sensors',navInsights:'AI Insights',navAlerts:'Alerts',navReports:'Reports',navSettings:'Settings',liveMap:'Live Map',allSystems:'All systems online',search:'Search zones, sensors, alerts…',weatherInt:'Weather Intelligence',liveAlerts:'Live Alerts',systemStatus:'System Status',askAI:'Ask AI Assistant',aiHello:'Hello! I am AgroSense AI. Ask me about farm status, recommendations, or zone risks.',pageOverview:'Smart Agricultural Intelligence',pageOverviewSub:'for Kazakhstan · real-time monitoring across 12 active zones',export:'Export Report',addZone:'Add Zone',kpi1:'Total Zones',kpi2:'Crop Health Index',kpi3:'Water Efficiency',kpi4:'Fire Risk',kpi5:'Soil Stability',kpi6:'AI Confidence',kpi7:'Average Moisture',kpi8:'Estimated Yield Growth',aiCenter:'AgroSense AI Control Center',aiCenterSub:'Updated 4 minutes ago · processing 847 telemetry points',highUrgency:'⚡ HIGH URGENCY',aiMessage:'<strong style="color:var(--green);">3 zones require immediate attention.</strong> Main threat: drought stress in Wheat cluster A1–A3 — soil moisture is 22%, which is critical under the realistic wheat range of 20–35% moisture. <strong>Recommended action: targeted drip irrigation within the next 6 hours</strong>. Secondary issue: Potato East reports <strong>Smoke Detected</strong>, so fire risk is automatically escalated to 91%.',openZone:'Open Wheat Zone A1',droneView:'Launch Drone',genReport:'Generate Report',dismiss:'Dismiss Alert',chartHealth:'Crop Health Trend',chartHealthSub:'Last 30 days across all zones',chartDist:'Zone Health Distribution',chartDistSub:'Current status',smartRec:'Neural Recommendations',aiGenerated:'AI Generated',pageZones:'Farm Zones',pageZonesSub:'Premium schematic map without external APIs',pageSensors:'Sensor Network',pageSensorsSub:'Operational metrics and device status across the farm',pageInsights:'AI Insights',pageInsightsSub:'Predictive recommendations from AgroSense Neural Engine',pageAlerts:'Alert Center',pageAlertsSub:'4 active signals · 2 critical · 1 resolved today',pageAnalytics:'Analytics & Reports',pageAnalyticsSub:'Season trends, yields, and water use',pageSettings:'Platform Settings',pageSettingsSub:'Manage farm, team, and integrations',modalTitle:'Confirm action',modalSent:'Command sent to equipment',modalPrompt:'The command will be passed to the AgroSense execution layer.',aiLoader:'Neural engine is analyzing fresh telemetry…',aiUpdated:'Updated recommendation: due to 18 km/h wind and a dry edge in Potato East, send a drone for visual verification first, then enable a local water barrier. For Wheat A1, apply a 14 mm pulse irrigation today and re-check in 2 hours.',chatbotReplies:['The farm currently has two critical risks: drought in Wheat A1 and a fire alert in Potato East.','Overall health is stable, but Wheat A1 needs immediate irrigation.','The system sees good water efficiency, but Smoke Detected keeps fire risk in the red zone.'],regionsLabel:'Region',farmTypeLabel:'Farm Type'
-  }
-};
-
+let activeNavItem=null;
+ 
 // ── ONBOARDING ──
 function selectCard(el,field,val){
   obSelections[field]=val;
@@ -1602,208 +2183,1176 @@ function selectCard(el,field,val){
   const map={type:'next1',region:'next2',size:'next3'};
   document.getElementById(map[field]).disabled=false;
 }
+ 
 function nextStep(n){
   document.querySelectorAll('.ob-step').forEach(s=>s.classList.remove('active'));
   document.getElementById('step'+n).classList.add('active');
-  document.querySelectorAll('.ob-dot').forEach((d,i)=>d.classList.toggle('active',i<n));
+  document.querySelectorAll('.ob-dot').forEach((d,i)=>{
+    d.classList.toggle('active',i<n);
+  });
 }
+ 
 function generateDashboard(){
   document.querySelectorAll('.ob-step').forEach(s=>s.classList.remove('active'));
   document.getElementById('step-gen').classList.add('active');
-  const msgs=['Connecting to regional satellite feeds...','Calibrating AI models for your farm type...','Loading sensor network topology...','Generating premium field topology...','Preparing multilingual dashboard...'];
-  let i=0; const el=document.getElementById('gen-status');
-  const iv=setInterval(()=>{ if(i<msgs.length){el.textContent=msgs[i++];} else {clearInterval(iv);launchApp();} },650);
+  const msgs=['Connecting to regional satellite feeds...','Calibrating AI models for your farm type...','Loading sensor network topology...','Generating smart zone configurations...','Preparing your personalized dashboard...'];
+  let i=0;
+  const el=document.getElementById('gen-status');
+  const iv=setInterval(()=>{
+    if(i<msgs.length){el.textContent=msgs[i++];}
+    else{clearInterval(iv);launchApp();}
+  },700);
 }
+ 
 function launchApp(){
   document.getElementById('onboarding').style.display='none';
-  document.getElementById('app').classList.add('ready');
-  applyProfileContext();
-  applyTranslations();
-  applyConsistencyLogic();
-  setTimeout(initCharts,160);
+  const app=document.getElementById('app');
+  app.classList.add('ready');
+  setTimeout(initCharts,200);
 }
-
+ 
 // ── NAVIGATION ──
 function showPage(page,navEl){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  const pg=document.getElementById('page-'+page); if(pg) pg.classList.add('active');
+  const pg=document.getElementById('page-'+page);
+  if(pg)pg.classList.add('active');
   activePage=page;
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   if(navEl){navEl.classList.add('active');}
-  else {
+  else{
     const map={overview:0,zones:1,sensors:2,insights:3,alerts:4,analytics:5,settings:6};
     const items=document.querySelectorAll('.nav-item');
-    if(items[map[page]]) items[map[page]].classList.add('active');
+    if(items[map[page]])items[map[page]].classList.add('active');
   }
-  document.querySelectorAll('#mobile-tabbar button').forEach(btn=>btn.classList.remove('active'));
-  const mobileMap={overview:0,zones:1,sensors:2,alerts:3};
-  const mbtns=document.querySelectorAll('#mobile-tabbar button');
-  if(mbtns[mobileMap[page]]) mbtns[mobileMap[page]].classList.add('active');
-  if(page==='analytics') setTimeout(initAnalyticsCharts,120);
+  if(page==='analytics')setTimeout(initAnalyticsCharts,100);
 }
-function syncMobileTab(btn){ document.querySelectorAll('#mobile-tabbar button').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); }
-function setLang(el,lang){ document.querySelectorAll('.nav-lang button').forEach(b=>b.classList.remove('active')); el.classList.add('active'); currentLang=lang; applyTranslations(); }
-function toggleFilter(el){ el.classList.toggle('active'); }
-function filterAlerts(el){ document.querySelectorAll('.af-btn').forEach(b=>b.classList.remove('active')); el.classList.add('active'); }
-function switchSettings(el,section){ document.querySelectorAll('.settings-nav-item').forEach(s=>s.classList.remove('active')); el.classList.add('active'); document.querySelectorAll('[id^="sfarm"],[id^="steam"],[id^="sdevices"],[id^="sintegrations"],[id^="snotif"],[id^="sapi"]').forEach(s=>s.style.display='none'); const el2=document.getElementById(section); if(el2)el2.style.display='block'; }
-
-function selectZone(el,name,crop,area,water,status,moisture,ph,date,scoreOverride){
-  document.querySelectorAll('.zone-item').forEach(z=>z.classList.remove('active'));
-  if(el) el.classList.add('active');
-  updateZonePanel(name,crop,area,water,status,moisture,ph,date,scoreOverride);
-}
-function selectZoneFromMap(el,name,crop,area,water,status,moisture,ph,date,scoreOverride){
-  document.querySelectorAll('.field-block').forEach(z=>z.classList.remove('active'));
-  if(el) el.classList.add('active');
-  updateZonePanel(name,crop,area,water,status,moisture,ph,date,scoreOverride);
-}
-function updateZonePanel(name,crop,area,water,status,moisture,ph,date,scoreOverride){
-  const byId=(id,val)=>{ const e=document.getElementById(id); if(e) e.textContent=val; };
-  byId('zp-name',name); byId('zp-crop',crop); byId('zp-area',area); byId('zp-water',water); byId('zp-moisture',moisture+'%'); byId('zp-ph',ph); byId('zp-date',date);
-  byId('zp-meta',`${crop} · ${status} · ${area}`);
-  const score= scoreOverride ?? Math.round(parseInt(moisture)||50);
-  byId('zp-score-val',score);
-  const arc=document.getElementById('score-arc');
-  if(arc){ const c=2*Math.PI*20; arc.setAttribute('stroke-dasharray',`${score/100*c} ${c}`); }
-  const col=score<35?'var(--red)':score<60?'var(--amber)':'var(--green)';
-  if(arc) arc.setAttribute('stroke',col);
-  const scoreEl=document.getElementById('zp-score-val'); if(scoreEl) scoreEl.style.color=col;
-  const statusEl=document.getElementById('zp-status'); if(statusEl){ statusEl.textContent=score<35?'Critical':score<60?'Warning':'Healthy'; statusEl.style.color=col; }
-  const moist=document.getElementById('zp-moisture'); if(moist) moist.style.color=parseInt(moisture)<35?'var(--red)':parseInt(moisture)<50?'var(--amber)':'var(--green)';
-}
-
-function applyProfileContext(){
-  const type = labels.type[obSelections.type]?.[currentLang] || labels.type.mixed[currentLang];
-  const region = labels.region[obSelections.region]?.[currentLang] || labels.region.almaty[currentLang];
-  const sizeMap = {small:'420 га',medium:'3,200 га',large:'18,400 га',enterprise:'52,000 га'};
-  const title = `${region} Agro`;
-  const farmName=document.getElementById('farm-name'); if(farmName) farmName.textContent=title;
-  const farmMeta=document.getElementById('farm-meta'); if(farmMeta) farmMeta.textContent=`${type} · ${sizeMap[obSelections.size] || '3,200 га'}`;
-  document.querySelector('.nav-weather .loc').textContent=region;
-}
-
-function applyTranslations(){
-  const t=translations[currentLang];
-  document.documentElement.lang=currentLang.toLowerCase();
-  const navItems=document.querySelectorAll('.nav-item');
-  if(navItems[0]) navItems[0].childNodes[1].textContent=' '+t.navOverview;
-  if(navItems[1]) navItems[1].childNodes[1].textContent=' '+t.navZones;
-  if(navItems[2]) navItems[2].childNodes[1].textContent=' '+t.navSensors;
-  if(navItems[3]) navItems[3].childNodes[1].textContent=' '+t.navInsights;
-  if(navItems[4]) navItems[4].childNodes[1].textContent=' '+t.navAlerts;
-  if(navItems[5]) navItems[5].childNodes[1].textContent=' '+t.navReports;
-  if(navItems[6]) navItems[6].childNodes[1].textContent=' '+t.navSettings;
-  const mobileBtns=document.querySelectorAll('#mobile-tabbar button');
-  if(mobileBtns[0]) mobileBtns[0].textContent=t.navOverview;
-  if(mobileBtns[1]) mobileBtns[1].textContent=t.navZones;
-  if(mobileBtns[2]) mobileBtns[2].textContent=t.navSensors;
-  if(mobileBtns[3]) mobileBtns[3].textContent=t.navAlerts;
-  const search=document.querySelector('.nav-search input'); if(search) search.placeholder=t.search;
-  const conn=document.querySelector('.nav-conn span'); if(conn) conn.textContent=t.allSystems;
-  const topBtn=document.querySelector('.nav-btn.primary'); if(topBtn) topBtn.innerHTML=`<span>🗺</span> ${t.liveMap}`;
-  const pageTitles=document.querySelectorAll('.page-title');
-  const pageSubs=document.querySelectorAll('.page-sub');
-  if(pageTitles[0]) pageTitles[0].textContent=t.pageOverview;
-  if(pageSubs[0]) pageSubs[0].textContent=t.pageOverviewSub;
-  if(pageTitles[1]) pageTitles[1].textContent=t.pageZones;
-  if(pageSubs[1]) pageSubs[1].textContent=t.pageZonesSub;
-  if(pageTitles[2]) pageTitles[2].textContent=t.pageSensors;
-  if(pageSubs[2]) pageSubs[2].textContent=t.pageSensorsSub;
-  if(pageTitles[3]) pageTitles[3].textContent=t.pageInsights;
-  if(pageSubs[3]) pageSubs[3].textContent=t.pageInsightsSub;
-  if(pageTitles[4]) pageTitles[4].textContent=t.pageAlerts;
-  if(pageSubs[4]) pageSubs[4].textContent=t.pageAlertsSub;
-  if(pageTitles[5]) pageTitles[5].textContent=t.pageAnalytics;
-  if(pageSubs[5]) pageSubs[5].textContent=t.pageAnalyticsSub;
-  if(pageTitles[6]) pageTitles[6].textContent=t.pageSettings;
-  if(pageSubs[6]) pageSubs[6].textContent=t.pageSettingsSub;
-  const btns=document.querySelectorAll('.page-header .btn-outline');
-  if(btns[0]) btns[0].innerHTML=`<span>↓</span> ${t.export}`;
-  if(btns[1]) btns[1].innerHTML=`⊕ ${t.addZone}`;
-  const kpiLabels=document.querySelectorAll('.kpi-label');
-  [t.kpi1,t.kpi2,t.kpi3,t.kpi4,t.kpi5,t.kpi6,t.kpi7,t.kpi8].forEach((label,i)=>{ if(kpiLabels[i]) kpiLabels[i].textContent=label; });
-  const aiTitle=document.querySelector('.ai-title'); if(aiTitle) aiTitle.textContent=t.aiCenter;
-  const aiSub=document.querySelector('.ai-sub'); if(aiSub) aiSub.textContent=t.aiCenterSub;
-  const urgency=document.querySelector('.urgency-badge.urgency-high'); if(urgency) urgency.textContent=t.highUrgency;
-  const aiMsg=document.querySelector('.ai-message'); if(aiMsg) aiMsg.innerHTML=t.aiMessage;
-  const aiActions=document.querySelectorAll('.ai-actions .btn-action');
-  if(aiActions[0]) aiActions[0].innerHTML='▶ '+t.openZone;
-  if(aiActions[1]) aiActions[1].innerHTML='🚁 '+t.droneView;
-  if(aiActions[2]) aiActions[2].innerHTML='📄 '+t.genReport;
-  if(aiActions[3]) aiActions[3].innerHTML='🔕 '+t.dismiss;
-  const chartTitles=document.querySelectorAll('.chart-title'); const chartSubs=document.querySelectorAll('.chart-sub');
-  if(chartTitles[0]) chartTitles[0].textContent=t.chartHealth; if(chartSubs[0]) chartSubs[0].textContent=t.chartHealthSub;
-  if(chartTitles[1]) chartTitles[1].textContent=t.chartDist; if(chartSubs[1]) chartSubs[1].textContent=t.chartDistSub;
-  const sec=document.querySelector('.section-title'); if(sec) sec.childNodes[0].textContent=t.smartRec+' ';
-  const aiBadge=document.querySelector('.section-title .badge-ai'); if(aiBadge) aiBadge.textContent=t.aiGenerated;
-  const panelTitles=document.querySelectorAll('.panel-title');
-  if(panelTitles[0]) panelTitles[0].textContent=t.weatherInt;
-  if(panelTitles[1]) panelTitles[1].textContent=t.liveAlerts;
-  if(panelTitles[2]) panelTitles[2].textContent=t.systemStatus;
-  if(panelTitles[3]) panelTitles[3].textContent=t.askAI;
-  const chatMsg=document.querySelector('.ai-chat-msg'); if(chatMsg) chatMsg.textContent=t.aiHello;
-  const aiInput=document.getElementById('ai-input'); if(aiInput) aiInput.placeholder=t.askAI+'…';
-  const modalTitle=document.getElementById('command-modal-title'); if(modalTitle) modalTitle.textContent=t.modalTitle;
-  const modalSub=document.getElementById('command-modal-sub'); if(modalSub) modalSub.textContent=t.modalPrompt;
-  const loader=document.getElementById('ai-loader-text'); if(loader) loader.textContent=t.aiLoader;
-  applyProfileContext();
-}
-
-function applyConsistencyLogic(){
-  const fireKpiValue=document.querySelectorAll('.kpi-value')[3];
-  const fireKpiBar=document.querySelectorAll('.kpi-bar-fill')[3];
-  const fireTrend=document.querySelectorAll('.kpi-trend')[3];
-  const smokePresent=[...document.querySelectorAll('.alert-title,.mini-alert-text,.rec-title,.sensor-name,.zone-item,.field-meta')].some(el=>/Smoke Detected|Smoke|дым/i.test(el.textContent));
-  if(smokePresent){
-    if(fireKpiValue){ fireKpiValue.textContent='91%'; fireKpiValue.className='kpi-value red'; fireKpiValue.parentElement.classList.add('fire-critical'); }
-    if(fireKpiBar){ fireKpiBar.style.width='91%'; fireKpiBar.className='kpi-bar-fill red'; }
-    if(fireTrend){ fireTrend.innerHTML='<span class="trend-down">↑ 18%</span><span style="color:var(--text3)"> smoke detected</span>'; }
-    document.querySelectorAll('.alert-item.critical,.mini-alert').forEach(el=>{ if(/Smoke|Fire Risk|дым/i.test(el.textContent)) el.classList.add('fire-critical'); });
-    document.querySelectorAll('.sensor-card').forEach(card=>{ if(/Smoke/i.test(card.textContent)) card.classList.add('fire-critical'); });
+ 
+// ══════════════════════════════════════════
+// ── LANGUAGE / i18n ──
+// ══════════════════════════════════════════
+const I18N = {
+  EN: {
+    // Nav
+    nav_overview:'Overview', nav_zones:'Zones', nav_sensors:'Sensors',
+    nav_insights:'AI Insights', nav_alerts:'Alerts', nav_reports:'Reports', nav_settings:'Settings',
+    nav_navigation:'Navigation', nav_analytics:'Analytics', nav_system:'System',
+    // Top bar
+    nav_live_map:'Live Map',
+    // Page titles
+    pt_overview:'Smart Agricultural Intelligence',
+    ps_overview:'for Kazakhstan · Real-time monitoring across 12 active zones',
+    pt_zones:'Field Zones',
+    pt_sensors:'Sensor Intelligence',
+    ps_sensors:'Unified sensor system across all zones',
+    pt_insights:'AI Insights',
+    ps_insights:'Simple AI decisions: Problem → Cause → Action → Profit',
+    pt_alerts:'Alert Center',
+    ps_alerts:'4 active alerts · 2 critical · 1 resolved today',
+    pt_analytics:'Reports & Analytics',
+    ps_analytics:'Season 2024 · Almaty Farm Portfolio · Executive Dashboard',
+    pt_settings:'Settings & Admin',
+    ps_settings:'Enterprise configuration · Almaty Agro Holdings',
+    // KPI cards
+    kpi_total_zones:'Total Zones', kpi_crop_health:'Crop Health Index',
+    kpi_water:'Water Efficiency', kpi_fire:'Fire Risk Score',
+    kpi_soil:'Soil Stability', kpi_ai:'AI Confidence',
+    kpi_moisture:'Avg Moisture', kpi_yield:'Est. Yield Growth',
+    // AI center
+    ai_title:'AgroSense AI Control Center',
+    ai_confidence:'CONFIDENCE',
+    // Buttons
+    btn_export:'Export Report', btn_add_zone:'Add Zone',
+    btn_open_wheat:'▶ Open Wheat Zone A1',
+    btn_drone:'🚁 Launch Drone View',
+    btn_report:'📄 Generate Report',
+    btn_dismiss:'🔕 Dismiss Alert',
+    // Sensor page
+    btn_add_sensor:'+ Add Sensor',
+    // Sensor history modal
+    sh_current:'Current', sh_avg:'7d Average', sh_min:'7d Min', sh_max:'7d Max',
+    sh_chart_title:'7-Day Sensor Reading History',
+    sh_7d:'7D', sh_14d:'14D', sh_30d:'30D',
+    // Right panel
+    rp_weather:'Weather Intelligence',
+    rp_alerts:'Live Alerts',
+    rp_system:'System Status',
+    rp_ai_ask:'Ask AI Assistant',
+    rp_ai_placeholder:'Ask about your farm...',
+    // Farm sidebar
+    farm_health:'Farm Health',
+    // System status labels
+    sys_sensors:'Sensors Online', sys_ai:'AI Engine', sys_satellite:'Satellite Feed',
+    sys_drone:'Drone Status', sys_latency:'Data Latency', sys_scan:'Last AI Scan',
+    sys_op:'Operational', sys_active:'Active', sys_standby:'Standby',
+  },
+  RU: {
+    nav_overview:'Обзор', nav_zones:'Зоны', nav_sensors:'Датчики',
+    nav_insights:'ИИ Анализ', nav_alerts:'Оповещения', nav_reports:'Отчёты', nav_settings:'Настройки',
+    nav_navigation:'Навигация', nav_analytics:'Аналитика', nav_system:'Система',
+    nav_live_map:'Карта',
+    pt_overview:'Умная с/х платформа',
+    ps_overview:'Казахстан · Мониторинг 12 активных зон в реальном времени',
+    pt_zones:'Поля и зоны',
+    pt_sensors:'Система датчиков',
+    ps_sensors:'Единая сеть датчиков по всем зонам',
+    pt_insights:'ИИ Аналитика',
+    ps_insights:'ИИ-решения: Проблема → Причина → Действие → Результат',
+    pt_alerts:'Центр оповещений',
+    ps_alerts:'4 активных оповещения · 2 критических · 1 решено сегодня',
+    pt_analytics:'Отчёты и аналитика',
+    ps_analytics:'Сезон 2024 · Алматинское хозяйство · Дашборд',
+    pt_settings:'Настройки и администрирование',
+    ps_settings:'Корпоративные настройки · Алматы Агро Холдинг',
+    kpi_total_zones:'Всего зон', kpi_crop_health:'Индекс здоровья',
+    kpi_water:'КПД полива', kpi_fire:'Риск пожара',
+    kpi_soil:'Состояние почвы', kpi_ai:'Точность ИИ',
+    kpi_moisture:'Ср. влажность', kpi_yield:'Прогноз урожая',
+    ai_title:'Центр управления AgroSense ИИ',
+    ai_confidence:'УВЕРЕННОСТЬ',
+    btn_export:'Экспорт отчёта', btn_add_zone:'Добавить зону',
+    btn_open_wheat:'▶ Открыть зону A1',
+    btn_drone:'🚁 Запустить дрон',
+    btn_report:'📄 Создать отчёт',
+    btn_dismiss:'🔕 Закрыть',
+    btn_add_sensor:'+ Добавить датчик',
+    sh_current:'Сейчас', sh_avg:'Среднее 7д', sh_min:'Мин 7д', sh_max:'Макс 7д',
+    sh_chart_title:'История показаний датчика (7 дней)',
+    sh_7d:'7Д', sh_14d:'14Д', sh_30d:'30Д',
+    rp_weather:'Погода',
+    rp_alerts:'Оповещения',
+    rp_system:'Статус системы',
+    rp_ai_ask:'Спросить ИИ',
+    rp_ai_placeholder:'Спросите о хозяйстве...',
+    farm_health:'Здоровье фермы',
+    sys_sensors:'Датчики онлайн', sys_ai:'ИИ Движок', sys_satellite:'Спутник',
+    sys_drone:'Дрон', sys_latency:'Задержка', sys_scan:'Последний скан',
+    sys_op:'Работает', sys_active:'Активен', sys_standby:'Ожидание',
+  },
+  KZ: {
+    nav_overview:'Шолу', nav_zones:'Аймақтар', nav_sensors:'Сенсорлар',
+    nav_insights:'ЖИ Талдауы', nav_alerts:'Ескертулер', nav_reports:'Есептер', nav_settings:'Параметрлер',
+    nav_navigation:'Навигация', nav_analytics:'Аналитика', nav_system:'Жүйе',
+    nav_live_map:'Карта',
+    pt_overview:'Ақылды ауыл шаруашылығы',
+    ps_overview:'Қазақстан · 12 белсенді аймақты нақты уақытта бақылау',
+    pt_zones:'Алқаптар мен аймақтар',
+    pt_sensors:'Сенсорлар жүйесі',
+    ps_sensors:'Барлық аймақтардағы біртұтас сенсор желісі',
+    pt_insights:'ЖИ Аналитикасы',
+    ps_insights:'ЖИ шешімдері: Мәселе → Себеп → Іс-әрекет → Нәтиже',
+    pt_alerts:'Ескерту орталығы',
+    ps_alerts:'4 белсенді ескерту · 2 сыни · 1 бүгін шешілді',
+    pt_analytics:'Есептер мен аналитика',
+    ps_analytics:'2024 маусымы · Алматы шаруашылығы',
+    pt_settings:'Параметрлер мен әкімшілік',
+    ps_settings:'Корпоративтік баптаулар · Алматы Агро Холдинг',
+    kpi_total_zones:'Барлық аймақтар', kpi_crop_health:'Дақыл денсаулығы',
+    kpi_water:'Суару тиімділігі', kpi_fire:'Өрт қаупі',
+    kpi_soil:'Топырақ жағдайы', kpi_ai:'ЖИ дәлдігі',
+    kpi_moisture:'Орт. ылғалдылық', kpi_yield:'Өнімділік болжамы',
+    ai_title:'AgroSense ЖИ Басқару орталығы',
+    ai_confidence:'СЕНІМДІЛІК',
+    btn_export:'Есепті экспорттау', btn_add_zone:'Аймақ қосу',
+    btn_open_wheat:'▶ A1 аймағын ашу',
+    btn_drone:'🚁 Дронды іске қосу',
+    btn_report:'📄 Есеп жасау',
+    btn_dismiss:'🔕 Жабу',
+    btn_add_sensor:'+ Сенсор қосу',
+    sh_current:'Қазір', sh_avg:'7к Орташа', sh_min:'7к Мин', sh_max:'7к Макс',
+    sh_chart_title:'Сенсор тарихы (7 күн)',
+    sh_7d:'7К', sh_14d:'14К', sh_30d:'30К',
+    rp_weather:'Ауа райы',
+    rp_alerts:'Ескертулер',
+    rp_system:'Жүйе күйі',
+    rp_ai_ask:'ЖИ-ға сұрақ',
+    rp_ai_placeholder:'Шаруашылық туралы сұраңыз...',
+    farm_health:'Шаруашылық денсаулығы',
+    sys_sensors:'Желідегі сенсорлар', sys_ai:'ЖИ қозғалтқышы', sys_satellite:'Жерсерік',
+    sys_drone:'Дрон', sys_latency:'Кідіріс', sys_scan:'Соңғы скан',
+    sys_op:'Жұмыс істейді', sys_active:'Белсенді', sys_standby:'Күту режимі',
   }
-  document.querySelectorAll('.zone-item').forEach(item=>{
-    item.setAttribute('onclick', item.getAttribute('onclick').replace("'3.1'","'6.4'").replace("'7.8'","'6.8'"));
+};
+ 
+let currentLang = 'EN';
+ 
+function setLang(el, lang){
+  document.querySelectorAll('.nav-lang button').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  currentLang = lang;
+  applyI18n(lang);
+}
+ 
+function t(key){ return (I18N[currentLang]||I18N.EN)[key] || (I18N.EN[key] || key); }
+ 
+function applyI18n(lang){
+  const d = I18N[lang] || I18N.EN;
+ 
+  // Page titles & subs
+  const setT = (id, key) => { const el=document.getElementById(id); if(el) el.textContent=d[key]||el.textContent; };
+  // Nav items (sidebar)
+  const navItems = document.querySelectorAll('.nav-item');
+  const navKeys  = ['nav_overview','nav_zones','nav_sensors','nav_insights','nav_alerts','nav_reports','nav_settings'];
+  navItems.forEach((el,i)=>{
+    if(!navKeys[i]) return;
+    const icon = el.querySelector('.nav-icon');
+    const badge = el.querySelector('.nav-badge');
+    el.childNodes.forEach(n=>{
+      if(n.nodeType===3 && n.textContent.trim()){
+        n.textContent = ' '+(d[navKeys[i]]||n.textContent.trim());
+      }
+    });
   });
+ 
+  // Sidebar section labels
+  const sidebarSections = document.querySelectorAll('.sidebar-section');
+  const secKeys = ['nav_navigation','nav_analytics','nav_system'];
+  sidebarSections.forEach((el,i)=>{ if(secKeys[i]) el.textContent=d[secKeys[i]]||el.textContent; });
+ 
+  // Page titles
+  const pageTitleMap = {
+    'page-overview': ['pt_overview','ps_overview'],
+    'page-zones':    ['pt_zones', null],
+    'page-sensors':  ['pt_sensors','ps_sensors'],
+    'page-insights': ['pt_insights','ps_insights'],
+    'page-alerts':   ['pt_alerts','ps_alerts'],
+    'page-analytics':['pt_analytics','ps_analytics'],
+    'page-settings': ['pt_settings','ps_settings'],
+  };
+  Object.entries(pageTitleMap).forEach(([pageId,[tKey,sKey]])=>{
+    const pg = document.getElementById(pageId);
+    if(!pg) return;
+    const title = pg.querySelector('.page-title');
+    const sub   = pg.querySelector('.page-sub');
+    if(title && tKey) title.textContent = d[tKey]||title.textContent;
+    if(sub   && sKey) sub.textContent   = d[sKey]||sub.textContent;
+  });
+ 
+  // KPI labels
+  const kpiLabels = document.querySelectorAll('.kpi-label');
+  const kpiKeys = ['kpi_total_zones','kpi_crop_health','kpi_water','kpi_fire','kpi_soil','kpi_ai','kpi_moisture','kpi_yield'];
+  kpiLabels.forEach((el,i)=>{ if(kpiKeys[i]) el.textContent=d[kpiKeys[i]]||el.textContent; });
+ 
+  // AI center title
+  const aiTitle = document.querySelector('.ai-title');
+  if(aiTitle) aiTitle.textContent = d['ai_title']||aiTitle.textContent;
+  const confLabel = document.querySelector('.conf-label');
+  if(confLabel) confLabel.textContent = d['ai_confidence']||confLabel.textContent;
+ 
+  // Right panel titles
+  const panelTitles = document.querySelectorAll('.panel-title');
+  const panelKeys = ['rp_weather','rp_alerts','rp_system','rp_ai_ask'];
+  panelTitles.forEach((el,i)=>{ if(panelKeys[i]) el.textContent=d[panelKeys[i]]||el.textContent; });
+ 
+  // AI chat placeholder
+  const aiInp = document.getElementById('ai-input');
+  if(aiInp) aiInp.placeholder = d['rp_ai_placeholder']||aiInp.placeholder;
+ 
+  // Live map btn
+  const liveMapBtn = document.querySelector('.nav-btn.primary');
+  if(liveMapBtn) liveMapBtn.innerHTML = `<span>🗺</span> ${d['nav_live_map']||'Live Map'}`;
+ 
+  // Sensor sub (if visible)
+  const sensorSub = document.getElementById('sensorSub');
+  // keep dynamic, just update prefix if needed
+ 
+  // data-i18n elements (sensor history modal)
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.getAttribute('data-i18n');
+    if(d[key]) el.textContent = d[key];
+  });
+ 
+  // Farm health label in sidebar
+  const farmHealthVal = document.querySelector('.farm-health-val');
+  // just update numeric - don't touch
+ 
+  // System status labels (right panel)
+  const sysLabels = document.querySelectorAll('.sys-item-label');
+  const sysKeys = ['sys_sensors','sys_ai','sys_satellite','sys_drone','sys_latency','sys_scan'];
+  sysLabels.forEach((el,i)=>{ if(sysKeys[i]) el.textContent=d[sysKeys[i]]||el.textContent; });
+ 
+  // Update html lang attr
+  document.documentElement.lang = lang.toLowerCase();
 }
-
-function openCommandModal(command){ currentCommand=command; document.getElementById('command-modal').classList.add('show'); }
-function closeCommandModal(){ document.getElementById('command-modal').classList.remove('show'); }
-function confirmCommand(){ const t=translations[currentLang]; const sub=document.getElementById('command-modal-sub'); sub.textContent=t.modalSent; setTimeout(closeCommandModal,900); }
-function runAIAnalysis(){
-  const loader=document.getElementById('ai-loader'); const msg=document.querySelector('.ai-message');
-  if(loader) loader.classList.add('show');
-  setTimeout(()=>{ if(loader) loader.classList.remove('show'); if(msg) msg.innerHTML=translations[currentLang].aiUpdated; },3000);
+ 
+ 
+function toggleFilter(el){
+  el.classList.toggle('active');
 }
+ 
+function filterAlerts(el,type){
+  document.querySelectorAll('.af-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+}
+ 
+function switchSettings(el,section){
+  document.querySelectorAll('.settings-nav-item').forEach(s=>s.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('[id^="sfarm"],[id^="steam"],[id^="sdevices"],[id^="sintegrations"],[id^="snotif"],[id^="sapi"]').forEach(s=>s.style.display='none');
+  const el2=document.getElementById(section);
+  if(el2)el2.style.display='block';
+}
+ 
+function selectZone(el,name,crop,area,water,status,moisture,ph,date){
+  document.querySelectorAll('.zone-item').forEach(z=>z.classList.remove('active'));
+  if(el)el.classList.add('active');
+  document.getElementById('zp-name').textContent=name;
+  document.getElementById('zp-crop').textContent=crop;
+  document.getElementById('zp-area').textContent=area;
+  document.getElementById('zp-water').textContent=water;
+  document.getElementById('zp-moisture').textContent=moisture+'%';
+  document.getElementById('zp-ph').textContent=ph;
+  document.getElementById('zp-date').textContent=date;
+  document.getElementById('zp-meta').textContent=`${crop} · ${status} · ${area}`;
+  const score=Math.round(parseInt(moisture)||50);
+  document.getElementById('zp-score-val').textContent=score;
+  const arc=document.getElementById('score-arc');
+  const c=2*Math.PI*20;
+  arc.setAttribute('stroke-dasharray',`${score/100*c} ${c}`);
+  const col=score<35?'var(--red)':score<60?'var(--amber)':'var(--green)';
+  arc.setAttribute('stroke',col);
+  document.getElementById('zp-score-val').style.color=col;
+  const statusEl=document.getElementById('zp-status');
+  statusEl.textContent=score<35?'Critical':score<60?'Warning':'Healthy';
+  statusEl.style.color=col;
+  document.getElementById('zp-moisture').style.color=parseInt(moisture)<35?'var(--red)':parseInt(moisture)<50?'var(--amber)':'var(--green)';
+}
+ 
 function askAI(){
-  const inp=document.getElementById('ai-input'); const q=inp.value.trim(); if(!q) return; inp.value='';
-  const replies=translations[currentLang].chatbotReplies; const reply=replies[Math.floor(Math.random()*replies.length)];
-  const box=document.querySelector('.ai-chat-msg'); if(box) box.textContent=reply;
+  const inp=document.getElementById('ai-input');
+  const q=inp.value.trim();
+  if(!q)return;
+  inp.value='';
+  showPage('insights');
 }
-
+ 
 // ── CHARTS ──
-Chart.defaults.color='rgba(122,144,184,0.85)';
+Chart.defaults.color='rgba(122,144,184,0.8)';
 Chart.defaults.borderColor='rgba(255,255,255,0.05)';
-Chart.defaults.font.family="'Inter',sans-serif";
+Chart.defaults.font.family="'Outfit',sans-serif";
+ 
 function initCharts(){
-  if(chartsInitialized) return; chartsInitialized=true;
   const months=['Jan','Feb','Mar','Apr','May','Jun'];
   const ctx1=document.getElementById('healthChart');
-  if(ctx1){ new Chart(ctx1,{type:'line',data:{labels:months,datasets:[{label:'Wheat',data:[72,74,76,78,75,78],borderColor:'#00D68F',backgroundColor:'rgba(0,214,143,0.05)',tension:0.42,pointRadius:3,pointBackgroundColor:'#00D68F',fill:true},{label:'Corn',data:[68,70,74,80,82,84],borderColor:'#3B9EFF',backgroundColor:'rgba(59,158,255,0.05)',tension:0.42,pointRadius:3,pointBackgroundColor:'#3B9EFF',fill:true},{label:'Potato',data:[65,68,70,72,69,71],borderColor:'#F5B731',backgroundColor:'rgba(245,183,49,0.05)',tension:0.42,pointRadius:3,pointBackgroundColor:'#F5B731',fill:true}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(255,255,255,0.03)'}},y:{min:60,max:90,grid:{color:'rgba(255,255,255,0.03)'}}}}}); }
+  if(!ctx1||ctx1._chartjs)return;
+  new Chart(ctx1,{type:'line',data:{labels:months,datasets:[
+    {label:'Wheat',data:[72,74,76,78,75,78],borderColor:'#00D68F',backgroundColor:'rgba(0,214,143,0.05)',tension:0.4,pointRadius:3,pointBackgroundColor:'#00D68F'},
+    {label:'Corn',data:[68,70,74,80,82,84],borderColor:'#3B9EFF',backgroundColor:'rgba(59,158,255,0.05)',tension:0.4,pointRadius:3,pointBackgroundColor:'#3B9EFF'},
+    {label:'Potato',data:[65,68,70,72,69,71],borderColor:'#F5B731',backgroundColor:'rgba(245,183,49,0.05)',tension:0.4,pointRadius:3,pointBackgroundColor:'#F5B731'}
+  ]},options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(255,255,255,0.03)'}},y:{min:60,max:90,grid:{color:'rgba(255,255,255,0.03)'}}}}});
+ 
   const ctx2=document.getElementById('zoneChart');
-  if(ctx2){ new Chart(ctx2,{type:'doughnut',data:{labels:['Healthy','Warning','Critical'],datasets:[{data:[7,3,2],backgroundColor:['rgba(0,214,143,0.85)','rgba(245,183,49,0.82)','rgba(255,92,107,0.85)'],borderWidth:0}]},options:{responsive:true,cutout:'70%',plugins:{legend:{position:'bottom',labels:{padding:12,font:{size:11}}}}}}); }
+  if(!ctx2||ctx2._chartjs)return;
+  new Chart(ctx2,{type:'doughnut',data:{labels:['Healthy','Warning','Critical'],datasets:[{data:[7,3,2],backgroundColor:['rgba(0,214,143,0.8)','rgba(245,183,49,0.8)','rgba(255,92,107,0.8)'],borderColor:'rgba(0,0,0,0)',borderWidth:0}]},options:{responsive:true,cutout:'70%',plugins:{legend:{position:'bottom',labels:{padding:12,font:{size:11}}}}}});
 }
+ 
 function initAnalyticsCharts(){
   const months=['Oct','Nov','Dec','Jan','Feb','Mar','Apr'];
-  const def=(id, cfg)=>{const el=document.getElementById(id); if(el && !el._chartjs) new Chart(el,cfg); };
-  def('trendChart',{type:'line',data:{labels:months,datasets:[{data:[65,68,72,75,73,76,78],borderColor:'#00D68F',backgroundColor:'rgba(0,214,143,0.08)',fill:true,tension:0.4,pointRadius:4,pointBackgroundColor:'#00D68F'}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(255,255,255,0.03)'}},y:{min:60,max:85,grid:{color:'rgba(255,255,255,0.03)'}}}}});
-  def('yieldChart',{type:'bar',data:{labels:['W-A1','W-A2','Corn B1','Corn B2','Potato E','Barley Z5'],datasets:[{label:'AgroSense',data:[28,84,90,75,82,86],backgroundColor:'rgba(0,214,143,0.75)'},{label:'Regional Avg',data:[72,72,72,72,72,72],backgroundColor:'rgba(59,158,255,0.35)'}]},options:{responsive:true,plugins:{legend:{position:'bottom',labels:{font:{size:10}}}},scales:{x:{grid:{color:'rgba(255,255,255,0.03)'}},y:{grid:{color:'rgba(255,255,255,0.03)'}}}}});
-  def('irrChart',{type:'line',data:{labels:months,datasets:[{label:'m³/ha',data:[320,310,290,280,265,250,240],borderColor:'#3B9EFF',backgroundColor:'rgba(59,158,255,0.08)',fill:true,tension:0.4,pointRadius:3}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(255,255,255,0.03)'}},y:{grid:{color:'rgba(255,255,255,0.03)'}}}}});
-  def('zoneCompChart',{type:'bar',data:{labels:['A1','A2','B1','B2','P-E','P-W','Z5','PA','PC'],datasets:[{data:[28,72,90,75,65,85,86,88,55],backgroundColor:['rgba(255,92,107,0.7)','rgba(245,183,49,0.7)','rgba(0,214,143,0.7)','rgba(245,183,49,0.7)','rgba(255,92,107,0.7)','rgba(0,214,143,0.7)','rgba(0,214,143,0.7)','rgba(0,214,143,0.7)','rgba(245,183,49,0.7)']}]},options:{responsive:true,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{min:0,max:100,grid:{color:'rgba(255,255,255,0.03)'}},y:{grid:{color:'rgba(255,255,255,0.03)'}}}}});
+  const t1=document.getElementById('trendChart');
+  if(t1&&!t1._chartjs){
+    new Chart(t1,{type:'line',data:{labels:months,datasets:[{data:[65,68,72,75,73,76,78],borderColor:'#00D68F',backgroundColor:'rgba(0,214,143,0.08)',fill:true,tension:0.4,pointRadius:4,pointBackgroundColor:'#00D68F'}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(255,255,255,0.03)'}},y:{min:60,max:85,grid:{color:'rgba(255,255,255,0.03)'}}}}}); 
+  }
+  const t2=document.getElementById('yieldChart');
+  if(t2&&!t2._chartjs){
+    new Chart(t2,{type:'bar',data:{labels:['W-A1','W-A2','Corn B1','Corn B2','Potato E','Barley Z5'],datasets:[{label:'AgroSense',data:[28,84,90,75,82,86],backgroundColor:'rgba(0,214,143,0.7)'},{label:'Regional Avg',data:[72,72,72,72,72,72],backgroundColor:'rgba(59,158,255,0.4)'}]},options:{responsive:true,plugins:{legend:{position:'bottom',labels:{font:{size:10}}}},scales:{x:{grid:{color:'rgba(255,255,255,0.03)'}},y:{grid:{color:'rgba(255,255,255,0.03)'}}}}}); 
+  }
+  const t3=document.getElementById('irrChart');
+  if(t3&&!t3._chartjs){
+    new Chart(t3,{type:'line',data:{labels:months,datasets:[{label:'m³/ha',data:[320,310,290,280,265,250,240],borderColor:'#3B9EFF',backgroundColor:'rgba(59,158,255,0.08)',fill:true,tension:0.4,pointRadius:3}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(255,255,255,0.03)'}},y:{grid:{color:'rgba(255,255,255,0.03)'}}}}}); 
+  }
+  const t4=document.getElementById('zoneCompChart');
+  if(t4&&!t4._chartjs){
+    new Chart(t4,{type:'bar',data:{labels:['A1','A2','B1','B2','P-E','P-W','Z5','PA','PC'],datasets:[{data:[28,72,90,75,65,85,86,88,55],backgroundColor:d=>['rgba(255,92,107,0.7)','rgba(245,183,49,0.7)','rgba(0,214,143,0.7)','rgba(245,183,49,0.7)','rgba(255,92,107,0.7)','rgba(0,214,143,0.7)','rgba(0,214,143,0.7)','rgba(0,214,143,0.7)','rgba(245,183,49,0.7)'][d.dataIndex]}]},options:{responsive:true,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{min:0,max:100,grid:{color:'rgba(255,255,255,0.03)'}},y:{grid:{color:'rgba(255,255,255,0.03)'}}}}}); 
+  }
 }
-
-setInterval(()=>{ const conn=document.querySelector('.nav-conn span'); if(conn && !/Syncing|Синхр|Синх/.test(conn.textContent)){ conn.textContent=translations[currentLang].allSystems; } }, 3000);
-document.addEventListener('click', e=>{ if(e.target.id==='command-modal') closeCommandModal(); });
-document.addEventListener('DOMContentLoaded', ()=>{ applyTranslations(); applyConsistencyLogic(); });
+ 
+// ── LIVE CLOCK update ──
+setInterval(()=>{
+  const conn=document.querySelector('.nav-conn span');
+  if(conn){const secs=Math.floor(Date.now()/1000);conn.textContent=secs%6===0?'Syncing data...':'All Systems Online';}
+},3000);
+const SENSOR_ZONE_DATA = {
+  wheatA1: {
+    title: "Wheat Zone A1",
+    kind: "crop",
+    sensors: {
+      soil_moisture: { value: "22", unit: "%", status: "alert", desc: "Optimal: 40–65%", fill: 22, icon: "💧" },
+      temperature: { value: "31", unit: "°C", status: "alert", desc: "Optimal: 18–26°C", fill: 80, icon: "🌡️" },
+      smoke: { value: "12", unit: "ppm", status: "watch", desc: "Mild smoke particles detected", fill: 35, icon: "🔥" },
+      salinity: { value: "1.4", unit: "dS/m", status: "normal", desc: "Optimal: < 2.0 dS/m", fill: 45, icon: "🧂" },
+      water_flow: { value: "4.8", unit: "m³/h", status: "watch", desc: "Above baseline by 15%", fill: 62, icon: "🚰" },
+      ph: { value: "6.3", unit: "pH", status: "normal", desc: "Optimal: 6.0–7.0", fill: 63, icon: "🧪" },
+      humidity: { value: "38", unit: "%", status: "watch", desc: "Below preferred humidity", fill: 38, icon: "💨" },
+      wind: { value: "14", unit: "km/h", status: "normal", desc: "Moderate crosswind", fill: 50, icon: "🌬️" },
+      nitrogen: { value: "41", unit: "ppm", status: "watch", desc: "Needs replenishment soon", fill: 41, icon: "🧬" },
+      solar: { value: "820", unit: "W/m²", status: "normal", desc: "Strong sunlight conditions", fill: 82, icon: "☀️" }
+    }
+  },
+ 
+  wheatA2: {
+    title: "Wheat Zone A2",
+    kind: "crop",
+    sensors: {
+      soil_moisture: { value: "45", unit: "%", status: "normal", desc: "Optimal: 40–65%", fill: 45, icon: "💧" },
+      temperature: { value: "27", unit: "°C", status: "watch", desc: "Slightly above target", fill: 68, icon: "🌡️" },
+      smoke: { value: "3", unit: "ppm", status: "normal", desc: "No active smoke anomaly", fill: 10, icon: "🔥" },
+      salinity: { value: "1.1", unit: "dS/m", status: "normal", desc: "Within tolerance", fill: 32, icon: "🧂" },
+      water_flow: { value: "4.1", unit: "m³/h", status: "normal", desc: "Baseline irrigation flow", fill: 51, icon: "🚰" },
+      ph: { value: "6.8", unit: "pH", status: "normal", desc: "Healthy pH balance", fill: 68, icon: "🧪" },
+      humidity: { value: "49", unit: "%", status: "normal", desc: "Stable humidity level", fill: 49, icon: "💨" },
+      wind: { value: "11", unit: "km/h", status: "normal", desc: "Low wind pressure", fill: 39, icon: "🌬️" },
+      nitrogen: { value: "56", unit: "ppm", status: "normal", desc: "Good nutrient reserve", fill: 56, icon: "🧬" },
+      solar: { value: "760", unit: "W/m²", status: "normal", desc: "Consistent radiation", fill: 76, icon: "☀️" }
+    }
+  },
+ 
+  cornB1: {
+    title: "Corn Zone B1",
+    kind: "crop",
+    sensors: {
+      soil_moisture: { value: "58", unit: "%", status: "normal", desc: "Optimal: 40–65%", fill: 58, icon: "💧" },
+      temperature: { value: "26", unit: "°C", status: "normal", desc: "Within target range", fill: 64, icon: "🌡️" },
+      smoke: { value: "1", unit: "ppm", status: "normal", desc: "No smoke anomaly", fill: 5, icon: "🔥" },
+      salinity: { value: "1.2", unit: "dS/m", status: "normal", desc: "Safe salinity", fill: 35, icon: "🧂" },
+      water_flow: { value: "3.9", unit: "m³/h", status: "normal", desc: "Efficient distribution", fill: 49, icon: "🚰" },
+      ph: { value: "6.9", unit: "pH", status: "normal", desc: "Good acidity level", fill: 69, icon: "🧪" },
+      humidity: { value: "55", unit: "%", status: "normal", desc: "Stable ambient moisture", fill: 55, icon: "💨" },
+      wind: { value: "13", unit: "km/h", status: "normal", desc: "Moderate air flow", fill: 44, icon: "🌬️" },
+      nitrogen: { value: "62", unit: "ppm", status: "normal", desc: "Strong nutrient condition", fill: 62, icon: "🧬" },
+      solar: { value: "682", unit: "W/m²", status: "normal", desc: "Balanced light exposure", fill: 68, icon: "☀️" }
+    }
+  },
+ 
+  cornB2: {
+    title: "Corn Zone B2",
+    kind: "crop",
+    sensors: {
+      soil_moisture: { value: "38", unit: "%", status: "watch", desc: "Below optimal threshold", fill: 38, icon: "💧" },
+      temperature: { value: "28", unit: "°C", status: "watch", desc: "Rising heat load", fill: 72, icon: "🌡️" },
+      smoke: { value: "2", unit: "ppm", status: "normal", desc: "No active alert", fill: 6, icon: "🔥" },
+      salinity: { value: "1.3", unit: "dS/m", status: "normal", desc: "Within safe range", fill: 39, icon: "🧂" },
+      water_flow: { value: "4.4", unit: "m³/h", status: "watch", desc: "Higher than usual", fill: 58, icon: "🚰" },
+      ph: { value: "5.1", unit: "pH", status: "alert", desc: "Below optimal: 6.0–7.0", fill: 51, icon: "🧪" },
+      humidity: { value: "44", unit: "%", status: "watch", desc: "Dry air detected", fill: 44, icon: "💨" },
+      wind: { value: "16", unit: "km/h", status: "normal", desc: "Normal wind stress", fill: 52, icon: "🌬️" },
+      nitrogen: { value: "37", unit: "ppm", status: "watch", desc: "Possible deficiency", fill: 37, icon: "🧬" },
+      solar: { value: "790", unit: "W/m²", status: "normal", desc: "High solar input", fill: 79, icon: "☀️" }
+    }
+  },
+ 
+  potatoEast: {
+    title: "Potato Field East",
+    kind: "crop",
+    sensors: {
+      soil_moisture: { value: "61", unit: "%", status: "normal", desc: "Moisture in healthy band", fill: 61, icon: "💧" },
+      temperature: { value: "25", unit: "°C", status: "normal", desc: "Within target range", fill: 60, icon: "🌡️" },
+      smoke: { value: "148", unit: "µg/m³", status: "alert", desc: "Smoke anomaly detected", fill: 90, icon: "🔥" },
+      salinity: { value: "0.9", unit: "dS/m", status: "normal", desc: "Low salinity", fill: 26, icon: "🧂" },
+      water_flow: { value: "4.0", unit: "m³/h", status: "normal", desc: "Stable irrigation rate", fill: 50, icon: "🚰" },
+      ph: { value: "7.2", unit: "pH", status: "watch", desc: "Slightly alkaline", fill: 72, icon: "🧪" },
+      humidity: { value: "57", unit: "%", status: "normal", desc: "Good atmospheric balance", fill: 57, icon: "💨" },
+      wind: { value: "18", unit: "km/h", status: "watch", desc: "Supports smoke spread", fill: 60, icon: "🌬️" },
+      nitrogen: { value: "54", unit: "ppm", status: "normal", desc: "Healthy nutrition", fill: 54, icon: "🧬" },
+      solar: { value: "735", unit: "W/m²", status: "normal", desc: "Strong daylight", fill: 73, icon: "☀️" }
+    }
+  },
+ 
+  potatoWest: {
+    title: "Potato Field West",
+    kind: "crop",
+    sensors: {
+      soil_moisture: { value: "55", unit: "%", status: "normal", desc: "Stable moisture", fill: 55, icon: "💧" },
+      temperature: { value: "24", unit: "°C", status: "normal", desc: "Healthy temperature", fill: 58, icon: "🌡️" },
+      smoke: { value: "0", unit: "ppm", status: "normal", desc: "No smoke traces", fill: 0, icon: "🔥" },
+      salinity: { value: "1.0", unit: "dS/m", status: "normal", desc: "Balanced salinity", fill: 30, icon: "🧂" },
+      water_flow: { value: "3.8", unit: "m³/h", status: "normal", desc: "Normal irrigation", fill: 48, icon: "🚰" },
+      ph: { value: "7.0", unit: "pH", status: "normal", desc: "Neutral soil chemistry", fill: 70, icon: "🧪" },
+      humidity: { value: "53", unit: "%", status: "normal", desc: "Good humidity", fill: 53, icon: "💨" },
+      wind: { value: "12", unit: "km/h", status: "normal", desc: "Low wind", fill: 40, icon: "🌬️" },
+      nitrogen: { value: "58", unit: "ppm", status: "normal", desc: "Solid nutrient level", fill: 58, icon: "🧬" },
+      solar: { value: "701", unit: "W/m²", status: "normal", desc: "Even sun exposure", fill: 70, icon: "☀️" }
+    }
+  },
+ 
+  barleyZ5: {
+    title: "Barley Zone Z5",
+    kind: "crop",
+    sensors: {
+      soil_moisture: { value: "49", unit: "%", status: "normal", desc: "Good seeding moisture", fill: 49, icon: "💧" },
+      temperature: { value: "18", unit: "°C", status: "normal", desc: "Optimal germination temp", fill: 45, icon: "🌡️" },
+      smoke: { value: "0", unit: "ppm", status: "normal", desc: "Air quality clear", fill: 0, icon: "🔥" },
+      salinity: { value: "0.8", unit: "dS/m", status: "normal", desc: "Low salt stress", fill: 24, icon: "🧂" },
+      water_flow: { value: "3.2", unit: "m³/h", status: "normal", desc: "Light irrigation profile", fill: 40, icon: "🚰" },
+      ph: { value: "6.8", unit: "pH", status: "normal", desc: "Suitable soil pH", fill: 68, icon: "🧪" },
+      humidity: { value: "60", unit: "%", status: "normal", desc: "High humidity for growth", fill: 60, icon: "💨" },
+      wind: { value: "8", unit: "km/h", status: "normal", desc: "Low wind resistance", fill: 28, icon: "🌬️" },
+      nitrogen: { value: "63", unit: "ppm", status: "normal", desc: "Strong nitrogen reserve", fill: 63, icon: "🧬" },
+      solar: { value: "640", unit: "W/m²", status: "normal", desc: "Moderate radiation", fill: 64, icon: "☀️" }
+    }
+  },
+ 
+  pastureA: {
+    title: "Cattle Pasture A",
+    kind: "pasture",
+    sensors: {
+      gps: { value: "847", unit: "head", status: "normal", desc: "All collars responding", fill: 84, icon: "📍" },
+      body_temp: { value: "38.4", unit: "°C", status: "normal", desc: "Healthy livestock body temp", fill: 64, icon: "🐄" },
+      water_tank: { value: "68", unit: "%", status: "normal", desc: "Tank level sufficient", fill: 68, icon: "🚰" },
+      fence_voltage: { value: "7.2", unit: "kV", status: "normal", desc: "Fence fully energized", fill: 72, icon: "⚡" },
+      smoke: { value: "0", unit: "ppm", status: "normal", desc: "No fire signal", fill: 0, icon: "🔥" },
+      grass_density: { value: "81", unit: "%", status: "normal", desc: "Pasture cover healthy", fill: 81, icon: "🌿" },
+      humidity: { value: "51", unit: "%", status: "normal", desc: "Ambient humidity stable", fill: 51, icon: "💨" },
+      wind: { value: "10", unit: "km/h", status: "normal", desc: "Light wind", fill: 34, icon: "🌬️" },
+      motion: { value: "Normal", unit: "", status: "normal", desc: "Animal movement balanced", fill: 62, icon: "🏃" },
+      feed_level: { value: "74", unit: "%", status: "normal", desc: "Feed reserve healthy", fill: 74, icon: "🌾" }
+    }
+  },
+ 
+  pastureC: {
+    title: "Cattle Pasture C",
+    kind: "pasture",
+    sensors: {
+      gps: { value: "691", unit: "head", status: "watch", desc: "Cluster density elevated", fill: 69, icon: "📍" },
+      body_temp: { value: "38.9", unit: "°C", status: "normal", desc: "Within safe band", fill: 66, icon: "🐄" },
+      water_tank: { value: "42", unit: "%", status: "watch", desc: "Tank refill soon", fill: 42, icon: "🚰" },
+      fence_voltage: { value: "6.8", unit: "kV", status: "normal", desc: "Fence secure", fill: 68, icon: "⚡" },
+      smoke: { value: "4", unit: "ppm", status: "normal", desc: "No critical smoke", fill: 12, icon: "🔥" },
+      grass_density: { value: "39", unit: "%", status: "alert", desc: "Overgrazing pressure detected", fill: 39, icon: "🌿" },
+      humidity: { value: "46", unit: "%", status: "watch", desc: "Dry pasture air", fill: 46, icon: "💨" },
+      wind: { value: "15", unit: "km/h", status: "normal", desc: "Moderate wind", fill: 50, icon: "🌬️" },
+      motion: { value: "High", unit: "", status: "watch", desc: "Movement concentration abnormal", fill: 76, icon: "🏃" },
+      feed_level: { value: "33", unit: "%", status: "watch", desc: "Feed supply running low", fill: 33, icon: "🌾" }
+    }
+  }
+};
+ 
+const SENSOR_LABELS = {
+  crop: {
+    soil_moisture: "Soil Moisture Sensor",
+    temperature: "Temperature Sensor",
+    smoke: "Smoke Sensor",
+    salinity: "Salinity Sensor",
+    water_flow: "Water Flow Meter",
+    ph: "pH Sensor",
+    humidity: "Humidity Sensor",
+    wind: "Wind Sensor",
+    nitrogen: "Nitrogen Sensor",
+    solar: "Solar Radiation Sensor"
+  },
+  pasture: {
+    gps: "GPS Collar Tracker",
+    body_temp: "Animal Body Temperature",
+    water_tank: "Water Tank Level",
+    fence_voltage: "Fence Voltage Sensor",
+    smoke: "Smoke Sensor",
+    grass_density: "Grass Density Sensor",
+    humidity: "Humidity Sensor",
+    wind: "Wind Sensor",
+    motion: "Motion Activity Sensor",
+    feed_level: "Feed Level Meter"
+  }
+};
+ 
+function sensorStatusClass(status){
+  if(status === "alert") return "alert";
+  if(status === "watch") return "watch";
+  return "normal";
+}
+ 
+function sensorStatusLabel(status){
+  if(status === "alert") return "ALERT";
+  if(status === "watch") return "WATCH";
+  return "NORMAL";
+}
+ 
+function sensorFillColor(status){
+  if(status === "alert") return "var(--red)";
+  if(status === "watch") return "var(--amber)";
+  return "var(--green)";
+}
+ 
+function renderSensorTabs(activeKey){
+  const tabs = document.getElementById("zoneTabs");
+  if(!tabs) return;
+ 
+  const order = [
+    "wheatA1",
+    "wheatA2",
+    "cornB1",
+    "cornB2",
+    "potatoEast",
+    "potatoWest",
+    "barleyZ5",
+    "pastureA",
+    "pastureC"
+  ];
+ 
+  tabs.innerHTML = "";
+ 
+  order.forEach(key => {
+    const btn = document.createElement("button");
+    btn.className = "zone-tab" + (key === activeKey ? " active" : "");
+    btn.textContent = SENSOR_ZONE_DATA[key].title;
+    btn.onclick = () => renderSensorPanel(key);
+    tabs.appendChild(btn);
+  });
+}
+ 
+// (renderSensorPanel defined below with zone insight injection)
+ 
+ 
+// ── MOBILE SIDEBAR ──
+function toggleMobileSidebar(){
+  const sidebar = document.querySelector('.sidebar');
+  const overlay = document.getElementById('mobileSidebarOverlay');
+  sidebar.classList.toggle('mobile-open');
+  overlay.classList.toggle('open');
+}
+ 
+function setMobActive(id){
+  document.querySelectorAll('.mob-nav-item').forEach(el => el.classList.remove('active'));
+  const el = document.getElementById(id);
+  if(el) el.classList.add('active');
+}
+ 
+// ── ADD ZONE MODAL ──
+let zoneCount = 12;
+ 
+function openAddZoneModal(){
+  document.getElementById('addZoneModal').classList.add('open');
+}
+function closeAddZoneModal(){
+  document.getElementById('addZoneModal').classList.remove('open');
+  // clear form
+  ['zf-name','zf-sector','zf-area','zf-moisture','zf-ph','zf-date'].forEach(id=>{
+    document.getElementById(id).value='';
+  });
+  document.getElementById('zf-crop').value='';
+  document.getElementById('zf-water').value='';
+  document.getElementById('zf-status').value='Healthy';
+}
+ 
+function saveNewZone(){
+  const name = document.getElementById('zf-name').value.trim();
+  const sector = document.getElementById('zf-sector').value.trim();
+  const crop = document.getElementById('zf-crop').value;
+  const area = document.getElementById('zf-area').value;
+  const water = document.getElementById('zf-water').value;
+  const moisture = document.getElementById('zf-moisture').value || '50';
+  const ph = document.getElementById('zf-ph').value || 'N/A';
+  const dateRaw = document.getElementById('zf-date').value;
+  const status = document.getElementById('zf-status').value;
+ 
+  if(!name || !crop || !area){
+    // highlight missing
+    if(!name) document.getElementById('zf-name').style.borderColor='var(--red)';
+    if(!crop) document.getElementById('zf-crop').style.borderColor='var(--red)';
+    if(!area) document.getElementById('zf-area').style.borderColor='var(--red)';
+    return;
+  }
+ 
+  // Reset borders
+  ['zf-name','zf-crop','zf-area'].forEach(id=>document.getElementById(id).style.borderColor='');
+ 
+  // Format date
+  let dateDisplay = '–';
+  if(dateRaw){
+    const d = new Date(dateRaw);
+    dateDisplay = d.toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+  }
+ 
+  const statusColors = {
+    'Healthy': 'var(--green)',
+    'Watch': 'var(--amber)',
+    'Critical': 'var(--red)'
+  };
+  const statusIcons = {
+    'Healthy': '✓ Healthy',
+    'Watch': '⚡ Watch',
+    'Critical': '⚠ Critical'
+  };
+  const color = statusColors[status] || 'var(--green)';
+  const label = statusIcons[status] || '✓ Healthy';
+  const areaLabel = area ? area + ' ha' : 'N/A';
+ 
+  // Insert zone item into the list
+  const list = document.querySelector('.zones-list');
+  const div = document.createElement('div');
+  div.className = 'zone-item';
+  div.onclick = function(){ selectZone(div, name, crop, areaLabel, water||'N/A', status, moisture, ph, dateDisplay); };
+  div.innerHTML = `
+    <div class="zone-item-header">
+      <div class="zone-dot" style="background:${color}"></div>
+      <div class="zone-name">${name}</div>
+      <div class="zone-status" style="color:${color}">${label}</div>
+    </div>
+    <div class="zone-meta">${areaLabel} · ${crop} · ${sector || 'Custom'}</div>
+  `;
+  // insert before the last child of the list to keep button at bottom
+  list.appendChild(div);
+ 
+  // Add corresponding zone polygon to SVG map
+  addZoneToMap(name, sector||name.substring(0,2).toUpperCase(), status);
+ 
+  // Update zone count
+  zoneCount++;
+  document.getElementById('zoneCount').textContent = zoneCount;
+ 
+  // Select the new zone
+  selectZone(div, name, crop, areaLabel, water||'N/A', status, moisture, ph, dateDisplay);
+ 
+  closeAddZoneModal();
+}
+ 
+// Add a small polygon to the SVG map for the new zone
+let newZoneOffset = 0;
+function addZoneToMap(name, label, status){
+  const svg = document.querySelector('.map-area svg');
+  if(!svg) return;
+ 
+  const cols = {'Healthy':'#00D68F','Watch':'#F5B731','Critical':'#FF5C6B'};
+  const fills = {'Healthy':'rgba(0,214,143,0.18)','Watch':'rgba(245,183,49,0.18)','Critical':'rgba(255,92,107,0.22)'};
+  const color = cols[status] || cols['Healthy'];
+  const fill = fills[status] || fills['Healthy'];
+ 
+  // Place new zones in a row along the bottom area of the SVG
+  const startX = 90 + (newZoneOffset % 4) * 105;
+  const startY = 300 + Math.floor(newZoneOffset / 4) * 38;
+  newZoneOffset++;
+ 
+  const g = document.createElementNS('http://www.w3.org/2000/svg','g');
+  g.setAttribute('class','map-polygon');
+ 
+  const path = document.createElementNS('http://www.w3.org/2000/svg','path');
+  const x1=startX, y1=startY, w=70, h=28;
+  path.setAttribute('d',`M${x1},${y1} L${x1+w},${y1} L${x1+w},${y1+h} L${x1},${y1+h} Z`);
+  path.setAttribute('fill', fill);
+  path.setAttribute('stroke', color);
+  path.setAttribute('stroke-width','1.5');
+  path.setAttribute('stroke-dasharray','4,3');
+ 
+  const text = document.createElementNS('http://www.w3.org/2000/svg','text');
+  text.setAttribute('x', String(x1 + w/2));
+  text.setAttribute('y', String(y1 + h/2 + 3));
+  text.setAttribute('fill', color);
+  text.setAttribute('font-size','9');
+  text.setAttribute('font-family',"'JetBrains Mono'");
+  text.setAttribute('text-anchor','middle');
+  text.textContent = label.substring(0,4);
+ 
+  g.appendChild(path);
+  g.appendChild(text);
+  svg.appendChild(g);
+}
+ 
+// ── ZONE INSIGHTS ENGINE ──
+const ZONE_INSIGHTS = {
+  wheatA1: {
+    level: 'alert',
+    headline: '⚠ Critical Stress — Immediate Action Required',
+    body: `<strong style="color:var(--red)">Wheat Zone A1 is in a critical drought state.</strong> Soil moisture has dropped to 22% — well below the 40–65% optimal band — while temperature has climbed to a damaging 31°C. The combination of heat stress and water deficit is triggering accelerated evapotranspiration, putting the crop at high risk of irreversible cell damage.<br><br>
+    Nitrogen levels at 41 ppm are also declining, likely due to reduced root uptake capacity in dry soil. Mild smoke particles (12 ppm) and slightly elevated water flow suggest the irrigation system may be struggling to compensate. <strong>Activate targeted drip irrigation within the next 6 hours</strong> and schedule a nitrogen top-dressing once soil moisture recovers above 35%.`,
+    tags: ['DROUGHT · CRITICAL','HEAT STRESS','N-DEFICIENCY RISK','IRRIGATE NOW']
+  },
+  wheatA2: {
+    level: 'watch',
+    headline: '⚡ Mostly Stable — Monitor Humidity & Temperature',
+    body: `Wheat Zone A2 is performing well overall, with soil moisture at a healthy 45% and pH balanced at 6.8. Nitrogen reserves at 56 ppm are adequate. However, temperature is trending slightly high at 27°C and ambient humidity is tightening at 49%. These conditions, while not yet critical, can compound quickly during heatwaves.<br><br>
+    <strong>No immediate irrigation action is required</strong>, but schedule a moisture check within 24 hours. Consider a light foliar spray if daytime temperatures exceed 30°C in the coming days.`,
+    tags: ['WATCH · TEMP','HUMIDITY TIGHTENING','ACTION IN 24H']
+  },
+  cornB1: {
+    level: 'good',
+    headline: '✓ Excellent Conditions — Zone Performing Optimally',
+    body: `Corn Zone B1 is in peak health. All 10 sensors return normal readings: soil moisture at 58%, temperature at 26°C, pH at 6.9, and nitrogen at a strong 62 ppm. Water flow is efficient at 3.9 m³/h and salinity is well within tolerance.<br><br>
+    <strong>No interventions are needed at this time.</strong> Continue the current drip irrigation schedule. This zone is a model for the rest of the farm — its conditions offer an opportunity to trial reduced irrigation cycles to further improve water efficiency.`,
+    tags: ['ALL SENSORS NORMAL','OPTIMAL GROWTH','EFFICIENCY OPPORTUNITY']
+  },
+  cornB2: {
+    level: 'alert',
+    headline: '⚠ pH Alert + Moisture Deficit — Treatment Needed',
+    body: `Corn Zone B2 has a confirmed pH alert at 5.1 — significantly below the optimal 6.0–7.0 range. Acidic soil at this level restricts phosphorus and molybdenum availability, suppressing root growth and reducing nitrogen uptake efficiency, which is reflected in the low 37 ppm nitrogen reading.<br><br>
+    Soil moisture at 38% is also below the optimal threshold, and ambient humidity is dry at 44%. Water flow is slightly elevated (4.4 m³/h), suggesting possible compensatory over-irrigation. <strong>Apply lime-based soil amendment to raise pH</strong>, and adjust the irrigation schedule to bring moisture back to 45–55%. A soil re-test is recommended in 10–14 days.`,
+    tags: ['pH ALERT · 5.1','ACIDIC SOIL','N-UPTAKE SUPPRESSED','LIME AMENDMENT']
+  },
+  potatoEast: {
+    level: 'alert',
+    headline: '🔥 Smoke Alert Active — Fire Risk Under Investigation',
+    body: `Potato Field East has triggered a significant smoke anomaly: particle concentration at 148 µg/m³, which is in the hazardous range. The NNE wind at 18 km/h is actively transporting smoke across the zone and potentially spreading fire risk toward adjacent pastures.<br><br>
+    The crop conditions themselves (moisture 61%, pH 7.2, temperature 25°C) are otherwise acceptable, though pH trending slightly alkaline may need attention later. <strong>The smoke event is the immediate priority — drone inspection should be dispatched now</strong>, and all personnel should be kept clear of the eastern boundary until the source is confirmed. The slightly alkaline pH (7.2) should be monitored and corrected with a mild acidifying fertilizer once the smoke situation is resolved.`,
+    tags: ['SMOKE · 148 µg/m³','FIRE RISK HIGH','DRONE REQUIRED','WIND SPREADING']
+  },
+  potatoWest: {
+    level: 'good',
+    headline: '✓ Healthy Zone — No Active Issues',
+    body: `Potato Field West is stable across all parameters. Soil moisture at 55%, temperature at 24°C, and pH at a neutral 7.0 all fall within ideal ranges. Nitrogen at 58 ppm provides solid nutritional support, and there are zero smoke readings — a reassuring contrast to the alert in the adjacent eastern field.<br><br>
+    <strong>Maintain the current management routine.</strong> As a precaution given the proximity to the smoke event in Potato East, keep the smoke sensors on elevated alert status and check readings every 30 minutes until the eastern zone incident is resolved.`,
+    tags: ['ALL CLEAR','MONITOR ADJACENCY','ROUTINE MAINTENANCE']
+  },
+  barleyZ5: {
+    level: 'good',
+    headline: '✦ Optimal Seeding Window — Act Within 72 Hours',
+    body: `Barley Zone Z5 is presenting an ideal agronomic window. Soil temperature at 18°C is optimal for barley germination, moisture at 49% ensures good seed-to-soil contact, and low wind speed (8 km/h) will not interfere with field operations. Nitrogen reserve is strong at 63 ppm and salinity is very low at 0.8 dS/m.<br><br>
+    <strong>AI confidence for this seeding window is 92%.</strong> The forecast shows favorable conditions for the next 2–3 days before a potential temperature rise. Begin seeding operations as soon as logistically possible to capture the +18% germination rate advantage this window offers.`,
+    tags: ['OPPORTUNITY','SEEDING WINDOW · 72H','AI CONFIDENCE 92%','OPTIMAL GERMINATION']
+  },
+  pastureA: {
+    level: 'good',
+    headline: '✓ Healthy Pasture — Livestock and Land in Good Condition',
+    body: `Cattle Pasture A is operating in a fully healthy state. All 847 GPS-collared livestock are accounted for and body temperature readings at 38.4°C sit within the safe cattle range. Grass density at 81% confirms excellent pasture cover, and the water tank is 68% full with no immediate replenishment needed. Fence voltage at 7.2 kV confirms the perimeter is fully secured.<br><br>
+    Feed reserves at 74% provide comfortable margin. <strong>No interventions required.</strong> Suggested next action: schedule a routine water tank refill when level drops below 40%, and perform monthly GPS collar battery checks.`,
+    tags: ['ALL LIVESTOCK SAFE','GRASS HEALTHY','TANK SUFFICIENT','FENCE SECURE']
+  },
+  pastureC: {
+    level: 'alert',
+    headline: '⚠ Overgrazing Pressure — Cattle Relocation Advised',
+    body: `Cattle Pasture C is under significant overgrazing stress. Grass density has fallen to just 39% — below the 50% threshold needed for sustainable grazing — while 691 head of cattle remain concentrated in the area. Motion sensor data shows abnormal movement concentration, suggesting animals are clustering around depleted feeding patches.<br><br>
+    The water tank is at only 42% and feed levels are at 33%, creating compounding pressure. Humidity at 46% and dry air conditions will slow grass regeneration. <strong>Relocate a portion of the herd to Pasture A or a supplementary paddock immediately</strong> and allow Pasture C a minimum 3-week rest period. Arrange emergency water and feed top-up within 24 hours.`,
+    tags: ['OVERGRAZING · CRITICAL','GRASS 39%','FEED 33%','RELOCATION REQUIRED']
+  }
+};
+ 
+const INSIGHT_LEVEL_MAP = {
+  alert: { statusClass:'alert', statusLabel:'NEEDS ATTENTION', borderClass:'alert' },
+  watch: { statusClass:'watch', statusLabel:'MONITOR CLOSELY', borderClass:'watch' },
+  good:  { statusClass:'good',  statusLabel:'ZONE HEALTHY',   borderClass:'' }
+};
+ 
+function renderZoneInsight(zoneKey){
+  const insight = ZONE_INSIGHTS[zoneKey];
+  if(!insight) return '';
+ 
+  const lm = INSIGHT_LEVEL_MAP[insight.level] || INSIGHT_LEVEL_MAP['good'];
+  const tagColors = {0:'red',1:'amber',2:'blue',3:'green'};
+ 
+  const tagsHTML = insight.tags.map((t,i)=>
+    `<span class="zone-insight-tag ${tagColors[i%4]}">${t}</span>`
+  ).join('');
+ 
+  return `
+    <div class="zone-insight-report">
+      <div class="zone-insight-header">
+        <div class="zone-insight-icon">✦</div>
+        <div>
+          <div class="zone-insight-title">AI Zone Analysis</div>
+          <div class="zone-insight-sub">Automated insight based on current sensor data</div>
+        </div>
+        <div class="zone-insight-status ${lm.statusClass}">${lm.statusLabel}</div>
+      </div>
+      <div class="zone-insight-body ${lm.borderClass}">
+        <strong style="display:block;margin-bottom:8px;font-family:var(--font-head);">${insight.headline}</strong>
+        ${insight.body}
+      </div>
+      <div class="zone-insight-actions-row">
+        ${tagsHTML}
+      </div>
+    </div>
+  `;
+}
+ 
+// ══════════════════════════════════════════
+// ── LIVE SENSOR SIMULATION ──
+// ══════════════════════════════════════════
+const liveValues = {};
+ 
+function initLiveValues(){
+  Object.keys(SENSOR_ZONE_DATA).forEach(zoneKey => {
+    liveValues[zoneKey] = {};
+    const zone = SENSOR_ZONE_DATA[zoneKey];
+    Object.keys(zone.sensors).forEach(sk => {
+      const raw = parseFloat(zone.sensors[sk].value);
+      liveValues[zoneKey][sk] = isNaN(raw) ? zone.sensors[sk].value : raw;
+    });
+  });
+}
+ 
+function nudge(val, amplitude, min, max, decimals){
+  const delta = (Math.random()-0.5)*2*amplitude;
+  let nv = val + delta;
+  nv = Math.max(min, Math.min(max, nv));
+  return parseFloat(nv.toFixed(decimals));
+}
+ 
+const NUDGE_CFG = {
+  soil_moisture: [0.6, 0, 100, 0],
+  temperature:   [0.3, -5, 50, 0],
+  smoke:         [2,   0, 200, 0],
+  salinity:      [0.05,0, 5, 2],
+  water_flow:    [0.1, 0, 20, 1],
+  ph:            [0.05,0,14, 1],
+  humidity:      [0.8, 0,100, 0],
+  wind:          [0.5, 0, 60, 0],
+  nitrogen:      [0.5, 0,200, 0],
+  solar:         [5,   0,1200,0],
+  gps:           [2,   0,1200,0],
+  body_temp:     [0.05,35, 42, 1],
+  water_tank:    [0.2, 0, 100, 0],
+  fence_voltage: [0.05,0,  12, 1],
+  grass_density: [0.3, 0, 100, 0],
+  motion:        [0,   0, 100, 0],
+  feed_level:    [0.3, 0, 100, 0],
+};
+ 
+let activeZoneKey = 'wheatA1';
+ 
+function tickLiveSensors(){
+  Object.keys(liveValues).forEach(zoneKey => {
+    Object.keys(liveValues[zoneKey]).forEach(sk => {
+      const cfg = NUDGE_CFG[sk];
+      if(!cfg || cfg[0]===0) return;
+      const old = liveValues[zoneKey][sk];
+      if(typeof old !== 'number') return;
+      liveValues[zoneKey][sk] = nudge(old, cfg[0], cfg[1], cfg[2], cfg[3]);
+    });
+  });
+ 
+  if(document.getElementById('page-sensors').classList.contains('active')){
+    refreshSensorCardValues(activeZoneKey);
+  }
+ 
+  // Update KPI avg moisture
+  const kpiCards = document.querySelectorAll('.kpi-value');
+  // update data latency flicker for realism
+  const latEl = document.querySelector('.sys-item-val.green');
+  if(latEl && latEl.textContent.includes('.')){
+    latEl.textContent = (0.8+Math.random()*0.8).toFixed(1)+'s';
+  }
+ 
+  // Sidebar bottom sync time
+  const syncEl = document.querySelector('.sidebar-bottom div');
+  if(syncEl){
+    const now = new Date();
+    syncEl.textContent = `v2.4.1 · Live · ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+  }
+}
+ 
+function refreshSensorCardValues(zoneKey){
+  const cards = document.querySelectorAll('.sensor-card-v3');
+  const zone = SENSOR_ZONE_DATA[zoneKey];
+  if(!zone) return;
+  const labels = SENSOR_LABELS[zone.kind];
+  const keys = Object.keys(labels);
+ 
+  cards.forEach((card, i) => {
+    const sk = keys[i];
+    if(!sk) return;
+    const lv = liveValues[zoneKey]?.[sk];
+    if(lv === undefined || typeof lv !== 'number') return;
+ 
+    const valueEl = card.querySelector('.value');
+    const barFill = card.querySelector('.sensor-fill-v3');
+ 
+    if(valueEl){
+      const cfg = NUDGE_CFG[sk];
+      valueEl.textContent = lv.toFixed(cfg?.[3]??0);
+    }
+    if(barFill){
+      const cfg = NUDGE_CFG[sk];
+      if(cfg){
+        const range = (cfg[2]-cfg[1]) || 1;
+        const pct = Math.min(100,Math.max(0,((lv-cfg[1])/range)*100));
+        barFill.style.width = pct+'%';
+      }
+    }
+  });
+}
+ 
+// ══════════════════════════════════════════
+// ── SENSOR HISTORY CHART ──
+// ══════════════════════════════════════════
+let shChart = null;
+let shCurrentSensorKey = null;
+let shCurrentZoneKey = null;
+let shCurrentRange = 7;
+ 
+function generateHistory(baseVal, amplitude, days, min, max, decimals){
+  const labels = [];
+  const data = [];
+  const today = new Date();
+  for(let i=days; i>=0; i--){
+    const d = new Date(today);
+    d.setDate(d.getDate()-i);
+    labels.push(i===0?'Today':`${d.getDate()}/${d.getMonth()+1}`);
+    const t = (days-i)/days;
+    const trend = baseVal*t + (baseVal*0.85)*(1-t);
+    const noise = (Math.random()-0.5)*2*amplitude*2;
+    const v = Math.max(min,Math.min(max,trend+noise));
+    data.push(parseFloat(v.toFixed(decimals)));
+  }
+  return {labels,data};
+}
+ 
+function openSensorHistory(zoneKey, sensorKey){
+  const zone = SENSOR_ZONE_DATA[zoneKey];
+  const s = zone.sensors[sensorKey];
+  const labels = SENSOR_LABELS[zone.kind];
+ 
+  shCurrentSensorKey = sensorKey;
+  shCurrentZoneKey = zoneKey;
+  shCurrentRange = 7;
+  document.querySelectorAll('.sh-range-btn').forEach((b,i)=>b.classList.toggle('active',i===0));
+ 
+  document.getElementById('sh-icon').textContent = s.icon;
+  document.getElementById('sh-icon').style.background = s.status==='alert'?'var(--red-dim)':s.status==='watch'?'var(--amber-dim)':'var(--green-dim)';
+  document.getElementById('sh-title').textContent = labels[sensorKey];
+  document.getElementById('sh-sub').textContent = `${zone.title} · 7-Day History`;
+ 
+  renderShChart(7);
+  document.getElementById('sensorHistoryModal').classList.add('open');
+}
+ 
+function renderShChart(days){
+  const zone = SENSOR_ZONE_DATA[shCurrentZoneKey];
+  const s = zone.sensors[shCurrentSensorKey];
+  const cfg = NUDGE_CFG[shCurrentSensorKey] || [1,0,100,0];
+  const baseVal = liveValues[shCurrentZoneKey]?.[shCurrentSensorKey] ?? parseFloat(s.value) ?? 50;
+  const {labels,data} = generateHistory(baseVal, cfg[0]*3, days, cfg[1], cfg[2], cfg[3]);
+ 
+  const dec = cfg[3];
+  const avg = (data.reduce((a,b)=>a+b,0)/data.length).toFixed(dec);
+  const minV = Math.min(...data).toFixed(dec);
+  const maxV = Math.max(...data).toFixed(dec);
+  const cur  = (liveValues[shCurrentZoneKey]?.[shCurrentSensorKey] ?? parseFloat(s.value)).toFixed(dec);
+  const unit = s.unit ? ' '+s.unit : '';
+ 
+  document.getElementById('sh-current').textContent = cur+unit;
+  document.getElementById('sh-avg').textContent     = avg+unit;
+  document.getElementById('sh-min').textContent     = minV+unit;
+  document.getElementById('sh-max').textContent     = maxV+unit;
+ 
+  const color    = s.status==='alert'?'#FF5C6B':s.status==='watch'?'#F5B731':'#00D68F';
+  const colorDim = s.status==='alert'?'rgba(255,92,107,0.08)':s.status==='watch'?'rgba(245,183,49,0.08)':'rgba(0,214,143,0.08)';
+ 
+  const canvas = document.getElementById('sensorHistoryChart');
+  if(shChart){ shChart.destroy(); shChart=null; }
+ 
+  shChart = new Chart(canvas,{
+    type:'line',
+    data:{
+      labels,
+      datasets:[{
+        label:SENSOR_LABELS[SENSOR_ZONE_DATA[shCurrentZoneKey].kind][shCurrentSensorKey],
+        data, borderColor:color, backgroundColor:colorDim,
+        fill:true, tension:0.4, pointRadius:3,
+        pointBackgroundColor:color, pointBorderColor:'transparent'
+      }]
+    },
+    options:{
+      responsive:true, animation:{duration:400},
+      plugins:{
+        legend:{display:false},
+        tooltip:{
+          backgroundColor:'rgba(12,26,46,0.95)',
+          borderColor:'rgba(255,255,255,0.08)',borderWidth:1,
+          titleFont:{family:"'Outfit'",size:12},
+          bodyFont:{family:"'JetBrains Mono'",size:11},
+          callbacks:{label:ctx=>`${ctx.parsed.y}${unit}`}
+        }
+      },
+      scales:{
+        x:{grid:{color:'rgba(255,255,255,0.03)'},ticks:{maxTicksLimit:10,font:{size:10}}},
+        y:{grid:{color:'rgba(255,255,255,0.03)'},ticks:{font:{size:10,family:"'JetBrains Mono'"}},
+           suggestedMin:Math.min(...data)*0.92, suggestedMax:Math.max(...data)*1.08}
+      }
+    }
+  });
+}
+ 
+function setSHRange(btn, days){
+  document.querySelectorAll('.sh-range-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderShChart(days);
+}
+ 
+function closeSensorHistory(){
+  document.getElementById('sensorHistoryModal').classList.remove('open');
+  if(shChart){shChart.destroy();shChart=null;}
+}
+ 
+// ══════════════════════════════════════════
+// ── PATCH renderSensorPanel with LIVE + CLICK-TO-HISTORY ──
+// ══════════════════════════════════════════
+function renderSensorPanel(zoneKey){
+  activeZoneKey = zoneKey;
+  const zone = SENSOR_ZONE_DATA[zoneKey];
+  const labels = SENSOR_LABELS[zone.kind];
+  const grid = document.getElementById("sensorGrid");
+  const sub  = document.getElementById("sensorSub");
+ 
+  if(!zone||!grid) return;
+  renderSensorTabs(zoneKey);
+ 
+  if(sub) sub.textContent = `${zone.title} · ${zone.kind==="crop"?"Crop sensor template":"Pasture sensor template"} · All standard sensors visible`;
+ 
+  grid.innerHTML = "";
+ 
+  Object.keys(labels).forEach(sensorKey => {
+    const s = zone.sensors[sensorKey];
+    const lv = liveValues[zoneKey]?.[sensorKey];
+    const cfg = NUDGE_CFG[sensorKey];
+    const dispVal = (lv!==undefined && typeof lv==='number') ? lv.toFixed(cfg?.[3]??0) : s.value;
+ 
+    const card = document.createElement("div");
+    card.className = `sensor-card-v3 ${sensorStatusClass(s.status)}`;
+    card.title = 'Click to view 7-day history';
+    card.onclick = ()=>openSensorHistory(zoneKey, sensorKey);
+ 
+    const bgIcon = s.status==='alert'?'var(--red-dim)':s.status==='watch'?'var(--amber-dim)':'var(--green-dim)';
+    const valColor = s.status==='alert'?'var(--red)':s.status==='watch'?'var(--amber)':'var(--text)';
+    const barColor = sensorFillColor(s.status);
+    const badgeClass = sensorStatusClass(s.status);
+    const badgeLabel = sensorStatusLabel(s.status);
+    const cfg2 = NUDGE_CFG[sensorKey];
+    const fillPct = (lv!==undefined&&typeof lv==='number'&&cfg2) ?
+      Math.min(100,Math.max(0,((lv-cfg2[1])/(cfg2[2]-cfg2[1]||1))*100)).toFixed(0) : s.fill;
+ 
+    card.innerHTML = `
+      <div class="sensor-top">
+        <div class="sensor-icon-v3" style="background:${bgIcon};">${s.icon}</div>
+        <div style="flex:1;min-width:0;">
+          <div class="sensor-title-v3">${labels[sensorKey]} <span class="live-tick"><span class="live-tick-dot"></span>LIVE</span></div>
+          <div class="sensor-zone-v3">${zone.title}</div>
+        </div>
+        <div class="sensor-badge-v3 ${badgeClass}">${badgeLabel}</div>
+      </div>
+      <div class="sensor-main-v3">
+        <div class="value" style="color:${valColor};">${dispVal}</div>
+        <div class="unit">${s.unit}</div>
+      </div>
+      <div class="sensor-desc-v3">${s.desc}</div>
+      <div class="sensor-bar-v3">
+        <div class="sensor-fill-v3" style="width:${fillPct}%;background:${barColor};"></div>
+      </div>
+      <div class="sensor-meta-v3">
+        <span style="color:var(--green);font-size:10px;">📈 History</span>
+        <span>${badgeLabel}</span>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+ 
+  const oldB = document.getElementById('zoneInsightBlock');
+  if(oldB) oldB.remove();
+ 
+  const insightHTML = renderZoneInsight(zoneKey);
+  if(insightHTML){
+    const wrapper = document.createElement('div');
+    wrapper.id = 'zoneInsightBlock';
+    wrapper.innerHTML = insightHTML;
+    grid.after(wrapper);
+  }
+}
+ 
+// ── BOOT ──
+document.addEventListener("DOMContentLoaded", function(){
+  initLiveValues();
+  renderSensorPanel("wheatA1");
+  setInterval(tickLiveSensors, 3000);
+});
+ 
+// Close history modal on backdrop click
+document.addEventListener('click', function(e){
+  if(e.target === document.getElementById('sensorHistoryModal')) closeSensorHistory();
+});
 </script>
 </body>
 </html>
