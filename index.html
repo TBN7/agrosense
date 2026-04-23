@@ -1150,6 +1150,154 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
 .plan-done-btn:hover{border-color:rgba(0,214,143,0.4);color:var(--green);}
 .plan-done-btn:disabled{opacity:0.4;cursor:default;}
 
+
+/* ══ COMPREHENSIVE MOBILE FIX ══ */
+/* Ensure viewport doesn't overflow */
+html{overflow-x:hidden;}
+body{overflow-x:hidden;}
+
+/* Top nav mobile */
+@media(max-width:768px){
+  .topnav{padding:0 10px;gap:8px;height:52px;}
+  .nav-logo{font-size:14px;}
+  .nav-logo .logo-badge{display:none;}
+  .nav-search{display:none;}
+  .nav-weather{display:none;}
+  .nav-conn{display:none;}
+  .nav-spacer{flex:1;}
+  .nav-btn:not(.primary){display:none;}
+  .nav-btn.primary{font-size:11px;padding:6px 10px;}
+  :root{--top-h:52px;}
+}
+@media(max-width:480px){
+  .nav-btn.primary{display:none;}
+  .nav-lang button{font-size:10px;padding:3px 5px;}
+}
+
+/* Sidebar hidden on mobile, shown via overlay */
+@media(max-width:768px){
+  .sidebar{display:none;}
+  .sidebar.mobile-open{display:flex;position:fixed;top:0;left:0;bottom:0;z-index:300;width:260px;box-shadow:4px 0 40px rgba(0,0,0,0.6);animation:slideInLeft 0.22s ease;}
+  .mobile-sidebar-overlay.open{display:block;}
+  .mobile-menu-btn{display:flex !important;}
+}
+@keyframes slideInLeft{from{transform:translateX(-100%);}to{transform:translateX(0);}}
+
+/* Right panel hidden on mobile */
+@media(max-width:768px){
+  .right-panel{display:none;}
+}
+
+/* Main content padding for bottom nav */
+@media(max-width:768px){
+  .main-content{padding-bottom:68px;}
+  .page{padding:14px;}
+}
+@media(max-width:480px){
+  .page{padding:10px;}
+}
+
+/* Bottom nav always visible on mobile */
+@media(max-width:768px){
+  .mobile-bottom-nav{display:flex !important;}
+}
+
+/* KPI grid responsive */
+@media(max-width:900px){.kpi-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:480px){.kpi-grid{grid-template-columns:repeat(2,1fr);gap:8px;}}
+
+/* Chart row stacks on mobile */
+@media(max-width:768px){
+  .chart-row{grid-template-columns:1fr;gap:12px;}
+}
+
+/* Recs grid */
+@media(max-width:768px){.recs-grid{grid-template-columns:1fr;}}
+
+/* AI actions */
+@media(max-width:600px){
+  .ai-actions{flex-wrap:wrap;}
+  .btn-action{flex:1;min-width:140px;justify-content:center;}
+}
+
+/* Zones page on mobile */
+@media(max-width:768px){
+  .zones-layout{display:flex;flex-direction:column;height:auto;margin:0;}
+  .zones-list{border-right:none;border-bottom:1px solid var(--border);max-height:260px;overflow-y:auto;}
+  .map-area{min-height:240px;border-radius:12px;margin:0 0 10px;}
+  .zone-profile{border-left:none;border-top:1px solid var(--border);}
+}
+
+/* Sensor grid responsive */
+@media(max-width:1100px){.v3-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:600px){.v3-grid{grid-template-columns:1fr;}}
+
+/* Insight chain */
+@media(max-width:768px){.insight-chain{grid-template-columns:1fr 1fr;gap:8px;}}
+@media(max-width:480px){.insight-chain{grid-template-columns:1fr;}}
+
+/* Alert items */
+@media(max-width:600px){
+  .alert-item{flex-wrap:wrap;gap:10px;}
+  .alert-meta{flex-wrap:wrap;gap:6px;}
+  .alert-actions{flex-wrap:wrap;gap:6px;}
+  .alert-time{margin-left:auto;}
+}
+
+/* Analytics grid */
+@media(max-width:768px){
+  .analytics-grid{grid-template-columns:1fr !important;}
+  .exec-cards{grid-template-columns:repeat(2,1fr) !important;}
+}
+@media(max-width:480px){.exec-cards{grid-template-columns:1fr !important;}}
+
+/* Settings */
+@media(max-width:768px){
+  .settings-layout{flex-direction:column !important;}
+  .settings-nav{width:100% !important;flex-direction:row;overflow-x:auto;border-right:none !important;border-bottom:1px solid var(--border);padding:8px !important;}
+  .settings-nav-item{white-space:nowrap;}
+}
+
+/* Plan page responsive */
+@media(max-width:600px){
+  .plan-header-bar{flex-wrap:wrap;gap:10px;}
+  .plan-stats{margin-left:0;gap:12px;}
+  .plan-step{flex-wrap:wrap;}
+  .plan-done-btn{width:100%;text-align:center;}
+}
+
+/* Page header */
+@media(max-width:600px){
+  .page-header{flex-direction:column;gap:10px;align-items:flex-start;}
+  .page-header>div:last-child{display:flex;flex-wrap:wrap;gap:8px;width:100%;}
+  .page-header>div:last-child button{flex:1;}
+}
+
+/* Onboarding mobile */
+@media(max-width:600px){
+  .ob-wrap{width:95%;padding:0 12px;}
+  .ob-cards{grid-template-columns:1fr;}
+  .ob-regions{grid-template-columns:1fr 1fr;}
+  .ob-sizes{grid-template-columns:1fr 1fr;}
+  .ob-step h2{font-size:22px;}
+}
+
+/* Sensor history modal mobile */
+@media(max-width:600px){
+  .sh-box{width:96vw;margin:0 auto;}
+  .sh-stats-row{grid-template-columns:repeat(2,1fr) !important;}
+}
+
+/* Zone profile grid */
+@media(max-width:480px){.zp-grid{grid-template-columns:1fr 1fr;}}
+
+/* Fix body layout overflow */
+.body-layout{min-width:0;}
+.main-content{min-width:0;}
+
+/* Mobile menu button always shown on small screens */
+.mobile-menu-btn{flex-shrink:0;}
+
 </style>
 </head>
 <body>
@@ -1158,7 +1306,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
 <div id="onboarding">
   <div class="ob-wrap">
     <div class="ob-logo">AgroSense <span>KZ</span></div>
-    <div class="ob-tagline">Smart Agricultural Intelligence Platform</div>
+    <div class="ob-tagline" data-i18n="ob_tagline">Smart Agricultural Intelligence Platform</div>
     <div class="ob-progress">
       <div class="ob-dot active" id="dot1"></div>
       <div class="ob-dot" id="dot2"></div>
@@ -1292,7 +1440,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
     <aside class="sidebar">
       <div class="sidebar-farm">
         <div class="farm-name" id="farm-name">Алматы Агро</div>
-        <div class="farm-meta" id="farm-meta">Смешанное хозяйство · 3,200 га</div>
+        <div class="farm-meta" id="farm-meta" data-i18n="farm_meta_val">Смешанное хозяйство · 3,200 га</div>
         <div class="farm-health">
           <div class="farm-health-bar"><div class="farm-health-fill" style="width:78%"></div></div>
           <div class="farm-health-val">78%</div>
@@ -1310,7 +1458,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
       <div class="sidebar-section">System</div>
       <div class="nav-item" onclick="showPage('settings',this)"><span class="nav-icon">⚙</span> Settings</div>
       <div class="sidebar-bottom">
-        <div style="font-size:11px;color:var(--text3);font-family:var(--font-mono);">v2.4.1 · Last sync 2m ago</div>
+        <div style="font-size:11px;color:var(--text3);font-family:var(--font-mono);" data-i18n="sidebar_version">v2.4.1 · Last sync 2m ago</div>
       </div>
     </aside>
  
@@ -1335,25 +1483,25 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
           <div class="kpi-card">
             <div class="kpi-label">Total Zones</div>
             <div class="kpi-value blue">12</div>
-            <div class="kpi-trend"><span class="trend-up">↑ 2</span><span style="color:var(--text3)"> this season</span></div>
+            <div class="kpi-trend"><span class="trend-up">↑ 2</span><span style="color:var(--text3)" data-i18n="kpi_trend1"> this season</span></div>
             <div class="kpi-bar"><div class="kpi-bar-fill blue" style="width:80%"></div></div>
           </div>
           <div class="kpi-card">
             <div class="kpi-label">Crop Health Index</div>
             <div class="kpi-value green">78.4</div>
-            <div class="kpi-trend"><span class="trend-up">↑ 3.2</span><span style="color:var(--text3)"> vs last week</span></div>
+            <div class="kpi-trend"><span class="trend-up">↑ 3.2</span><span style="color:var(--text3)" data-i18n="kpi_trend2"> vs last week</span></div>
             <div class="kpi-bar"><div class="kpi-bar-fill green" style="width:78%"></div></div>
           </div>
           <div class="kpi-card">
             <div class="kpi-label">Water Efficiency</div>
             <div class="kpi-value green">91%</div>
-            <div class="kpi-trend"><span class="trend-up">↑ 6%</span><span style="color:var(--text3)"> optimization</span></div>
+            <div class="kpi-trend"><span class="trend-up">↑ 6%</span><span style="color:var(--text3)" data-i18n="kpi_trend3"> optimization</span></div>
             <div class="kpi-bar"><div class="kpi-bar-fill green" style="width:91%"></div></div>
           </div>
           <div class="kpi-card">
             <div class="kpi-label">Fire Risk Score</div>
             <div class="kpi-value amber">3.2</div>
-            <div class="kpi-trend"><span class="trend-down">↑ 0.8</span><span style="color:var(--text3)"> elevated</span></div>
+            <div class="kpi-trend"><span class="trend-down">↑ 0.8</span><span style="color:var(--text3)" data-i18n="kpi_trend4"> elevated</span></div>
             <div class="kpi-bar"><div class="kpi-bar-fill amber" style="width:32%"></div></div>
           </div>
           <div class="kpi-card">
@@ -1365,13 +1513,13 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
           <div class="kpi-card">
             <div class="kpi-label">AI Confidence</div>
             <div class="kpi-value blue">87%</div>
-            <div class="kpi-trend"><span class="trend-up">↑ 2%</span><span style="color:var(--text3)"> model accuracy</span></div>
+            <div class="kpi-trend"><span class="trend-up">↑ 2%</span><span style="color:var(--text3)" data-i18n="kpi_trend6"> model accuracy</span></div>
             <div class="kpi-bar"><div class="kpi-bar-fill blue" style="width:87%"></div></div>
           </div>
           <div class="kpi-card">
             <div class="kpi-label">Avg Moisture</div>
             <div class="kpi-value amber">34%</div>
-            <div class="kpi-trend"><span class="trend-down">↓ 8%</span><span style="color:var(--text3)"> needs attention</span></div>
+            <div class="kpi-trend"><span class="trend-down">↓ 8%</span><span style="color:var(--text3)" data-i18n="kpi_trend7"> needs attention</span></div>
             <div class="kpi-bar"><div class="kpi-bar-fill amber" style="width:34%"></div></div>
           </div>
           <div class="kpi-card">
@@ -1393,7 +1541,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
             <div class="urgency-badge urgency-high">⚡ HIGH URGENCY</div>
           </div>
           <div class="ai-message">
-            <strong style="color:var(--green);">3 zones require immediate attention.</strong> Main threat: drought stress detected in Wheat Cluster A1–A3 — soil moisture at 22%, critically below 40% threshold. Rising temperature (+31°C) accelerates evaporation rate. <strong>Recommended action: targeted drip irrigation within the next 6 hours</strong> to prevent irreversible yield loss. Secondary concern: smoke anomaly near Potato Zone East detected by 2 sensors.
+            <span data-i18n="ai_msg_html"><strong style="color:var(--green);">3 zones require immediate attention.</strong> Main threat: drought stress detected in Wheat Cluster A1–A3 — soil moisture at 22%, critically below 40% threshold. Rising temperature (+31°C) accelerates evaporation rate. <strong>Recommended action: targeted drip irrigation within the next 6 hours</strong> to prevent irreversible yield loss. Secondary concern: smoke anomaly near Potato Zone East detected by 2 sensors.</span>
           </div>
           <div class="ai-confidence">
             <span class="conf-label">CONFIDENCE</span>
@@ -1437,55 +1585,55 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
  
         <!-- RECOMMENDATIONS -->
         <div class="section-title">
-          Smart Recommendations
-          <span class="badge badge-ai">AI Generated</span>
+          <span data-i18n="rec_title">Smart Recommendations</span>
+          <span class="badge badge-ai" data-i18n="rec_badge">AI Generated</span>
         </div>
         <div class="recs-grid">
           <div class="rec-card" onclick="showPage('zones')">
             <div class="rec-icon red">🌾</div>
             <div class="rec-content">
-              <div class="rec-title">Check Wheat Sector A1 — Drought Stress</div>
-              <div class="rec-meta">Zone A1 · Soil moisture 22% · 847 affected ha</div>
+              <div class="rec-title" data-i18n="rec1_title">Check Wheat Sector A1 — Drought Stress</div>
+              <div class="rec-meta" data-i18n="rec1_meta">Zone A1 · Soil moisture 22% · 847 affected ha</div>
               <div class="sev-badge sev-critical">CRITICAL</div>
             </div>
           </div>
           <div class="rec-card" onclick="showPage('alerts')">
             <div class="rec-icon amber">🔥</div>
             <div class="rec-content">
-              <div class="rec-title">Smoke Anomaly near Potato Zone East</div>
-              <div class="rec-meta">Zone P-East · 2 sensors triggered · 18 min ago</div>
+              <div class="rec-title" data-i18n="rec2_title">Smoke Anomaly near Potato Zone East</div>
+              <div class="rec-meta" data-i18n="rec2_meta">Zone P-East · 2 sensors triggered · 18 min ago</div>
               <div class="sev-badge sev-high">HIGH</div>
             </div>
           </div>
           <div class="rec-card" onclick="showPage('insights')">
             <div class="rec-icon blue">🐄</div>
             <div class="rec-content">
-              <div class="rec-title">Reduce Grazing Pressure — Pasture C</div>
-              <div class="rec-meta">Pasture C · Overload 140% · Regeneration at risk</div>
+              <div class="rec-title" data-i18n="rec3_title">Reduce Grazing Pressure — Pasture C</div>
+              <div class="rec-meta" data-i18n="rec3_meta">Pasture C · Overload 140% · Regeneration at risk</div>
               <div class="sev-badge sev-medium">MEDIUM</div>
             </div>
           </div>
           <div class="rec-card" onclick="showPage('sensors')">
             <div class="rec-icon green">🧪</div>
             <div class="rec-content">
-              <div class="rec-title">Soil pH Outside Optimal Range</div>
-              <div class="rec-meta">Corn Zone B2 · pH 5.1, optimal 6.0–7.0</div>
+              <div class="rec-title" data-i18n="rec4_title">Soil pH Outside Optimal Range</div>
+              <div class="rec-meta" data-i18n="rec4_meta">Corn Zone B2 · pH 5.1, optimal 6.0–7.0</div>
               <div class="sev-badge sev-low">LOW</div>
             </div>
           </div>
           <div class="rec-card" onclick="showPage('sensors')">
             <div class="rec-icon amber">💧</div>
             <div class="rec-content">
-              <div class="rec-title">Water Flow Meter Anomaly Detected</div>
-              <div class="rec-meta">Irrigation Line 3 · Flow 15% above baseline</div>
+              <div class="rec-title" data-i18n="rec5_title">Water Flow Meter Anomaly Detected</div>
+              <div class="rec-meta" data-i18n="rec5_meta">Irrigation Line 3 · Flow 15% above baseline</div>
               <div class="sev-badge sev-high">HIGH</div>
             </div>
           </div>
           <div class="rec-card" onclick="showPage('insights')">
             <div class="rec-icon green">🌱</div>
             <div class="rec-content">
-              <div class="rec-title">Optimal Seeding Window — Barley Z5</div>
-              <div class="rec-meta">Zone Z5 · Next 3 days ideal · AI confidence 92%</div>
+              <div class="rec-title" data-i18n="rec6_title">Optimal Seeding Window — Barley Z5</div>
+              <div class="rec-meta" data-i18n="rec6_meta">Zone Z5 · Next 3 days ideal · AI confidence 92%</div>
               <div class="sev-badge sev-low">OPPORTUNITY</div>
             </div>
           </div>
@@ -1694,14 +1842,14 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
           <div class="insight-header">
             <div class="urgency-badge urgency-critical">⚠ CRITICAL</div>
             <div class="insight-zone">Wheat Zone A1</div>
-            <div style="font-family:var(--font-head);font-size:15px;font-weight:600;flex:1;">Severe Drought Stress — Immediate Irrigation Required</div>
+            <div style="font-family:var(--font-head);font-size:15px;font-weight:600;flex:1;" data-i18n="ins1_title">Severe Drought Stress — Immediate Irrigation Required</div>
             <div style="font-size:11px;font-family:var(--font-mono);color:var(--text3);">Confidence 91%</div>
           </div>
           <div class="insight-chain">
-            <div class="chain-item"><div class="chain-label">Cause</div><div class="chain-value danger">Low moisture (22%) + heat (31°C) + 8 days no rain</div></div>
-            <div class="chain-item"><div class="chain-label">Action</div><div class="chain-value highlight">Targeted drip irrigation — 6h window</div></div>
-            <div class="chain-item"><div class="chain-label">Expected Impact</div><div class="chain-value highlight">+12% yield retention, stress reversal 48h</div></div>
-            <div class="chain-item"><div class="chain-label">Risk if Ignored</div><div class="chain-value danger">Severe stress in 48h, crop loss 30–60%</div></div>
+            <div class="chain-item"><div class="chain-label">Cause</div><div class="chain-value danger" data-i18n="c1_cause">Low moisture (22%) + heat (31°C) + 8 days no rain</div></div>
+            <div class="chain-item"><div class="chain-label">Action</div><div class="chain-value highlight" data-i18n="c1_action">Targeted drip irrigation — 6h window</div></div>
+            <div class="chain-item"><div class="chain-label">Expected Impact</div><div class="chain-value highlight" data-i18n="c1_impact">+12% yield retention, stress reversal 48h</div></div>
+            <div class="chain-item"><div class="chain-label">Risk if Ignored</div><div class="chain-value danger" data-i18n="c1_risk">Severe stress in 48h, crop loss 30–60%</div></div>
           </div>
           <div class="insight-timeline">
             <span style="white-space:nowrap">Now</span>
@@ -1717,14 +1865,14 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
           <div class="insight-header">
             <div class="urgency-badge urgency-high">⚡ HIGH</div>
             <div class="insight-zone">Potato East + Pasture C</div>
-            <div style="font-family:var(--font-head);font-size:15px;font-weight:600;flex:1;">Smoke Anomaly + Overgrazing Compound Risk</div>
+            <div style="font-family:var(--font-head);font-size:15px;font-weight:600;flex:1;" data-i18n="ins2_title">Smoke Anomaly + Overgrazing Compound Risk</div>
             <div style="font-size:11px;font-family:var(--font-mono);color:var(--text3);">Confidence 84%</div>
           </div>
           <div class="insight-chain">
-            <div class="chain-item"><div class="chain-label">Cause</div><div class="chain-value warn">2 smoke sensors + dry vegetation + NNE wind</div></div>
-            <div class="chain-item"><div class="chain-label">Action</div><div class="chain-value highlight">Dispatch inspection + move cattle from C</div></div>
-            <div class="chain-item"><div class="chain-label">Expected Impact</div><div class="chain-value highlight">Fire containment, pasture regeneration in 3 weeks</div></div>
-            <div class="chain-item"><div class="chain-label">Risk if Ignored</div><div class="chain-value warn">Potential wildfire spread, pasture degradation</div></div>
+            <div class="chain-item"><div class="chain-label">Cause</div><div class="chain-value warn" data-i18n="c2_cause">2 smoke sensors + dry vegetation + NNE wind</div></div>
+            <div class="chain-item"><div class="chain-label">Action</div><div class="chain-value highlight" data-i18n="c2_action">Dispatch inspection + move cattle from C</div></div>
+            <div class="chain-item"><div class="chain-label">Expected Impact</div><div class="chain-value highlight" data-i18n="c2_impact">Fire containment, pasture regeneration in 3 weeks</div></div>
+            <div class="chain-item"><div class="chain-label">Risk if Ignored</div><div class="chain-value warn" data-i18n="c2_risk">Potential wildfire spread, pasture degradation</div></div>
           </div>
           <div style="display:flex;gap:8px;margin-top:12px;"><button class="btn-action primary">🚁 Dispatch Inspection</button><button class="btn-action">🐄 Relocate Cattle</button><button class="btn-action">📊 View Analysis</button></div>
         </div>
@@ -1732,14 +1880,14 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
           <div class="insight-header">
             <div class="urgency-badge" style="background:var(--green-dim);color:var(--green);border:1px solid rgba(0,214,143,0.3);">✦ OPPORTUNITY</div>
             <div class="insight-zone">Barley Zone Z5</div>
-            <div style="font-family:var(--font-head);font-size:15px;font-weight:600;flex:1;">Optimal Seeding Window Detected</div>
+            <div style="font-family:var(--font-head);font-size:15px;font-weight:600;flex:1;" data-i18n="ins3_title">Optimal Seeding Window Detected</div>
             <div style="font-size:11px;font-family:var(--font-mono);color:var(--text3);">Confidence 92%</div>
           </div>
           <div class="insight-chain">
-            <div class="chain-item"><div class="chain-label">Cause</div><div class="chain-value highlight">Soil temp 18°C, moisture 49%, low wind forecast</div></div>
-            <div class="chain-item"><div class="chain-label">Action</div><div class="chain-value highlight">Begin seeding operation in 12–72h window</div></div>
-            <div class="chain-item"><div class="chain-label">Expected Impact</div><div class="chain-value highlight">+18% germination rate vs average conditions</div></div>
-            <div class="chain-item"><div class="chain-label">Risk if Ignored</div><div class="chain-value">Next optimal window in 3–4 weeks</div></div>
+            <div class="chain-item"><div class="chain-label">Cause</div><div class="chain-value highlight" data-i18n="c3_cause">Soil temp 18°C, moisture 49%, low wind forecast</div></div>
+            <div class="chain-item"><div class="chain-label">Action</div><div class="chain-value highlight" data-i18n="c3_action">Begin seeding operation in 12–72h window</div></div>
+            <div class="chain-item"><div class="chain-label">Expected Impact</div><div class="chain-value highlight" data-i18n="c3_impact">+18% germination rate vs average conditions</div></div>
+            <div class="chain-item"><div class="chain-label">Risk if Ignored</div><div class="chain-value" data-i18n="c3_risk">Next optimal window in 3–4 weeks</div></div>
           </div>
           <div style="display:flex;gap:8px;margin-top:12px;"><button class="btn-action primary">📅 Schedule Seeding</button><button class="btn-action">📊 Full Analysis</button></div>
         </div>
@@ -1762,10 +1910,10 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
         <div class="alert-item critical">
           <div class="alert-sev-icon" style="background:var(--red-dim)">🔥</div>
           <div class="alert-body">
-            <div class="alert-title">Fire Risk — Smoke Detected at Potato Zone East</div>
+            <div class="alert-title" data-i18n="alt1_title">Fire Risk — Smoke Detected at Potato Zone East</div>
             <div class="alert-meta">
-              <span>📍 Potato East</span>
-              <span>🕐 18 min ago</span>
+              <span data-i18n="alt1_zone">📍 Potato East</span>
+              <span data-i18n="alt1_time">🕐 18 min ago</span>
               <span>🔬 Smoke Sensor #PE-02 + #PE-04</span>
               <span class="sev-badge sev-critical">CRITICAL</span>
             </div>
@@ -1781,10 +1929,10 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
         <div class="alert-item critical">
           <div class="alert-sev-icon" style="background:var(--red-dim)">🌵</div>
           <div class="alert-body">
-            <div class="alert-title">Drought Critical — Wheat Zone A1 Moisture Below Threshold</div>
+            <div class="alert-title" data-i18n="alt2_title">Drought Critical — Wheat Zone A1 Moisture Below Threshold</div>
             <div class="alert-meta">
-              <span>📍 Wheat A1</span>
-              <span>🕐 1h 12min ago</span>
+              <span data-i18n="alt2_zone">📍 Wheat A1</span>
+              <span data-i18n="alt2_time">🕐 1h 12min ago</span>
               <span>🔬 Moisture Sensor #WA1-01</span>
               <span class="sev-badge sev-critical">CRITICAL</span>
             </div>
@@ -1800,10 +1948,10 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
         <div class="alert-item high">
           <div class="alert-sev-icon" style="background:var(--amber-dim)">🐄</div>
           <div class="alert-body">
-            <div class="alert-title">Overgrazing Risk — Cattle Load Exceeds Safe Capacity in Pasture C</div>
+            <div class="alert-title" data-i18n="alt3_title">Overgrazing Risk — Cattle Load Exceeds Safe Capacity in Pasture C</div>
             <div class="alert-meta">
-              <span>📍 Pasture C</span>
-              <span>🕐 3h ago</span>
+              <span data-i18n="alt3_zone">📍 Pasture C</span>
+              <span data-i18n="alt3_time">🕐 3h ago</span>
               <span>🔬 Movement Tracker · AI Generated</span>
               <span class="sev-badge sev-high">HIGH</span>
             </div>
@@ -1818,10 +1966,10 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
         <div class="alert-item medium">
           <div class="alert-sev-icon" style="background:var(--blue-dim)">🧪</div>
           <div class="alert-body">
-            <div class="alert-title">Soil pH Deviation — Corn Zone B2 Below Optimal Range</div>
+            <div class="alert-title" data-i18n="alt4_title">Soil pH Deviation — Corn Zone B2 Below Optimal Range</div>
             <div class="alert-meta">
-              <span>📍 Corn B2</span>
-              <span>🕐 Yesterday</span>
+              <span data-i18n="alt4_zone">📍 Corn B2</span>
+              <span data-i18n="alt4_time">🕐 Yesterday</span>
               <span>🔬 pH Sensor #CB2-03</span>
               <span class="sev-badge sev-medium">MEDIUM</span>
             </div>
@@ -2003,14 +2151,14 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
           <div class="weather-main">
             <div>
               <div class="weather-temp-big">+18°C</div>
-              <div class="weather-desc">Partly Cloudy · Almaty Region</div>
+              <div class="weather-desc" data-i18n="wp_weather_desc">Partly Cloudy · Almaty Region</div>
             </div>
             <div class="weather-icon">⛅</div>
           </div>
           <div class="weather-grid">
-            <div class="weather-stat"><div class="weather-stat-val">62%</div><div class="weather-stat-label">Humidity</div></div>
-            <div class="weather-stat"><div class="weather-stat-val">14 km/h</div><div class="weather-stat-label">Wind NNE</div></div>
-            <div class="weather-stat"><div class="weather-stat-val">0 mm</div><div class="weather-stat-label">Rain today</div></div>
+            <div class="weather-stat"><div class="weather-stat-val">62%</div><div class="weather-stat-label" data-i18n="wp_humidity">Humidity</div></div>
+            <div class="weather-stat"><div class="weather-stat-val">14 km/h</div><div class="weather-stat-label" data-i18n="wp_wind">Wind NNE</div></div>
+            <div class="weather-stat"><div class="weather-stat-val">0 mm</div><div class="weather-stat-label" data-i18n="wp_rain">Rain today</div></div>
           </div>
           <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);display:flex;gap:8px;">
             <div style="flex:1;text-align:center;font-size:11px;color:var(--text2);">Mon<br><span style="color:var(--text)">+20°</span></div>
@@ -2026,38 +2174,38 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
         <div class="panel-title">Live Alerts</div>
         <div class="mini-alert" onclick="showPage('alerts')">
           <div class="mini-alert-dot" style="background:var(--red)"></div>
-          <div><div class="mini-alert-text">🔥 Smoke detected — Potato East</div><div class="mini-alert-time">18 min ago</div></div>
+          <div><div class="mini-alert-text" data-i18n="ma1_text">🔥 Smoke detected — Potato East</div><div class="mini-alert-time" data-i18n="ma1_time">18 min ago</div></div>
         </div>
         <div class="mini-alert" onclick="showPage('alerts')">
           <div class="mini-alert-dot" style="background:var(--red)"></div>
-          <div><div class="mini-alert-text">🌵 Drought critical — Wheat A1</div><div class="mini-alert-time">1h 12min ago</div></div>
+          <div><div class="mini-alert-text" data-i18n="ma2_text">🌵 Drought critical — Wheat A1</div><div class="mini-alert-time" data-i18n="ma2_time">1h 12min ago</div></div>
         </div>
         <div class="mini-alert" onclick="showPage('alerts')">
           <div class="mini-alert-dot" style="background:var(--amber)"></div>
-          <div><div class="mini-alert-text">🐄 Overgrazing risk — Pasture C</div><div class="mini-alert-time">3h ago</div></div>
+          <div><div class="mini-alert-text" data-i18n="ma3_text">🐄 Overgrazing risk — Pasture C</div><div class="mini-alert-time" data-i18n="ma3_time">3h ago</div></div>
         </div>
         <div class="mini-alert" onclick="showPage('alerts')">
           <div class="mini-alert-dot" style="background:var(--blue)"></div>
-          <div><div class="mini-alert-text">🧪 pH deviation — Corn B2</div><div class="mini-alert-time">Yesterday</div></div>
+          <div><div class="mini-alert-text" data-i18n="ma4_text">🧪 pH deviation — Corn B2</div><div class="mini-alert-time" data-i18n="ma4_time">Yesterday</div></div>
         </div>
       </div>
  
       <div class="panel-section">
         <div class="panel-title">System Status</div>
         <div class="sys-status">
-          <div class="sys-item"><div class="sys-item-label">Sensors Online</div><div class="sys-item-val green">46 / 48</div></div>
-          <div class="sys-item"><div class="sys-item-label">AI Engine</div><div class="sys-item-val green">Operational</div></div>
-          <div class="sys-item"><div class="sys-item-label">Satellite Feed</div><div class="sys-item-val green">Active</div></div>
-          <div class="sys-item"><div class="sys-item-label">Drone Status</div><div class="sys-item-val green">Standby</div></div>
-          <div class="sys-item"><div class="sys-item-label">Data Latency</div><div class="sys-item-val green">1.2s</div></div>
-          <div class="sys-item"><div class="sys-item-label">Last AI Scan</div><div class="sys-item-val amber">4m ago</div></div>
+          <div class="sys-item"><div class="sys-item-label">Sensors Online</div><div class="sys-item-val green" data-i18n="sys_val_sensors">46 / 48</div></div>
+          <div class="sys-item"><div class="sys-item-label">AI Engine</div><div class="sys-item-val green" data-i18n="sys_val_ai">Operational</div></div>
+          <div class="sys-item"><div class="sys-item-label">Satellite Feed</div><div class="sys-item-val green" data-i18n="sys_val_sat">Active</div></div>
+          <div class="sys-item"><div class="sys-item-label">Drone Status</div><div class="sys-item-val green" data-i18n="sys_val_drone">Standby</div></div>
+          <div class="sys-item"><div class="sys-item-label">Data Latency</div><div class="sys-item-val green" data-i18n="sys_val_lat">1.2s</div></div>
+          <div class="sys-item"><div class="sys-item-label">Last AI Scan</div><div class="sys-item-val amber" data-i18n="sys_val_scan">4m ago</div></div>
         </div>
       </div>
  
       <div class="panel-section">
         <div class="panel-title">Ask AI Assistant</div>
         <div class="ai-chat-preview">
-          <div class="ai-chat-msg">Hello! I'm your AgroSense AI. Ask me about your farm status, recommendations, or any agricultural question.</div>
+          <div class="ai-chat-msg" data-i18n="ai_chat_msg">Hello! I'm your AgroSense AI. Ask me about your farm status, recommendations, or any agricultural question.</div>
           <div class="ai-chat-input">
             <input type="text" placeholder="Ask about your farm..." id="ai-input" onkeydown="if(event.key==='Enter')askAI()">
             <button onclick="askAI()">↑</button>
@@ -2382,7 +2530,15 @@ function launchApp(){
   document.getElementById('onboarding').style.display='none';
   const app=document.getElementById('app');
   app.classList.add('ready');
-  setTimeout(initCharts,200);
+  setTimeout(()=>{
+    initCharts();
+    // Apply default language (RU since the farm is in Kazakhstan)
+    const savedLang = document.documentElement.getAttribute('data-lang') || 'RU';
+    const btn = document.querySelector('.nav-lang button[onclick*="'+savedLang+'"]');
+    if(btn){ document.querySelectorAll('.nav-lang button').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); }
+    currentLang = savedLang;
+    applyAllI18n(savedLang);
+  }, 300);
 }
  
 // ── NAVIGATION ──
@@ -2553,9 +2709,7 @@ function setLang(el, lang){
   document.querySelectorAll('.nav-lang button').forEach(b=>b.classList.remove('active'));
   el.classList.add('active');
   currentLang = lang;
-  applyI18n(lang);
-  applyPlanI18n(lang);
-  if(typeof renderSensorPanel==='function' && typeof activeZoneKey!=='undefined') renderSensorPanel(activeZoneKey);
+  applyAllI18n(lang);
 }
  
 function t(key){ return (I18N[currentLang]||I18N.EN)[key] || (I18N.EN[key] || key); }
@@ -3787,6 +3941,385 @@ function applyPlanI18n(lang) {
       if(n.nodeType===3 && n.textContent.trim()) n.textContent=' '+d.nav;
     });
   }
+}
+
+
+// ══════════════════════════════════════════
+// ── FULL i18n DATA EXTENSION ──
+// ══════════════════════════════════════════
+const I18N_FULL = {
+  EN: {
+    // Onboarding
+    ob_tagline:'Smart Agricultural Intelligence Platform',
+    ob_step1_h:'What type of farm do you operate?',
+    ob_step1_p:'Select your primary agricultural activity to personalize your AI dashboard.',
+    ob_step2_h:'Select your region',
+    ob_step2_p:'AgroSense adapts its AI models based on regional climate, soil types, and pest patterns in Kazakhstan.',
+    ob_step3_h:'Farm size',
+    ob_step3_p:'This helps calibrate zone counts, sensor density recommendations, and AI monitoring granularity.',
+    ob_generate:'🚀 Generate My Dashboard',
+    // KPI trends
+    kpi_trend1:' this season', kpi_trend2:' vs last week', kpi_trend3:' optimization',
+    kpi_trend4:' elevated', kpi_trend5:'9 of 12 zones stable', kpi_trend6:' model accuracy',
+    kpi_trend7:' needs attention', kpi_trend8:' vs baseline',
+    // AI center message
+    ai_msg_html:'<strong style="color:var(--green)">3 zones require immediate attention.</strong> Main threat: drought stress in Wheat A1–A3 — soil moisture 22%, critically below 40%. Rising temperature (+31°C) accelerates evaporation. <strong>Recommended: targeted drip irrigation within 6 hours</strong> to prevent yield loss. Secondary: smoke anomaly near Potato East detected by 2 sensors.',
+    // Recommendations
+    rec_title:'Smart Recommendations', rec_badge:'AI Generated',
+    rec1_title:'Check Wheat Sector A1 — Drought Stress', rec1_meta:'Zone A1 · Soil moisture 22% · 847 affected ha',
+    rec2_title:'Smoke Anomaly near Potato Zone East', rec2_meta:'Zone P-East · 2 sensors triggered · 18 min ago',
+    rec3_title:'Reduce Grazing Pressure — Pasture C', rec3_meta:'Pasture C · Overload 140% · Regeneration at risk',
+    rec4_title:'Soil pH Outside Optimal Range', rec4_meta:'Corn Zone B2 · pH 5.1, optimal 6.0–7.0',
+    rec5_title:'Water Flow Meter Anomaly Detected', rec5_meta:'Irrigation Line 3 · Flow 15% above baseline',
+    rec6_title:'Optimal Seeding Window — Barley Z5', rec6_meta:'Zone Z5 · Next 3 days ideal · AI confidence 92%',
+    // AI Insights chain
+    c1_cause:'Low moisture (22%) + heat (31°C) + 8 days no rain',
+    c1_action:'Targeted drip irrigation — 6h window',
+    c1_impact:'+12% yield retention, stress reversal 48h',
+    c1_risk:'Severe stress in 48h, crop loss 30–60%',
+    c2_cause:'2 smoke sensors + dry vegetation + NNE wind',
+    c2_action:'Dispatch inspection + move cattle from C',
+    c2_impact:'Fire containment, pasture regeneration in 3 weeks',
+    c2_risk:'Potential wildfire spread, pasture degradation',
+    c3_cause:'Soil temp 18°C, moisture 49%, low wind forecast',
+    c3_action:'Begin seeding operation in 12–72h window',
+    c3_impact:'+18% germination rate vs average conditions',
+    c3_risk:'Next optimal window in 3–4 weeks',
+    ins1_title:'Severe Drought Stress — Immediate Irrigation Required',
+    ins2_title:'Smoke Anomaly + Overgrazing Compound Risk',
+    ins3_title:'Optimal Seeding Window Detected',
+    ins1_roi:'ROI of Action: <span style="color:var(--green)">+₸ 2.4M estimated yield preservation</span>',
+    // Alerts
+    alt1_title:'Fire Risk — Smoke Detected at Potato Zone East',
+    alt1_zone:'📍 Potato East', alt1_time:'🕐 18 min ago',
+    alt2_title:'Drought Critical — Wheat Zone A1 Moisture Below Threshold',
+    alt2_zone:'📍 Wheat A1', alt2_time:'🕐 1h 12min ago',
+    alt3_title:'Overgrazing Risk — Cattle Load Exceeds Safe Capacity in Pasture C',
+    alt3_zone:'📍 Pasture C', alt3_time:'🕐 3h ago',
+    alt4_title:'Soil pH Deviation — Corn Zone B2 Below Optimal Range',
+    alt4_zone:'📍 Corn B2', alt4_time:'🕐 Yesterday',
+    // Right panel weather
+    wp_weather_desc:'Partly Cloudy · Almaty Region',
+    wp_humidity:'Humidity', wp_wind:'Wind NNE', wp_rain:'Rain today',
+    // Right panel mini-alerts
+    ma1_text:'🔥 Smoke detected — Potato East', ma1_time:'18 min ago',
+    ma2_text:'🌵 Drought critical — Wheat A1', ma2_time:'1h 12min ago',
+    ma3_text:'🐄 Overgrazing risk — Pasture C', ma3_time:'3h ago',
+    ma4_text:'🧪 pH deviation — Corn B2', ma4_time:'Yesterday',
+    // System status values
+    sys_val_sensors:'46 / 48', sys_val_ai:'Operational', sys_val_sat:'Active',
+    sys_val_drone:'Standby', sys_val_lat:'1.2s', sys_val_scan:'4m ago',
+    // AI chat
+    ai_chat_msg:"Hello! I'm your AgroSense AI. Ask me about your farm status, recommendations, or any agricultural question.",
+    // Sidebar
+    sidebar_version:'v2.4.1 · Last sync 2m ago',
+    farm_meta_val:'Mixed Farm · 3,200 ha',
+    // Nav
+    nav_plan:'Plan of Action',
+    // Misc
+    nav_overview:'Overview', nav_zones:'Zones', nav_sensors:'Sensors',
+    nav_insights:'AI Insights', nav_alerts:'Alerts', nav_reports:'Reports', nav_settings:'Settings',
+    nav_navigation:'Navigation', nav_analytics:'Analytics', nav_system:'System',
+    nav_live_map:'Live Map',
+    pt_overview:'Smart Agricultural Intelligence', ps_overview:'for Kazakhstan · Real-time monitoring across 12 active zones',
+    pt_zones:'Field Zones', pt_sensors:'Sensor Intelligence', ps_sensors:'Live sensor network across all zones',
+    pt_insights:'AI Insights', ps_insights:'Problem → Cause → Action → Profit',
+    pt_alerts:'Alert Center', ps_alerts:'4 active alerts · 2 critical · 1 resolved today',
+    pt_analytics:'Reports & Analytics', ps_analytics:'Season 2024 · Almaty Farm Portfolio',
+    pt_settings:'Settings & Admin', ps_settings:'Enterprise configuration · Almaty Agro Holdings',
+    kpi_total_zones:'Total Zones', kpi_crop_health:'Crop Health Index',
+    kpi_water:'Water Efficiency', kpi_fire:'Fire Risk Score',
+    kpi_soil:'Soil Stability', kpi_ai:'AI Confidence',
+    kpi_moisture:'Avg Moisture', kpi_yield:'Est. Yield Growth',
+    ai_title:'AgroSense AI Control Center', ai_confidence:'CONFIDENCE',
+    btn_export:'Export Report', btn_add_zone:'Add Zone',
+    btn_open_wheat:'▶ Open Wheat Zone A1', btn_drone:'🚁 Launch Drone View',
+    btn_report:'📄 Generate Report', btn_dismiss:'🔕 Dismiss Alert',
+    btn_add_sensor:'+ Add Sensor',
+    sh_current:'Current', sh_avg:'7d Average', sh_min:'7d Min', sh_max:'7d Max',
+    sh_chart_title:'7-Day Sensor Reading History', sh_7d:'7D', sh_14d:'14D', sh_30d:'30D',
+    rp_weather:'Weather Intelligence', rp_alerts:'Live Alerts', rp_system:'System Status', rp_ai_ask:'Ask AI Assistant',
+    rp_ai_placeholder:'Ask about your farm...',
+    sys_sensors:'Sensors Online', sys_ai:'AI Engine', sys_satellite:'Satellite Feed',
+    sys_drone:'Drone Status', sys_latency:'Data Latency', sys_scan:'Last AI Scan',
+  },
+  RU: {
+    ob_tagline:'Умная платформа сельскохозяйственного интеллекта',
+    ob_step1_h:'Тип вашего хозяйства',
+    ob_step1_p:'Выберите основной вид деятельности для персонализации ИИ-дашборда.',
+    ob_step2_h:'Выберите регион',
+    ob_step2_p:'AgroSense адаптирует свои модели ИИ на основе климата, типов почв и вредителей Казахстана.',
+    ob_step3_h:'Площадь хозяйства',
+    ob_step3_p:'Это поможет откалибровать количество зон, плотность датчиков и детализацию мониторинга.',
+    ob_generate:'🚀 Создать дашборд',
+    kpi_trend1:' в этом сезоне', kpi_trend2:' за прошлую неделю', kpi_trend3:' оптимизация',
+    kpi_trend4:' повышен', kpi_trend5:'9 из 12 зон стабильны', kpi_trend6:' точность модели',
+    kpi_trend7:' требует внимания', kpi_trend8:' vs базовый',
+    ai_msg_html:'<strong style="color:var(--green)">3 зоны требуют немедленного внимания.</strong> Основная угроза: засухный стресс в Пшенице A1–A3 — влажность 22%, критически ниже 40%. Рост температуры (+31°C) ускоряет испарение. <strong>Рекомендация: капельный полив в течение 6 часов</strong> для предотвращения потери урожая. Вторичная угроза: аномалия дыма у Картофельного поля Восток.',
+    rec_title:'Умные рекомендации', rec_badge:'Создано ИИ',
+    rec1_title:'Проверить зону Пшеницы A1 — засухный стресс', rec1_meta:'Зона A1 · Влажность 22% · 847 га под угрозой',
+    rec2_title:'Аномалия дыма у Картофельного поля Восток', rec2_meta:'Зона П-Восток · 2 датчика сработали · 18 мин назад',
+    rec3_title:'Снизить нагрузку на выпас — Пастбище C', rec3_meta:'Пастбище C · Перегрузка 140% · Под угрозой восстановления',
+    rec4_title:'pH почвы вне оптимального диапазона', rec4_meta:'Кукуруза B2 · pH 5.1, оптимум 6.0–7.0',
+    rec5_title:'Обнаружена аномалия счётчика воды', rec5_meta:'Ирригационная линия 3 · Поток на 15% выше нормы',
+    rec6_title:'Оптимальное окно посева — Ячмень Z5', rec6_meta:'Зона Z5 · Следующие 3 дня идеальны · Уверенность ИИ 92%',
+    c1_cause:'Низкая влажность (22%) + жара (31°C) + 8 дней без дождя',
+    c1_action:'Капельный полив — в течение 6 часов',
+    c1_impact:'+12% сохранения урожая, снятие стресса за 48ч',
+    c1_risk:'Тяжёлый стресс через 48ч, потеря урожая 30–60%',
+    c2_cause:'2 датчика дыма + сухая растительность + ветер NNE',
+    c2_action:'Инспекция дроном + перевод скота из C',
+    c2_impact:'Сдерживание пожара, восстановление пастбища за 3 недели',
+    c2_risk:'Возможное распространение пожара, деградация пастбища',
+    c3_cause:'Температура почвы 18°C, влажность 49%, прогноз слабого ветра',
+    c3_action:'Начать посев в течение 12–72 часов',
+    c3_impact:'+18% прорастания по сравнению со средними условиями',
+    c3_risk:'Следующее оптимальное окно через 3–4 недели',
+    ins1_title:'Тяжёлый засухный стресс — требуется немедленный полив',
+    ins2_title:'Аномалия дыма + риск перевыпаса',
+    ins3_title:'Обнаружено оптимальное окно посева',
+    ins1_roi:'ROI от действия: <span style="color:var(--green)">+₸ 2.4М прогнозируемое сохранение урожая</span>',
+    alt1_title:'Риск пожара — дым обнаружен на Картофельном поле Восток',
+    alt1_zone:'📍 Картофель Восток', alt1_time:'🕐 18 мин назад',
+    alt2_title:'Критическая засуха — Влажность Пшеницы A1 ниже порога',
+    alt2_zone:'📍 Пшеница A1', alt2_time:'🕐 1ч 12мин назад',
+    alt3_title:'Риск перевыпаса — Нагрузка скота превышает норму на Пастбище C',
+    alt3_zone:'📍 Пастбище C', alt3_time:'🕐 3ч назад',
+    alt4_title:'Отклонение pH — Кукуруза B2 ниже оптимального диапазона',
+    alt4_zone:'📍 Кукуруза B2', alt4_time:'🕐 Вчера',
+    wp_weather_desc:'Переменная облачность · Алматинская область',
+    wp_humidity:'Влажность', wp_wind:'Ветер ССВ', wp_rain:'Дождь сегодня',
+    ma1_text:'🔥 Дым обнаружен — Картофель Восток', ma1_time:'18 мин назад',
+    ma2_text:'🌵 Критическая засуха — Пшеница A1', ma2_time:'1ч 12мин назад',
+    ma3_text:'🐄 Риск перевыпаса — Пастбище C', ma3_time:'3ч назад',
+    ma4_text:'🧪 Отклонение pH — Кукуруза B2', ma4_time:'Вчера',
+    sys_val_sensors:'46 / 48', sys_val_ai:'Работает', sys_val_sat:'Активен',
+    sys_val_drone:'Ожидание', sys_val_lat:'1.2с', sys_val_scan:'4 мин назад',
+    ai_chat_msg:'Здравствуйте! Я ваш ИИ AgroSense. Спросите о состоянии фермы, рекомендациях или любом агрономическом вопросе.',
+    sidebar_version:'v2.4.1 · Синх. 2 мин назад',
+    farm_meta_val:'Смешанное хозяйство · 3 200 га',
+    nav_plan:'План действий',
+    nav_overview:'Обзор', nav_zones:'Зоны', nav_sensors:'Датчики',
+    nav_insights:'ИИ Анализ', nav_alerts:'Оповещения', nav_reports:'Отчёты', nav_settings:'Настройки',
+    nav_navigation:'Навигация', nav_analytics:'Аналитика', nav_system:'Система',
+    nav_live_map:'Карта',
+    pt_overview:'Умная с/х платформа', ps_overview:'Казахстан · Мониторинг 12 активных зон',
+    pt_zones:'Поля и зоны', pt_sensors:'Система датчиков', ps_sensors:'Единая сеть датчиков по всем зонам',
+    pt_insights:'ИИ Аналитика', ps_insights:'Проблема → Причина → Действие → Результат',
+    pt_alerts:'Центр оповещений', ps_alerts:'4 активных · 2 критических · 1 решено сегодня',
+    pt_analytics:'Отчёты и аналитика', ps_analytics:'Сезон 2024 · Алматинское хозяйство',
+    pt_settings:'Настройки и администрирование', ps_settings:'Корпоративные настройки · Алматы Агро Холдинг',
+    kpi_total_zones:'Всего зон', kpi_crop_health:'Индекс здоровья',
+    kpi_water:'КПД полива', kpi_fire:'Риск пожара',
+    kpi_soil:'Состояние почвы', kpi_ai:'Точность ИИ',
+    kpi_moisture:'Ср. влажность', kpi_yield:'Прогноз урожая',
+    ai_title:'Центр управления AgroSense ИИ', ai_confidence:'УВЕРЕННОСТЬ',
+    btn_export:'Экспорт отчёта', btn_add_zone:'Добавить зону',
+    btn_open_wheat:'▶ Открыть зону A1', btn_drone:'🚁 Запустить дрон',
+    btn_report:'📄 Создать отчёт', btn_dismiss:'🔕 Закрыть',
+    btn_add_sensor:'+ Добавить датчик',
+    sh_current:'Сейчас', sh_avg:'Среднее 7д', sh_min:'Мин 7д', sh_max:'Макс 7д',
+    sh_chart_title:'История показаний датчика (7 дней)', sh_7d:'7Д', sh_14d:'14Д', sh_30d:'30Д',
+    rp_weather:'Погода', rp_alerts:'Оповещения', rp_system:'Статус системы', rp_ai_ask:'Спросить ИИ',
+    rp_ai_placeholder:'Спросите о хозяйстве...',
+    sys_sensors:'Датчики онлайн', sys_ai:'ИИ Движок', sys_satellite:'Спутник',
+    sys_drone:'Дрон', sys_latency:'Задержка', sys_scan:'Последний скан',
+  },
+  KZ: {
+    ob_tagline:'Ақылды ауыл шаруашылығы интеллект платформасы',
+    ob_step1_h:'Шаруашылық түріңіз',
+    ob_step1_p:'ЖИ-дашбордыңызды жекелендіру үшін негізгі іс-әрекет түрін таңдаңыз.',
+    ob_step2_h:'Аймақты таңдаңыз',
+    ob_step2_p:'AgroSense Қазақстанның климаты, топырақ түрлері мен зиянкестер заңдылықтарына негізделген ЖИ модельдерін бейімдейді.',
+    ob_step3_h:'Шаруашылық мөлшері',
+    ob_step3_p:'Бұл аймақ санын, сенсор тығыздығы ұсыныстарын және бақылау дәлдігін калибрлеуге көмектеседі.',
+    ob_generate:'🚀 Менің дашбордты жасау',
+    kpi_trend1:' осы маусымда', kpi_trend2:' өткен аптамен', kpi_trend3:' оңтайландыру',
+    kpi_trend4:' жоғарылатылған', kpi_trend5:'12-нің 9 аймағы тұрақты', kpi_trend6:' модель дәлдігі',
+    kpi_trend7:' назар қажет', kpi_trend8:' базалыққа қарсы',
+    ai_msg_html:'<strong style="color:var(--green)">3 аймақ дереу назар аударуды қажет етеді.</strong> Негізгі қатер: Бидай A1–A3-те қуаңшылық стрессі — ылғалдылық 22%, 40% шегінен сыни төмен. Температура өсуі (+31°C) булануды тездетеді. <strong>Ұсыныс: 6 сағат ішінде тамшылатып суару</strong> өнімді сақтау үшін. Қосымша: Картоп алқабы Шығыста 2 сенсор түтін аномалиясын анықтады.',
+    rec_title:'Ақылды ұсыныстар', rec_badge:'ЖИ жасаған',
+    rec1_title:'Бидай секторы A1-ді тексеру — қуаңшылық стрессі', rec1_meta:'A1 аймағы · Ылғалдылық 22% · 847 га зардап шеккен',
+    rec2_title:'Картоп алқабы Шығыста түтін аномалиясы', rec2_meta:'П-Шығыс аймағы · 2 сенсор іске қосылды · 18 мин бұрын',
+    rec3_title:'Жайылым қысымын азайту — C Жайылымы', rec3_meta:'C Жайылымы · Шамадан тыс 140% · Қалпына келу қаупінде',
+    rec4_title:'Топырақ pH-ы оптималды диапазоннан тыс', rec4_meta:'Жүгері B2 · pH 5.1, оптималды 6.0–7.0',
+    rec5_title:'Су ағыны өлшеуішінде аномалия анықталды', rec5_meta:'Суару желісі 3 · Ағын нормадан 15% жоғары',
+    rec6_title:'Оптималды егу терезесі — Арпа Z5', rec6_meta:'Z5 аймағы · Келесі 3 күн идеалды · ЖИ сенімділігі 92%',
+    c1_cause:'Төмен ылғалдылық (22%) + жылу (31°C) + 8 күн жауын жоқ',
+    c1_action:'Тамшылатып суару — 6 сағаттық терезе',
+    c1_impact:'Өнімнің +12% сақталуы, 48 сағатта стрессті жою',
+    c1_risk:'48 сағатта ауыр стресс, өнімнің 30–60% жоғалуы',
+    c2_cause:'2 түтін сенсоры + құрғақ өсімдік + NNE жел',
+    c2_action:'Дрон инспекциясы + C-тен малды аудару',
+    c2_impact:'Өртті сдерживание, жайылымды 3 аптада қалпына келтіру',
+    c2_risk:'Өрттің мүмкін таралуы, жайылымның деградациясы',
+    c3_cause:'Топырақ температурасы 18°C, ылғалдылық 49%, желі аз болжам',
+    c3_action:'12–72 сағаттық терезеде егуді бастау',
+    c3_impact:'Орташа жағдайға қарағанда +18% өну',
+    c3_risk:'Келесі оптималды терезе 3–4 аптадан кейін',
+    ins1_title:'Ауыр қуаңшылық стрессі — дереу суару қажет',
+    ins2_title:'Түтін аномалиясы + шамадан тыс жайылым кешенді қаупі',
+    ins3_title:'Оптималды егу терезесі анықталды',
+    ins1_roi:'Іс-қимыл ROI: <span style="color:var(--green)">+₸ 2.4М болжамды өнімді сақтау</span>',
+    alt1_title:'Өрт қаупі — Картоп алқабы Шығыста түтін анықталды',
+    alt1_zone:'📍 Картоп Шығыс', alt1_time:'🕐 18 мин бұрын',
+    alt2_title:'Сыни қуаңшылық — Бидай A1 ылғалдылығы шегінен төмен',
+    alt2_zone:'📍 Бидай A1', alt2_time:'🕐 1с 12мин бұрын',
+    alt3_title:'Шамадан тыс жайылым — Мал жүктемесі C Жайылымында нормадан асты',
+    alt3_zone:'📍 C Жайылымы', alt3_time:'🕐 3с бұрын',
+    alt4_title:'pH ауытқуы — Жүгері B2 оптималды диапазоннан төмен',
+    alt4_zone:'📍 Жүгері B2', alt4_time:'🕐 Кеше',
+    wp_weather_desc:'Айнымалы бұлтты · Алматы облысы',
+    wp_humidity:'Ылғалдылық', wp_wind:'Жел ССШ', wp_rain:'Бүгінгі жаңбыр',
+    ma1_text:'🔥 Түтін анықталды — Картоп Шығыс', ma1_time:'18 мин бұрын',
+    ma2_text:'🌵 Сыни қуаңшылық — Бидай A1', ma2_time:'1с 12мин бұрын',
+    ma3_text:'🐄 Шамадан тыс жайылым — C Жайылымы', ma3_time:'3с бұрын',
+    ma4_text:'🧪 pH ауытқуы — Жүгері B2', ma4_time:'Кеше',
+    sys_val_sensors:'46 / 48', sys_val_ai:'Жұмыс істейді', sys_val_sat:'Белсенді',
+    sys_val_drone:'Күту', sys_val_lat:'1.2с', sys_val_scan:'4 мин бұрын',
+    ai_chat_msg:'Сәлем! Мен сіздің AgroSense ЖИ-мін. Шаруашылық күйі, ұсыныстар немесе кез-келген агрономиялық сұрақ туралы сұраңыз.',
+    sidebar_version:'v2.4.1 · Синх. 2 мин бұрын',
+    farm_meta_val:'Аралас шаруашылық · 3 200 га',
+    nav_plan:'Іс-қимыл жоспары',
+    nav_overview:'Шолу', nav_zones:'Аймақтар', nav_sensors:'Сенсорлар',
+    nav_insights:'ЖИ Талдауы', nav_alerts:'Ескертулер', nav_reports:'Есептер', nav_settings:'Параметрлер',
+    nav_navigation:'Навигация', nav_analytics:'Аналитика', nav_system:'Жүйе',
+    nav_live_map:'Карта',
+    pt_overview:'Ақылды ауыл шаруашылығы', ps_overview:'Қазақстан · 12 белсенді аймақты нақты уақытта бақылау',
+    pt_zones:'Алқаптар мен аймақтар', pt_sensors:'Сенсорлар жүйесі', ps_sensors:'Барлық аймақтардағы сенсор желісі',
+    pt_insights:'ЖИ Аналитикасы', ps_insights:'Мәселе → Себеп → Іс-әрекет → Нәтиже',
+    pt_alerts:'Ескерту орталығы', ps_alerts:'4 белсенді · 2 сыни · 1 бүгін шешілді',
+    pt_analytics:'Есептер мен аналитика', ps_analytics:'2024 маусымы · Алматы шаруашылығы',
+    pt_settings:'Параметрлер мен әкімшілік', ps_settings:'Корпоративтік баптаулар · Алматы Агро Холдинг',
+    kpi_total_zones:'Барлық аймақтар', kpi_crop_health:'Дақыл денсаулығы',
+    kpi_water:'Суару тиімділігі', kpi_fire:'Өрт қаупі',
+    kpi_soil:'Топырақ жағдайы', kpi_ai:'ЖИ дәлдігі',
+    kpi_moisture:'Орт. ылғалдылық', kpi_yield:'Өнімділік болжамы',
+    ai_title:'AgroSense ЖИ Басқару орталығы', ai_confidence:'СЕНІМДІЛІК',
+    btn_export:'Есепті экспорттау', btn_add_zone:'Аймақ қосу',
+    btn_open_wheat:'▶ A1 аймағын ашу', btn_drone:'🚁 Дронды іске қосу',
+    btn_report:'📄 Есеп жасау', btn_dismiss:'🔕 Жабу',
+    btn_add_sensor:'+ Сенсор қосу',
+    sh_current:'Қазір', sh_avg:'7к Орташа', sh_min:'7к Мин', sh_max:'7к Макс',
+    sh_chart_title:'Сенсор тарихы (7 күн)', sh_7d:'7К', sh_14d:'14К', sh_30d:'30К',
+    rp_weather:'Ауа райы', rp_alerts:'Ескертулер', rp_system:'Жүйе күйі', rp_ai_ask:'ЖИ-ға сұрақ',
+    rp_ai_placeholder:'Шаруашылық туралы сұраңыз...',
+    sys_sensors:'Желідегі сенсорлар', sys_ai:'ЖИ қозғалтқышы', sys_satellite:'Жерсерік',
+    sys_drone:'Дрон', sys_latency:'Кідіріс', sys_scan:'Соңғы скан',
+  }
+};
+
+// ── MASTER applyAllI18n — translates EVERYTHING ──
+function applyAllI18n(lang) {
+  const d = Object.assign({}, I18N_FULL[lang] || I18N_FULL.EN);
+
+  // 1. All data-i18n elements (innerHTML for HTML content, textContent for rest)
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (!d[key]) return;
+    if (key.endsWith('_html') || key === 'ins1_roi') {
+      el.innerHTML = d[key];
+    } else {
+      el.textContent = d[key];
+    }
+  });
+
+  // 2. Nav items (sidebar) — preserve icon and badge
+  const navItems = document.querySelectorAll('.nav-item');
+  const navKeys  = ['nav_overview','nav_zones','nav_sensors','nav_insights','nav_alerts','nav_plan','nav_reports','nav_settings'];
+  navItems.forEach((el,i) => {
+    if (!navKeys[i] || !d[navKeys[i]]) return;
+    el.childNodes.forEach(n => {
+      if (n.nodeType === 3 && n.textContent.trim()) n.textContent = ' ' + d[navKeys[i]];
+    });
+  });
+
+  // 3. Sidebar sections
+  const sidebarSections = document.querySelectorAll('.sidebar-section');
+  const secKeys = ['nav_navigation', 'nav_analytics', 'nav_system'];
+  sidebarSections.forEach((el,i) => { if (d[secKeys[i]]) el.textContent = d[secKeys[i]]; });
+
+  // 4. Page titles + subs
+  const pageTitleMap = {
+    'page-overview': ['pt_overview','ps_overview'], 'page-zones': ['pt_zones', null],
+    'page-sensors':  ['pt_sensors','ps_sensors'],   'page-insights': ['pt_insights','ps_insights'],
+    'page-alerts':   ['pt_alerts','ps_alerts'],     'page-analytics':['pt_analytics','ps_analytics'],
+    'page-settings': ['pt_settings','ps_settings'],
+  };
+  Object.entries(pageTitleMap).forEach(([pid,[tk,sk]]) => {
+    const pg = document.getElementById(pid);
+    if (!pg) return;
+    const title = pg.querySelector('.page-title');
+    const sub   = pg.querySelector('.page-sub');
+    if (title && tk && d[tk]) title.textContent = d[tk];
+    if (sub   && sk && d[sk]) sub.textContent   = d[sk];
+  });
+
+  // 5. KPI labels
+  const kpiLabels = document.querySelectorAll('.kpi-label');
+  const kpiKeys = ['kpi_total_zones','kpi_crop_health','kpi_water','kpi_fire','kpi_soil','kpi_ai','kpi_moisture','kpi_yield'];
+  kpiLabels.forEach((el,i) => { if (d[kpiKeys[i]]) el.textContent = d[kpiKeys[i]]; });
+
+  // 6. AI center
+  const aiTitle = document.querySelector('.ai-title');
+  if (aiTitle && d.ai_title) aiTitle.textContent = d.ai_title;
+  const confLabel = document.querySelector('.conf-label');
+  if (confLabel && d.ai_confidence) confLabel.textContent = d.ai_confidence;
+
+  // 7. Right panel titles
+  const panelTitles = document.querySelectorAll('.panel-title');
+  const panelKeys = ['rp_weather','rp_alerts','rp_system','rp_ai_ask'];
+  panelTitles.forEach((el,i) => { if (d[panelKeys[i]]) el.textContent = d[panelKeys[i]]; });
+
+  // 8. AI chat placeholder
+  const aiInp = document.getElementById('ai-input');
+  if (aiInp && d.rp_ai_placeholder) aiInp.placeholder = d.rp_ai_placeholder;
+
+  // 9. Live map button
+  const liveMapBtn = document.querySelector('.nav-btn.primary');
+  if (liveMapBtn && d.nav_live_map) liveMapBtn.innerHTML = '<span>🗺</span> ' + d.nav_live_map;
+
+  // 10. data-i18n elements in sensor history modal
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (d[key] && !key.endsWith('_html')) el.textContent = d[key];
+  });
+
+  // 11. System status labels
+  const sysLabels = document.querySelectorAll('.sys-item-label');
+  const sysKeys = ['sys_sensors','sys_ai','sys_satellite','sys_drone','sys_latency','sys_scan'];
+  sysLabels.forEach((el,i) => { if (d[sysKeys[i]]) el.textContent = d[sysKeys[i]]; });
+
+  // 12. Mobile bottom nav
+  const mobMap = {
+    'mob-overview': 'nav_overview', 'mob-zones': 'nav_zones',
+    'mob-sensors': 'nav_sensors', 'mob-alerts': 'nav_alerts',
+    'mob-plan': 'nav_plan', 'mob-insights': 'nav_insights'
+  };
+  Object.entries(mobMap).forEach(([id, key]) => {
+    const el = document.getElementById(id);
+    if (!el || !d[key]) return;
+    el.childNodes.forEach(n => {
+      if (n.nodeType === 3 && n.textContent.trim()) n.textContent = d[key].split(' ').slice(-1)[0];
+    });
+  });
+
+  // 13. Plan of Action page
+  if (typeof applyPlanI18n === 'function') applyPlanI18n(lang);
+
+  // 14. Sensor panel (range labels + WTM buttons)
+  if (typeof renderSensorPanel === 'function' && typeof activeZoneKey !== 'undefined') {
+    renderSensorPanel(activeZoneKey);
+  }
+
+  // 15. Sensor sub text
+  const sensorSub = document.getElementById('sensorSub');
+  // handled by renderSensorPanel above
+
+  // 16. lang attr
+  document.documentElement.lang = lang.toLowerCase();
+  document.documentElement.setAttribute('data-lang', lang);
+  currentLang = lang;
 }
 
 </script>
