@@ -2555,6 +2555,280 @@ AgroChart.defaults = {
 G.Chart = AgroChart;
 })(window);
 </script>
+
+<!-- ══ INTERACTIVE SVG CHART ENGINE ══ -->
+<script>
+(function(G){
+'use strict';
+const SC = {
+  colors: ['#00D68F','#3B9EFF','#F5B731','#FF5C6B','#A855F7','#06B6D4'],
+  isLight(){ return document.documentElement.getAttribute('data-theme')==='light'; },
+  textColor(){ return SC.isLight()?'rgba(60,80,100,0.75)':'rgba(150,175,210,0.8)'; },
+  gridColor(){ return SC.isLight()?'rgba(0,0,0,0.055)':'rgba(255,255,255,0.05)'; },
+  mkSvg(tag,a){ const el=document.createElementNS('http://www.w3.org/2000/svg',tag); if(a)Object.entries(a).forEach(([k,v])=>el.setAttribute(k,v)); return el; }
+};
+
+// ── Tooltip singleton ──
+let _tt=null;
+function _ensureTT(){
+  if(_tt) return _tt;
+  _tt=document.createElement('div');
+  _tt.style.cssText='position:fixed;pointer-events:none;z-index:9999;display:none;border-radius:9px;padding:11px 15px;font-family:var(--font-body,sans-serif);box-shadow:0 12px 36px rgba(0,0,0,0.45);min-width:110px;white-space:nowrap;transition:opacity .12s;';
+  document.body.appendChild(_tt);
+  return _tt;
+}
+function _showTT(e,label,value,series,color){
+  const tt=_ensureTT(),lgt=SC.isLight();
+  tt.style.background=lgt?'rgba(255,255,255,.98)':'rgba(8,16,32,.97)';
+  tt.style.color=lgt?'#1a2030':'#e8f0ff';
+  tt.style.border=`1px solid ${lgt?'rgba(0,0,0,.1)':'rgba(255,255,255,.1)'}`;
+  const sRow=series?`<div style="font-size:10px;color:${color};font-weight:700;letter-spacing:.6px;text-transform:uppercase;margin-bottom:3px;">${series}</div>`:'';
+  const fmt=v=>{if(typeof v!=='number')return v;return Number.isInteger(v)?v:v.toFixed(1);};
+  tt.innerHTML=`${sRow}<div style="font-size:11px;opacity:.65;margin-bottom:2px;">${label}</div><div style="font-size:17px;font-weight:700;color:${color};line-height:1.1;">${fmt(value)}</div>`;
+  tt.style.display='block';
+  const x=Math.min(e.clientX+16,window.innerWidth-160),y=e.clientY-12;
+  tt.style.left=x+'px'; tt.style.top=y+'px';
+}
+function _hideTT(){ _ensureTT().style.display='none'; }
+
+// ── SvgChart class ──
+function SvgChart(container,cfg){
+  if(!container)return;
+  container.innerHTML='';
+  container.style.position='relative';
+  this.container=container; this.cfg=cfg;
+  this.type=cfg.type||'line';
+  this._render();
+}
+
+SvgChart.prototype._render=function(){
+  const t=this.type;
+  if(t==='donut'||t==='pie'){ this._donut(); return; }
+  if(t==='hbar'){ this._hbar(); return; }
+  this._lineBar();
+};
+
+SvgChart.prototype._lineBar=function(){
+  const {container,cfg}=this;
+  const data=cfg.data||{}, labels=data.labels||[], datasets=data.datasets||[], opts=cfg.options||{};
+  const type=this.type;
+  const W=Math.max(container.offsetWidth||0, container.getBoundingClientRect().width||0, 400);
+  const H=cfg.height||200;
+  const pad={t:18,r:20,b:38,l:50};
+  const cW=W-pad.l-pad.r, cH=H-pad.t-pad.b;
+  const n=labels.length||1;
+  let allV=[];
+  datasets.forEach(d=>(d.data||[]).forEach(v=>{if(v!=null)allV.push(+v);}));
+  const scY=(opts.scales&&opts.scales.y)||{};
+  let minV=scY.min!=null?scY.min:allV.length?Math.min(...allV)*0.95:0;
+  let maxV=scY.max!=null?scY.max:allV.length?Math.max(...allV)*1.05:100;
+  if(minV===maxV){minV-=1;maxV+=1;}
+  const rng=maxV-minV;
+  const xp=i=>pad.l+(n>1?(i/(n-1))*cW:cW/2);
+  const yp=v=>pad.t+cH-((+v-minV)/rng)*cH;
+  const svg=SC.mkSvg('svg',{width:W,height:H,viewBox:`0 0 ${W} ${H}`});
+  svg.style.display='block'; svg.style.overflow='visible';
+  container.appendChild(svg);
+  const gc=SC.gridColor(), tc=SC.textColor();
+  // Grid
+  for(let g=0;g<=5;g++){
+    const gy=pad.t+(g/5)*cH;
+    svg.appendChild(SC.mkSvg('line',{x1:pad.l,y1:gy,x2:pad.l+cW,y2:gy,stroke:gc,'stroke-dasharray':'4,4'}));
+    const val=maxV-((g/5)*rng);
+    const lbl=Math.abs(val)<10?val.toFixed(1):Math.round(val)+'';
+    const t2=SC.mkSvg('text',{x:pad.l-7,y:gy+4,'text-anchor':'end',fill:tc,'font-size':11,'font-family':'sans-serif'});
+    t2.textContent=lbl; svg.appendChild(t2);
+  }
+  // X labels
+  const step=Math.ceil(n/8);
+  labels.forEach((lbl,i)=>{
+    if(i%step===0||i===n-1){
+      const t2=SC.mkSvg('text',{x:xp(i),y:pad.t+cH+17,'text-anchor':'middle',fill:tc,'font-size':11,'font-family':'sans-serif'});
+      t2.textContent=lbl; svg.appendChild(t2);
+    }
+  });
+  // Datasets
+  const slotW=cW/n, dsLen=datasets.length;
+  datasets.forEach((ds,di)=>{
+    const pts=ds.data||[];
+    const color=ds.color||ds.borderColor||SC.colors[di%6];
+    if(type==='bar'){
+      const bW=(slotW*0.72/dsLen)-2;
+      pts.forEach((v,i)=>{
+        if(v==null)return;
+        const bH=((+v-minV)/rng)*cH;
+        const x=pad.l+i*slotW+slotW*0.14+di*bW;
+        const y=yp(Math.max(+v,minV));
+        const bgC=typeof ds.backgroundColor==='function'?ds.backgroundColor({dataIndex:i}):(ds.backgroundColor||color+'BB');
+        const rect=SC.mkSvg('rect',{x,y,width:Math.max(bW,1),height:Math.max(bH,1),fill:bgC,rx:3});
+        rect.style.cursor='pointer';
+        rect.addEventListener('mouseenter',e=>{rect.style.opacity='.72';_showTT(e,labels[i],+v,ds.label||'',color);});
+        rect.addEventListener('mouseleave',()=>{rect.style.opacity='1';_hideTT();});
+        svg.appendChild(rect);
+      });
+      return;
+    }
+    // Line
+    const vpts=pts.map((v,i)=>v!=null?{x:xp(i),y:yp(v),v,lbl:labels[i]}:null).filter(Boolean);
+    if(!vpts.length)return;
+    if(ds.fill){
+      const fp=vpts.map((p,i)=>`${i?'L':'M'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ')
+        +` L${vpts[vpts.length-1].x.toFixed(1)},${pad.t+cH} L${vpts[0].x.toFixed(1)},${pad.t+cH} Z`;
+      svg.appendChild(SC.mkSvg('path',{d:fp,fill:typeof ds.fill==='string'?ds.fill:color+'18',stroke:'none'}));
+    }
+    const tension=ds.tension!=null?ds.tension:0.38;
+    let d='';
+    if(tension>0){
+      d=`M${vpts[0].x.toFixed(1)},${vpts[0].y.toFixed(1)}`;
+      for(let i=0;i<vpts.length-1;i++){
+        const p0=vpts[i],p1=vpts[i+1];
+        const cx1=p0.x+(p1.x-p0.x)*tension, cx2=p1.x-(p1.x-p0.x)*tension;
+        d+=` C${cx1.toFixed(1)},${p0.y.toFixed(1)} ${cx2.toFixed(1)},${p1.y.toFixed(1)} ${p1.x.toFixed(1)},${p1.y.toFixed(1)}`;
+      }
+    } else {
+      d=vpts.map((p,i)=>`${i?'L':'M'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
+    }
+    const pathEl=SC.mkSvg('path',{d,stroke:color,'stroke-width':ds.lineWidth||2.5,fill:'none','stroke-linecap':'round','stroke-linejoin':'round'});
+    svg.appendChild(pathEl);
+    // Dash animation
+    try{const len=pathEl.getTotalLength();pathEl.setAttribute('stroke-dasharray',len);pathEl.setAttribute('stroke-dashoffset',len);requestAnimationFrame(()=>{pathEl.style.transition=`stroke-dashoffset ${0.7+di*0.25}s cubic-bezier(.4,0,.2,1)`;pathEl.setAttribute('stroke-dashoffset',0);});}catch(e){}
+    // Points
+    vpts.forEach(p=>{
+      const c=SC.mkSvg('circle',{cx:p.x.toFixed(1),cy:p.y.toFixed(1),r:4,fill:color,stroke:'rgba(0,0,0,.25)','stroke-width':1.5});
+      c.style.cursor='pointer';
+      c.addEventListener('mouseenter',e=>{c.setAttribute('r',6);_showTT(e,p.lbl,p.v,ds.label||'',color);});
+      c.addEventListener('mouseleave',()=>{c.setAttribute('r',4);_hideTT();});
+      svg.appendChild(c);
+    });
+  });
+};
+
+SvgChart.prototype._donut=function(){
+  const {container,cfg}=this;
+  const data=cfg.data||{},datasets=data.datasets||[],labels=data.labels||[];
+  const W=Math.max(container.offsetWidth||0, container.getBoundingClientRect().width||0, 220),H=cfg.height||200;
+  const svg=SC.mkSvg('svg',{width:W,height:H,viewBox:`0 0 ${W} ${H}`});
+  container.appendChild(svg);
+  const ds=datasets[0]||{},vals=ds.data||[],colors=ds.backgroundColor||SC.colors;
+  const total=vals.reduce((a,b)=>a+(+b||0),0);
+  if(!total)return;
+  const cx=W/2,cy=H/2,r=Math.min(cx,cy)*.84,inner=r*.64;
+  let angle=-Math.PI/2;
+  vals.forEach((v,i)=>{
+    const sweep=(v/total)*Math.PI*2;
+    const x1=cx+r*Math.cos(angle),y1=cy+r*Math.sin(angle);
+    const x2=cx+r*Math.cos(angle+sweep),y2=cy+r*Math.sin(angle+sweep);
+    const ix1=cx+inner*Math.cos(angle),iy1=cy+inner*Math.sin(angle);
+    const ix2=cx+inner*Math.cos(angle+sweep),iy2=cy+inner*Math.sin(angle+sweep);
+    const lg=sweep>Math.PI?1:0;
+    const p=SC.mkSvg('path',{d:`M${ix1.toFixed(1)},${iy1.toFixed(1)} L${x1.toFixed(1)},${y1.toFixed(1)} A${r},${r} 0 ${lg},1 ${x2.toFixed(1)},${y2.toFixed(1)} L${ix2.toFixed(1)},${iy2.toFixed(1)} A${inner},${inner} 0 ${lg},0 ${ix1.toFixed(1)},${iy1.toFixed(1)} Z`,fill:colors[i]||'#888'});
+    p.style.cursor='pointer'; p.style.transition='opacity .18s,transform .18s'; p.style.transformOrigin=`${cx}px ${cy}px`;
+    p.addEventListener('mouseenter',e=>{p.style.transform='scale(1.04)';_showTT(e,labels[i]||'',+v,`${Math.round((v/total)*100)}%`,colors[i]||'#888');});
+    p.addEventListener('mouseleave',()=>{p.style.transform='scale(1)';_hideTT();});
+    svg.appendChild(p); angle+=sweep;
+  });
+};
+
+SvgChart.prototype._hbar=function(){
+  const {container,cfg}=this;
+  const data=cfg.data||{},labels=data.labels||[],datasets=data.datasets||[],opts=cfg.options||{};
+  const W=Math.max(container.offsetWidth||0, container.getBoundingClientRect().width||0, 400);
+  const bH=28,gap=8,padL=92,padR=50,padT=8,padB=8;
+  const H=labels.length*(bH+gap)+padT+padB;
+  container.style.height=H+'px';
+  const svg=SC.mkSvg('svg',{width:W,height:H,viewBox:`0 0 ${W} ${H}`});
+  container.appendChild(svg);
+  let allV=[];
+  datasets.forEach(d=>(d.data||[]).forEach(v=>{if(v!=null)allV.push(+v);}));
+  const scX=(opts.scales&&opts.scales.x)||{};
+  const maxV=scX.max!=null?scX.max:(allV.length?Math.max(...allV)*1.06:100);
+  const cW=W-padL-padR;
+  const tc=SC.textColor(),gc=SC.gridColor();
+  // vertical grid lines
+  for(let g=0;g<=4;g++){const gx=padL+(g/4)*cW;svg.appendChild(SC.mkSvg('line',{x1:gx,y1:padT,x2:gx,y2:padT+H-padB,stroke:gc,'stroke-dasharray':'4,4'}));}
+  labels.forEach((lbl,i)=>{
+    const y=padT+i*(bH+gap);
+    const t2=SC.mkSvg('text',{x:padL-7,y:y+bH/2+4,'text-anchor':'end',fill:tc,'font-size':12,'font-family':'sans-serif'});
+    t2.textContent=lbl; svg.appendChild(t2);
+    svg.appendChild(SC.mkSvg('rect',{x:padL,y,width:cW,height:bH,fill:SC.isLight()?'rgba(0,0,0,.03)':'rgba(255,255,255,.025)',rx:5}));
+    datasets.forEach((ds,di)=>{
+      const v=(ds.data||[])[i]; if(v==null)return;
+      const bLen=((+v-0)/(maxV||1))*cW;
+      const bgC=typeof ds.backgroundColor==='function'?ds.backgroundColor({dataIndex:i}):(ds.backgroundColor||SC.colors[0]);
+      const rect=SC.mkSvg('rect',{x:padL,y:y+di*(bH/datasets.length),width:0,height:bH/datasets.length-1,fill:bgC,rx:4});
+      svg.appendChild(rect);
+      requestAnimationFrame(()=>{rect.style.transition=`width ${0.45+i*0.04}s cubic-bezier(.4,0,.2,1)`;rect.setAttribute('width',Math.max(bLen,0).toFixed(1));});
+      rect.style.cursor='pointer';
+      rect.addEventListener('mouseenter',e=>{rect.style.opacity='.72';_showTT(e,lbl,+v,ds.label||'',bgC);});
+      rect.addEventListener('mouseleave',()=>{rect.style.opacity='1';_hideTT();});
+      // value label
+      const vt=SC.mkSvg('text',{x:padL+cW+4,y:y+bH/2+4,'text-anchor':'start',fill:tc,'font-size':11,'font-family':'sans-serif'});
+      vt.textContent=Math.round(+v); svg.appendChild(vt);
+    });
+  });
+};
+
+G.SvgChart=SvgChart;
+G._svgTT={show:_showTT,hide:_hideTT};
+})(window);
+</script>
+<!-- ══ REPORT STYLES ══ -->
+<style>
+/* ── Chart period selector ── */
+.chart-period-btn{background:var(--card2);border:1px solid var(--border);border-radius:6px;padding:5px 12px;font-size:11px;font-family:var(--font-mono);color:var(--text2);cursor:pointer;transition:all .2s;}
+.chart-period-btn:hover{border-color:rgba(0,214,143,.3);color:var(--text);}
+.chart-period-btn.active{background:var(--green-dim);border-color:rgba(0,214,143,.35);color:var(--green);}
+/* ── Data table ── */
+.data-table{width:100%;border-collapse:collapse;font-size:13px;}
+.data-table th{text-align:left;padding:9px 12px;font-size:10px;font-family:var(--font-mono);letter-spacing:.8px;text-transform:uppercase;color:var(--text3);border-bottom:1px solid var(--border);cursor:pointer;user-select:none;white-space:nowrap;}
+.data-table th:hover{color:var(--text2);}
+.data-table th .sort-arrow{margin-left:4px;opacity:.4;font-size:9px;}
+.data-table th.sort-asc .sort-arrow:before{content:'▲';}
+.data-table th.sort-desc .sort-arrow:before{content:'▼';}
+.data-table th:not(.sort-asc):not(.sort-desc) .sort-arrow:before{content:'⬍';}
+.data-table td{padding:10px 12px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle;}
+.data-table tbody tr{transition:background .15s;}
+.data-table tbody tr:hover{background:rgba(255,255,255,.025);}
+[data-theme="light"] .data-table tbody tr:hover{background:rgba(0,0,0,.025);}
+.data-table tbody tr:last-child td{border-bottom:none;}
+.tbl-health-bar{height:5px;background:var(--border2);border-radius:3px;overflow:hidden;min-width:60px;}
+.tbl-health-fill{height:100%;border-radius:3px;}
+.tbl-badge{display:inline-block;font-size:10px;font-family:var(--font-mono);padding:2px 8px;border-radius:10px;}
+.tbl-badge.good{background:var(--green-dim);color:var(--green);}
+.tbl-badge.warn{background:var(--amber-dim);color:var(--amber);}
+.tbl-badge.crit{background:var(--red-dim);color:var(--red);}
+.table-search{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:7px 12px;color:var(--text);font-family:var(--font-body);font-size:12px;outline:none;width:180px;transition:border-color .2s;}
+.table-search:focus{border-color:rgba(0,214,143,.35);}
+.table-search::placeholder{color:var(--text3);}
+/* ── Overview chart area ── */
+.ov-charts-row{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:20px;}
+@media(max-width:900px){.ov-charts-row{grid-template-columns:1fr;}}
+.ov-donut-legend{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:10px;}
+.report-kpi-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
+.report-kpi-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;}
+.report-kpi-val{font-family:var(--font-head);font-size:28px;font-weight:700;line-height:1;margin-bottom:4px;}
+.report-kpi-label{font-size:11px;color:var(--text2);font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.report-kpi-trend{font-size:12px;display:flex;align-items:center;gap:4px;}
+@media(max-width:768px){.report-kpi-bar{grid-template-columns:repeat(2,1fr);}  .ov-charts-row{grid-template-columns:1fr;}}
+@media(max-width:480px){.report-kpi-bar{grid-template-columns:1fr;}}
+/* Analytics tabs */
+.analytics-periods{display:flex;gap:6px;margin-bottom:20px;}
+.analytics-grid-v2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
+@media(max-width:900px){.analytics-grid-v2{grid-template-columns:1fr;}}
+.chart-card-v2{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;}
+.chart-card-v2 .chart-header{margin-bottom:14px;}
+.span-full{grid-column:1/-1;}
+/* exec cards v2 */
+.exec-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
+.exec-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;text-align:center;}
+.exec-icon{font-size:24px;margin-bottom:6px;}
+.exec-val{font-family:var(--font-head);font-size:22px;font-weight:700;margin-bottom:4px;}
+.exec-label{font-size:11px;color:var(--text2);}
+@media(max-width:768px){.exec-cards{grid-template-columns:repeat(2,1fr);}}
+/* Sparkline mini bars in KPI cards */
+.kpi-sparkline{display:flex;align-items:flex-end;gap:2px;height:28px;margin-top:8px;}
+.kpi-spark-bar{flex:1;border-radius:2px 2px 0 0;transition:height .3s;}
+</style>
 </head>
 <body>
  
@@ -2576,18 +2850,18 @@ G.Chart = AgroChart;
       <div class="ob-cards">
         <div class="ob-card" onclick="selectCard(this,'type','crop')">
           <div class="ob-icon">🌾</div>
-          <h3>Crop Farming</h3>
-          <p>Wheat, corn, barley, sunflower</p>
+          <h3 data-i18n="ob_crop_farming">Crop Farming</h3>
+          <p data-i18n="ob_crop_desc">Wheat, corn, barley, sunflower</p>
         </div>
         <div class="ob-card" onclick="selectCard(this,'type','livestock')">
           <div class="ob-icon">🐄</div>
-          <h3>Livestock</h3>
-          <p>Cattle, sheep, horse breeding</p>
+          <h3 data-i18n="ob_livestock">Livestock</h3>
+          <p data-i18n="ob_livestock_desc">Cattle, sheep, horse breeding</p>
         </div>
         <div class="ob-card" onclick="selectCard(this,'type','mixed')">
           <div class="ob-icon">🌿</div>
-          <h3>Mixed Farm</h3>
-          <p>Combined crop & livestock</p>
+          <h3 data-i18n="ob_mixed">Mixed Farm</h3>
+          <p data-i18n="ob_mixed_desc">Combined crop & livestock</p>
         </div>
       </div>
       <button class="btn-primary" id="next1" onclick="nextStep(2)" disabled>Continue →</button>
@@ -2617,16 +2891,16 @@ G.Chart = AgroChart;
       <p>We'll calibrate AI models and sensor thresholds accordingly</p>
       <div class="ob-sizes">
         <div class="ob-size" onclick="selectCard(this,'size','small')">
-          <h4>Small</h4><p>&lt; 500 ha</p>
+          <h4 data-i18n="ob_small">Small</h4><p data-i18n="ob_small_desc">&lt; 500 ha</p>
         </div>
         <div class="ob-size" onclick="selectCard(this,'size','medium')">
-          <h4>Medium</h4><p>500–5,000 ha</p>
+          <h4 data-i18n="ob_medium">Medium</h4><p data-i18n="ob_medium_desc">500–5,000 ha</p>
         </div>
         <div class="ob-size" onclick="selectCard(this,'size','large')">
-          <h4>Large</h4><p>5,000–50,000 ha</p>
+          <h4 data-i18n="ob_large">Large</h4><p data-i18n="ob_large_desc">5,000–50,000 ha</p>
         </div>
         <div class="ob-size" onclick="selectCard(this,'size','enterprise')">
-          <h4>Enterprise</h4><p>&gt; 50,000 ha</p>
+          <h4 data-i18n="ob_enterprise">Enterprise</h4><p data-i18n="ob_enterprise_desc">&gt; 50,000 ha</p>
         </div>
       </div>
       <button class="btn-primary" id="next3" onclick="generateDashboard()" disabled>Generate My Dashboard ✦</button>
@@ -2672,7 +2946,7 @@ G.Chart = AgroChart;
     </div>
     <div class="nav-conn">
       <div class="dot"></div>
-      <span>All Systems Online</span>
+      <span data-i18n="nav_systems_online">All Systems Online</span>
     </div>
     <div class="nav-spacer"></div>
     <div class="nav-lang">
@@ -2700,29 +2974,29 @@ G.Chart = AgroChart;
           <div class="pp-avatar-lg" id="pp-avatar-lg">АА</div>
           <div class="pp-name-block">
             <div class="pp-name-display" id="pp-name-display">Фермер</div>
-            <div class="pp-role-tag">✦ Farm Manager</div>
+            <div class="pp-role-tag">✦ <span data-i18n="pp_role">Farm Manager</span></div>
           </div>
         </div>
         <div class="pp-body">
           <div class="pp-field">
-            <label class="pp-label">Имя / Аты</label>
+            <label class="pp-label" data-i18n="pp_name_label">Имя / Аты</label>
             <input class="pp-input" id="pp-name-input" type="text" placeholder="Введите ваше имя...">
           </div>
           <div class="pp-field">
-            <label class="pp-label">Номер телефона / Телефон</label>
+            <label class="pp-label" data-i18n="pp_phone_label">Номер телефона / Телефон</label>
             <input class="pp-input" id="pp-phone-input" type="tel" placeholder="+7 (___) ___-__-__">
           </div>
           <div class="pp-notif-row">
             <div class="pp-notif-info">
-              <div class="pp-notif-title">SMS уведомления</div>
-              <div class="pp-notif-sub">Критические оповещения на ваш номер</div>
+              <div class="pp-notif-title" data-i18n="pp_notif_title">SMS уведомления</div>
+              <div class="pp-notif-sub" data-i18n="pp_notif_sub">Критические оповещения на ваш номер</div>
             </div>
             <button class="pp-toggle on" id="pp-notif-toggle" onclick="this.classList.toggle('on')"></button>
           </div>
         </div>
         <div class="pp-footer">
-          <button class="pp-btn-cancel" onclick="closeProfile()">Отмена</button>
-          <button class="pp-btn-save" onclick="saveProfile()">✓ Сохранить</button>
+          <button class="pp-btn-cancel" onclick="closeProfile()" data-i18n="pp_cancel">Отмена</button>
+          <button class="pp-btn-save" onclick="saveProfile()" data-i18n="pp_save">✓ Сохранить</button>
         </div>
         <div class="pp-toast" id="pp-toast">✓ Профиль сохранён!</div>
       </div>
@@ -2765,117 +3039,138 @@ G.Chart = AgroChart;
       <div class="page active" id="page-overview">
         <div class="page-header">
           <div>
-            <div class="page-title">Smart Agricultural Intelligence</div>
-            <div class="page-sub">for Kazakhstan · Real-time monitoring across 12 active zones</div>
+            <div class="page-title" data-i18n="pt_overview">Smart Agricultural Intelligence</div>
+            <div class="page-sub" data-i18n="ps_overview">Kazakhstan · Real-time monitoring across 12 active zones</div>
           </div>
           <div style="display:flex;gap:8px;">
-            <button class="btn-outline"><span>↓</span> Export Report</button>
-            <button class="btn-outline" style="border-color:rgba(0,214,143,0.3);color:var(--green);">⊕ Add Zone</button>
+            <button class="btn-outline" onclick="showPage('analytics')"><span>↓</span> <span data-i18n="btn_export">Export Report</span></button>
+            <button class="btn-outline" style="border-color:rgba(0,214,143,0.3);color:var(--green);" onclick="showPage('zones')">⊕ <span data-i18n="btn_add_zone">Add Zone</span></button>
           </div>
         </div>
  
         <!-- KPI GRID -->
         <div class="kpi-grid">
           <div class="kpi-card">
-            <div class="kpi-label">Total Zones</div>
+            <div class="kpi-label" data-i18n="kpi_total_zones">Total Zones</div>
             <div class="kpi-value blue">12</div>
             <div class="kpi-trend"><span class="trend-up">↑ 2</span><span style="color:var(--text3)" data-i18n="kpi_trend1"> this season</span></div>
-            <div class="kpi-bar"><div class="kpi-bar-fill blue" style="width:80%"></div></div>
+            <div class="kpi-sparkline" id="spark-zones"></div>
           </div>
           <div class="kpi-card">
-            <div class="kpi-label">Crop Health Index</div>
+            <div class="kpi-label" data-i18n="kpi_crop_health">Crop Health Index</div>
             <div class="kpi-value green">78.4</div>
             <div class="kpi-trend"><span class="trend-up">↑ 3.2</span><span style="color:var(--text3)" data-i18n="kpi_trend2"> vs last week</span></div>
-            <div class="kpi-bar"><div class="kpi-bar-fill green" style="width:78%"></div></div>
+            <div class="kpi-sparkline" id="spark-health"></div>
           </div>
           <div class="kpi-card">
-            <div class="kpi-label">Water Efficiency</div>
+            <div class="kpi-label" data-i18n="kpi_water">Water Efficiency</div>
             <div class="kpi-value green">91%</div>
             <div class="kpi-trend"><span class="trend-up">↑ 6%</span><span style="color:var(--text3)" data-i18n="kpi_trend3"> optimization</span></div>
-            <div class="kpi-bar"><div class="kpi-bar-fill green" style="width:91%"></div></div>
+            <div class="kpi-sparkline" id="spark-water"></div>
           </div>
           <div class="kpi-card">
-            <div class="kpi-label">Fire Risk Score</div>
+            <div class="kpi-label" data-i18n="kpi_fire">Fire Risk Score</div>
             <div class="kpi-value amber">3.2</div>
             <div class="kpi-trend"><span class="trend-down">↑ 0.8</span><span style="color:var(--text3)" data-i18n="kpi_trend4"> elevated</span></div>
-            <div class="kpi-bar"><div class="kpi-bar-fill amber" style="width:32%"></div></div>
+            <div class="kpi-sparkline" id="spark-fire"></div>
           </div>
           <div class="kpi-card">
-            <div class="kpi-label">Soil Stability</div>
+            <div class="kpi-label" data-i18n="kpi_soil">Soil Stability</div>
             <div class="kpi-value green">Good</div>
-            <div class="kpi-trend"><span style="color:var(--text3)">9 of 12 zones stable</span></div>
-            <div class="kpi-bar"><div class="kpi-bar-fill green" style="width:75%"></div></div>
+            <div class="kpi-trend"><span style="color:var(--text3)" data-i18n="kpi_soil_detail">9 of 12 zones stable</span></div>
+            <div class="kpi-bar" style="margin-top:12px;"><div class="kpi-bar-fill green" style="width:75%"></div></div>
           </div>
           <div class="kpi-card">
-            <div class="kpi-label">AI Confidence</div>
+            <div class="kpi-label" data-i18n="kpi_ai">AI Confidence</div>
             <div class="kpi-value blue">87%</div>
             <div class="kpi-trend"><span class="trend-up">↑ 2%</span><span style="color:var(--text3)" data-i18n="kpi_trend6"> model accuracy</span></div>
-            <div class="kpi-bar"><div class="kpi-bar-fill blue" style="width:87%"></div></div>
+            <div class="kpi-sparkline" id="spark-ai"></div>
           </div>
           <div class="kpi-card">
-            <div class="kpi-label">Avg Moisture</div>
+            <div class="kpi-label" data-i18n="kpi_moisture">Avg Moisture</div>
             <div class="kpi-value amber">34%</div>
             <div class="kpi-trend"><span class="trend-down">↓ 8%</span><span style="color:var(--text3)" data-i18n="kpi_trend7"> needs attention</span></div>
-            <div class="kpi-bar"><div class="kpi-bar-fill amber" style="width:34%"></div></div>
+            <div class="kpi-sparkline" id="spark-moisture"></div>
           </div>
           <div class="kpi-card">
-            <div class="kpi-label">Est. Yield Growth</div>
+            <div class="kpi-label" data-i18n="kpi_yield">Est. Yield Growth</div>
             <div class="kpi-value green">+14%</div>
-            <div class="kpi-trend"><span class="trend-up">↑ vs baseline</span></div>
-            <div class="kpi-bar"><div class="kpi-bar-fill green" style="width:68%"></div></div>
+            <div class="kpi-trend"><span class="trend-up" data-i18n="kpi_trend8">↑ vs baseline</span></div>
+            <div class="kpi-sparkline" id="spark-yield"></div>
           </div>
         </div>
- 
+
+        <!-- LIVE CHARTS ROW -->
+        <div class="ov-charts-row">
+          <div class="chart-card">
+            <div class="chart-header">
+              <div>
+                <div class="chart-title" data-i18n="chart_7day_title">7-Day Moisture Trend</div>
+                <div class="chart-sub" data-i18n="chart_7day_sub">Soil moisture % · Primary crop zones</div>
+              </div>
+              <div class="chart-legend">
+                <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div><span>Wheat A1</span></div>
+                <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div><span>Corn B1</span></div>
+                <div class="legend-item"><div class="legend-dot" style="background:var(--blue)"></div><span>Barley Z5</span></div>
+              </div>
+            </div>
+            <div id="overviewTrendChart" style="width:100%;height:180px;"></div>
+          </div>
+          <div class="chart-card" style="display:flex;flex-direction:column;">
+            <div class="chart-header">
+              <div>
+                <div class="chart-title" data-i18n="chart_zones_title">Zone Health</div>
+                <div class="chart-sub" data-i18n="chart_zones_sub">12 zones · current status</div>
+              </div>
+            </div>
+            <div id="overviewDonutChart" style="width:100%;height:150px;"></div>
+            <div class="ov-donut-legend">
+              <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div><span data-i18n="status_healthy">Healthy (7)</span></div>
+              <div class="legend-item"><div class="legend-dot" style="background:var(--amber)"></div><span data-i18n="status_warning">Warning (3)</span></div>
+              <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div><span data-i18n="status_critical">Critical (2)</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ZONE PERFORMANCE BAR CHART -->
+        <div class="glass-card" style="margin-bottom:20px;">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title" data-i18n="chart_perf_title">Zone Performance Overview</div>
+              <div class="chart-sub" data-i18n="chart_perf_sub">Click a metric to compare all zones</div>
+            </div>
+            <div style="display:flex;gap:6px;">
+              <button class="chart-period-btn active" id="ov-metric-moisture" onclick="setOvMetric(this,'moisture')" data-i18n="metric_moisture">Moisture</button>
+              <button class="chart-period-btn" id="ov-metric-health" onclick="setOvMetric(this,'health')" data-i18n="metric_health">Health</button>
+              <button class="chart-period-btn" id="ov-metric-temp" onclick="setOvMetric(this,'temp')" data-i18n="metric_temp">Temp °C</button>
+            </div>
+          </div>
+          <div id="overviewBarChart" style="width:100%;"></div>
+        </div>
+
         <!-- AI CONTROL CENTER -->
         <div class="ai-center">
           <div class="ai-center-header">
             <div class="ai-icon">✦</div>
             <div>
-              <div class="ai-title">AgroSense AI Control Center</div>
-              <div class="ai-sub">Updated 4 minutes ago · Processing 847 sensor data points</div>
+              <div class="ai-title" data-i18n="ai_title">AgroSense AI Control Center</div>
+              <div class="ai-sub" data-i18n="ai_sub">Updated 4 minutes ago · Processing 847 sensor data points</div>
             </div>
-            <div class="urgency-badge urgency-high">⚡ HIGH URGENCY</div>
+            <div class="urgency-badge urgency-high" data-i18n="ai_urgency">⚡ HIGH URGENCY</div>
           </div>
           <div class="ai-message">
             <span data-i18n="ai_msg_html"><strong style="color:var(--green);">3 zones require immediate attention.</strong> Main threat: drought stress detected in Wheat Cluster A1–A3 — soil moisture at 22%, critically below 40% threshold. Rising temperature (+31°C) accelerates evaporation rate. <strong>Recommended action: targeted drip irrigation within the next 6 hours</strong> to prevent irreversible yield loss. Secondary concern: smoke anomaly near Potato Zone East detected by 2 sensors.</span>
           </div>
           <div class="ai-confidence">
-            <span class="conf-label">CONFIDENCE</span>
+            <span class="conf-label" data-i18n="ai_confidence">CONFIDENCE</span>
             <div class="conf-bar"><div class="conf-fill"></div></div>
             <span class="conf-val">87%</span>
           </div>
           <div class="ai-actions">
-            <button class="btn-action primary" onclick="showPage('zones')">▶ Open Wheat Zone A1</button>
-            <button class="btn-action" onclick="showPage('insights')">🚁 Launch Drone View</button>
-            <button class="btn-action" onclick="showPage('analytics')">📄 Generate Report</button>
+            <button class="btn-action primary" onclick="showPage('zones')" data-i18n="btn_open_wheat">▶ Open Wheat Zone A1</button>
+            <button class="btn-action" onclick="showPage('insights')" data-i18n="btn_drone">🚁 Launch Drone View</button>
+            <button class="btn-action" onclick="showPage('analytics')" data-i18n="btn_report">📄 Generate Report</button>
             <button class="btn-action" onclick="showPage('alerts')">🔕 Dismiss Alert</button>
-          </div>
-        </div>
- 
-        <!-- CHART ROW -->
-        <div class="chart-row">
-          <div class="chart-card">
-            <div class="chart-header">
-              <div>
-                <div class="chart-title">Crop Health Trend</div>
-                <div class="chart-sub">Last 30 days across all zones</div>
-              </div>
-              <div class="chart-legend">
-                <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div> Wheat</div>
-                <div class="legend-item"><div class="legend-dot" style="background:var(--blue)"></div> Corn</div>
-                <div class="legend-item"><div class="legend-dot" style="background:var(--amber)"></div> Potato</div>
-              </div>
-            </div>
-            <canvas id="healthChart" height="100"></canvas>
-          </div>
-          <div class="chart-card">
-            <div class="chart-header">
-              <div>
-                <div class="chart-title">Zone Health Distribution</div>
-                <div class="chart-sub">Current status</div>
-              </div>
-            </div>
-            <canvas id="zoneChart" height="140"></canvas>
           </div>
         </div>
  
@@ -2890,7 +3185,7 @@ G.Chart = AgroChart;
             <div class="rec-content">
               <div class="rec-title" data-i18n="rec1_title">Check Wheat Sector A1 — Drought Stress</div>
               <div class="rec-meta" data-i18n="rec1_meta">Zone A1 · Soil moisture 22% · 847 affected ha</div>
-              <div class="sev-badge sev-critical">CRITICAL</div>
+              <div class="sev-badge sev-critical" data-i18n="sev_critical">CRITICAL</div>
             </div>
           </div>
           <div class="rec-card" onclick="showPage('alerts')">
@@ -2898,7 +3193,7 @@ G.Chart = AgroChart;
             <div class="rec-content">
               <div class="rec-title" data-i18n="rec2_title">Smoke Anomaly near Potato Zone East</div>
               <div class="rec-meta" data-i18n="rec2_meta">Zone P-East · 2 sensors triggered · 18 min ago</div>
-              <div class="sev-badge sev-high">HIGH</div>
+              <div class="sev-badge sev-high" data-i18n="sev_high">HIGH</div>
             </div>
           </div>
           <div class="rec-card" onclick="showPage('insights')">
@@ -2906,7 +3201,7 @@ G.Chart = AgroChart;
             <div class="rec-content">
               <div class="rec-title" data-i18n="rec3_title">Reduce Grazing Pressure — Pasture C</div>
               <div class="rec-meta" data-i18n="rec3_meta">Pasture C · Overload 140% · Regeneration at risk</div>
-              <div class="sev-badge sev-medium">MEDIUM</div>
+              <div class="sev-badge sev-medium" data-i18n="sev_medium">MEDIUM</div>
             </div>
           </div>
           <div class="rec-card" onclick="showPage('sensors')">
@@ -2914,7 +3209,7 @@ G.Chart = AgroChart;
             <div class="rec-content">
               <div class="rec-title" data-i18n="rec4_title">Soil pH Outside Optimal Range</div>
               <div class="rec-meta" data-i18n="rec4_meta">Corn Zone B2 · pH 5.1, optimal 6.0–7.0</div>
-              <div class="sev-badge sev-low">LOW</div>
+              <div class="sev-badge sev-low" data-i18n="sev_low">LOW</div>
             </div>
           </div>
           <div class="rec-card" onclick="showPage('sensors')">
@@ -2930,7 +3225,7 @@ G.Chart = AgroChart;
             <div class="rec-content">
               <div class="rec-title" data-i18n="rec6_title">Optimal Seeding Window — Barley Z5</div>
               <div class="rec-meta" data-i18n="rec6_meta">Zone Z5 · Next 3 days ideal · AI confidence 92%</div>
-              <div class="sev-badge sev-low">OPPORTUNITY</div>
+              <div class="sev-badge sev-low" data-i18n="sev_opp">OPPORTUNITY</div>
             </div>
           </div>
         </div>
@@ -2943,7 +3238,7 @@ G.Chart = AgroChart;
           <div class="zones-list scrollbar-hide">
             <div style="font-family:var(--font-head);font-size:13px;font-weight:600;margin-bottom:12px;padding:0 4px;display:flex;align-items:center;justify-content:space-between;">
               <span>Farm Zones <span style="color:var(--text3);font-weight:400;" id="zoneCount">12</span></span>
-              <button class="btn-outline" style="border-color:rgba(0,214,143,0.3);color:var(--green);font-size:11px;padding:5px 10px;" onclick="openAddZoneModal()">⊕ Add Zone</button>
+              <button class="btn-outline" style="border-color:rgba(0,214,143,0.3);color:var(--green);font-size:11px;padding:5px 10px;" onclick="openAddZoneModal()" data-i18n="btn_add_zone">⊕ Add Zone</button>
             </div>
             <div class="zone-item active" onclick="selectZone(this,'Wheat Zone A1','Wheat','847 ha','Drip Irrigation','Critical — Drought Stress','22','3.1','2024-03-15')">
               <div class="zone-item-header"><div class="zone-dot" style="background:var(--red)"></div><div class="zone-name">Wheat Zone A1</div><div class="zone-status" style="color:var(--red)">⚠ Critical</div></div>
@@ -3154,7 +3449,7 @@ G.Chart = AgroChart;
           </div>
           <div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px;">
             <div style="font-size:12px;color:var(--text2);">ROI of Action: <span style="color:var(--green)">+₸ 2.4M estimated yield preservation</span></div>
-            <div style="display:flex;gap:8px;"><button class="btn-action primary">▶ Activate Irrigation Now</button><button class="btn-action">📋 Schedule Later</button></div>
+            <div style="display:flex;gap:8px;"><button class="btn-action primary" data-i18n="ins_activate_irr">▶ Activate Irrigation Now</button><button class="btn-action">📋 Schedule Later</button></div>
           </div>
         </div>
         <div class="insight-card high">
@@ -3198,10 +3493,10 @@ G.Chart = AgroChart;
           </div>
         </div>
         <div class="alerts-filters">
-          <button class="af-btn active">All (4)</button>
-          <button class="af-btn" onclick="filterAlerts(this,'critical')">Critical (2)</button>
-          <button class="af-btn" onclick="filterAlerts(this,'unresolved')">Unresolved (4)</button>
-          <button class="af-btn" onclick="filterAlerts(this,'ai')">AI Generated (3)</button>
+          <button class="af-btn active" data-i18n="af_all">All (4)</button>
+          <button class="af-btn" onclick="filterAlerts(this,'critical')" data-i18n="af_critical">Critical (2)</button>
+          <button class="af-btn" onclick="filterAlerts(this,'unresolved')" data-i18n="af_unresolved">Unresolved (4)</button>
+          <button class="af-btn" onclick="filterAlerts(this,'ai')" data-i18n="af_ai">AI Generated (3)</button>
         </div>
         <div class="alert-item critical">
           <div class="alert-sev-icon" style="background:var(--red-dim)">🔥</div>
@@ -3211,16 +3506,16 @@ G.Chart = AgroChart;
               <span data-i18n="alt1_zone">📍 Potato East</span>
               <span data-i18n="alt1_time">🕐 18 min ago</span>
               <span>🔬 Smoke Sensor #PE-02 + #PE-04</span>
-              <span class="sev-badge sev-critical">CRITICAL</span>
+              <span class="sev-badge sev-critical" data-i18n="sev_critical">CRITICAL</span>
             </div>
             <div class="alert-actions">
-              <button class="alert-btn ack">✓ Acknowledge</button>
-              <button class="alert-btn" onclick="showPage('zones')">🗺 View on Map</button>
-              <button class="alert-btn">🚁 Drone Dispatch</button>
-              <button class="alert-btn">📞 Call Supervisor</button>
+              <button class="alert-btn ack" data-i18n="btn_ack">✓ Acknowledge</button>
+              <button class="alert-btn" onclick="showPage('zones')" data-i18n="btn_view_map">🗺 View on Map</button>
+              <button class="alert-btn" data-i18n="btn_drone_dispatch">🚁 Drone Dispatch</button>
+              <button class="alert-btn" data-i18n="btn_call_sup">📞 Call Supervisor</button>
             </div>
           </div>
-          <div class="alert-time">14:22<br>Today</div>
+          <div class="alert-time">14:22<br><span data-i18n="time_today">Today</span></div>
         </div>
         <div class="alert-item critical">
           <div class="alert-sev-icon" style="background:var(--red-dim)">🌵</div>
@@ -3233,13 +3528,13 @@ G.Chart = AgroChart;
               <span class="sev-badge sev-critical">CRITICAL</span>
             </div>
             <div class="alert-actions">
-              <button class="alert-btn ack">✓ Acknowledge</button>
-              <button class="alert-btn" onclick="showPage('zones')">🗺 View on Map</button>
-              <button class="alert-btn">💧 Activate Irrigation</button>
-              <button class="alert-btn" onclick="showPage('insights')">✦ AI Recommendation</button>
+              <button class="alert-btn ack" data-i18n="btn_ack">✓ Acknowledge</button>
+              <button class="alert-btn" onclick="showPage('zones')" data-i18n="btn_view_map">🗺 View on Map</button>
+              <button class="alert-btn" data-i18n="btn_activate_irr">💧 Activate Irrigation</button>
+              <button class="alert-btn" onclick="showPage('insights')" data-i18n="btn_ai_rec">✦ AI Recommendation</button>
             </div>
           </div>
-          <div class="alert-time">13:28<br>Today</div>
+          <div class="alert-time">13:28<br><span data-i18n="time_today">Today</span></div>
         </div>
         <div class="alert-item high">
           <div class="alert-sev-icon" style="background:var(--amber-dim)">🐄</div>
@@ -3249,15 +3544,15 @@ G.Chart = AgroChart;
               <span data-i18n="alt3_zone">📍 Pasture C</span>
               <span data-i18n="alt3_time">🕐 3h ago</span>
               <span>🔬 Movement Tracker · AI Generated</span>
-              <span class="sev-badge sev-high">HIGH</span>
+              <span class="sev-badge sev-high" data-i18n="sev_high">HIGH</span>
             </div>
             <div class="alert-actions">
-              <button class="alert-btn ack">✓ Acknowledge</button>
-              <button class="alert-btn" onclick="showPage('zones')">🗺 View on Map</button>
-              <button class="alert-btn">📋 Relocation Plan</button>
+              <button class="alert-btn ack" data-i18n="btn_ack">✓ Acknowledge</button>
+              <button class="alert-btn" onclick="showPage('zones')" data-i18n="btn_view_map">🗺 View on Map</button>
+              <button class="alert-btn" data-i18n="btn_relocation">📋 Relocation Plan</button>
             </div>
           </div>
-          <div class="alert-time">11:40<br>Today</div>
+          <div class="alert-time">11:40<br><span data-i18n="time_today">Today</span></div>
         </div>
         <div class="alert-item medium">
           <div class="alert-sev-icon" style="background:var(--blue-dim)">🧪</div>
@@ -3267,15 +3562,15 @@ G.Chart = AgroChart;
               <span data-i18n="alt4_zone">📍 Corn B2</span>
               <span data-i18n="alt4_time">🕐 Yesterday</span>
               <span>🔬 pH Sensor #CB2-03</span>
-              <span class="sev-badge sev-medium">MEDIUM</span>
+              <span class="sev-badge sev-medium" data-i18n="sev_medium">MEDIUM</span>
             </div>
             <div class="alert-actions">
-              <button class="alert-btn ack">✓ Acknowledge</button>
+              <button class="alert-btn ack" data-i18n="btn_ack">✓ Acknowledge</button>
               <button class="alert-btn" onclick="showPage('sensors')">📡 View Sensor</button>
               <button class="alert-btn">📋 Treatment Plan</button>
             </div>
           </div>
-          <div class="alert-time">09:15<br>Yesterday</div>
+          <div class="alert-time">09:15<br><span data-i18n="time_yesterday">Yesterday</span></div>
         </div>
       </div>
  
@@ -3283,60 +3578,209 @@ G.Chart = AgroChart;
       <div class="page" id="page-analytics">
         <div class="page-header">
           <div>
-            <div class="page-title">Reports & Analytics</div>
-            <div class="page-sub">Season 2024 · Almaty Farm Portfolio · Executive Dashboard</div>
+            <div class="page-title" data-i18n="pt_analytics">Reports & Analytics</div>
+            <div class="page-sub" data-i18n="ps_analytics">Season 2024 · Almaty Farm Portfolio · Executive Dashboard</div>
           </div>
           <div style="display:flex;gap:8px;">
-            <button class="btn-outline">📄 Export PDF</button>
-            <button class="btn-outline">📊 Excel Report</button>
+            <button class="btn-outline" onclick="exportCSV()">📄 <span data-i18n="btn_export_csv">Export CSV</span></button>
+            <button class="btn-outline" onclick="window.print()">🖨 <span data-i18n="btn_export_pdf">Print Report</span></button>
           </div>
         </div>
+
+        <!-- Period selector -->
+        <div class="analytics-periods">
+          <button class="chart-period-btn active" id="rp-7d" onclick="setReportPeriod(this,'7d')" data-i18n="period_7d">7 Days</button>
+          <button class="chart-period-btn" id="rp-30d" onclick="setReportPeriod(this,'30d')" data-i18n="period_30d">30 Days</button>
+          <button class="chart-period-btn" id="rp-season" onclick="setReportPeriod(this,'season')" data-i18n="period_season">Full Season</button>
+        </div>
+
+        <!-- Summary KPIs -->
         <div class="exec-cards">
           <div class="exec-card">
             <div class="exec-icon">💧</div>
-            <div class="exec-val">847 m³</div>
-            <div class="exec-label">Water Saved This Season</div>
+            <div class="exec-val" id="rp-water-saved">847 m³</div>
+            <div class="exec-label" data-i18n="rp_water_saved">Water Saved This Season</div>
           </div>
           <div class="exec-card">
             <div class="exec-icon">🌱</div>
-            <div class="exec-val">+14%</div>
-            <div class="exec-label">Estimated Yield Growth</div>
+            <div class="exec-val" id="rp-yield-growth" style="color:var(--green)">+14%</div>
+            <div class="exec-label" data-i18n="rp_yield_growth">Estimated Yield Growth</div>
           </div>
           <div class="exec-card">
             <div class="exec-icon">🌍</div>
-            <div class="exec-val">12.4 t</div>
-            <div class="exec-label">CO₂ Reduction vs Baseline</div>
+            <div class="exec-val" id="rp-co2">12.4 t</div>
+            <div class="exec-label" data-i18n="rp_co2">CO₂ Reduction vs Baseline</div>
           </div>
           <div class="exec-card">
             <div class="exec-icon">💰</div>
-            <div class="exec-val">₸ 8.2M</div>
-            <div class="exec-label">Estimated Value Protected</div>
+            <div class="exec-val" id="rp-value" style="color:var(--amber)">₸ 8.2M</div>
+            <div class="exec-label" data-i18n="rp_value_protected">Estimated Value Protected</div>
           </div>
         </div>
-        <div class="analytics-grid">
-          <div class="analytics-chart">
+
+        <!-- Charts grid -->
+        <div class="analytics-grid-v2">
+          <!-- Crop health trend -->
+          <div class="chart-card-v2 span-full">
             <div class="chart-header">
-              <div><div class="chart-title">Crop Health — 6 Month Trend</div><div class="chart-sub">All zones combined</div></div>
+              <div>
+                <div class="chart-title" data-i18n="chart_trend_title">Crop Health Index — Season Trend</div>
+                <div class="chart-sub" data-i18n="chart_trend_sub">Hover over data points to see exact values</div>
+              </div>
+              <div class="chart-legend">
+                <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div><span data-i18n="legend_wheat">Wheat</span></div>
+                <div class="legend-item"><div class="legend-dot" style="background:var(--blue)"></div><span data-i18n="legend_corn">Corn</span></div>
+                <div class="legend-item"><div class="legend-dot" style="background:var(--amber)"></div><span data-i18n="legend_barley">Barley</span></div>
+              </div>
             </div>
-            <canvas id="trendChart" height="120"></canvas>
+            <div id="trendChart" style="width:100%;height:220px;"></div>
           </div>
-          <div class="analytics-chart">
+
+          <!-- Water usage -->
+          <div class="chart-card-v2">
             <div class="chart-header">
-              <div><div class="chart-title">Yield Forecast</div><div class="chart-sub">vs. Regional Average</div></div>
+              <div>
+                <div class="chart-title" data-i18n="chart_irrigation_title">Irrigation Efficiency</div>
+                <div class="chart-sub" data-i18n="chart_irrigation_sub">m³/ha · decreasing = improving</div>
+              </div>
             </div>
-            <canvas id="yieldChart" height="120"></canvas>
+            <div id="irrChart" style="width:100%;height:200px;"></div>
           </div>
-          <div class="analytics-chart">
+
+          <!-- Monthly comparison -->
+          <div class="chart-card-v2">
             <div class="chart-header">
-              <div><div class="chart-title">Irrigation Efficiency</div><div class="chart-sub">Water used per hectare</div></div>
+              <div>
+                <div class="chart-title" data-i18n="chart_yield_title">Yield Forecast vs Regional Avg</div>
+                <div class="chart-sub" data-i18n="chart_yield_sub">Score index per zone (100 = optimal)</div>
+              </div>
             </div>
-            <canvas id="irrChart" height="120"></canvas>
+            <div id="yieldChart" style="width:100%;height:200px;"></div>
           </div>
-          <div class="analytics-chart">
+
+          <!-- Zone comparison - full width -->
+          <div class="chart-card-v2 span-full">
             <div class="chart-header">
-              <div><div class="chart-title">Zone Performance Comparison</div><div class="chart-sub">Health index by zone</div></div>
+              <div>
+                <div class="chart-title" data-i18n="chart_zone_comp_title">Zone Performance Comparison</div>
+                <div class="chart-sub" data-i18n="chart_zone_comp_sub">Health index 0–100 · Red = critical · Green = optimal</div>
+              </div>
             </div>
-            <canvas id="zoneCompChart" height="120"></canvas>
+            <div id="zoneCompChart" style="width:100%;"></div>
+          </div>
+        </div>
+
+        <!-- Data Table -->
+        <div class="glass-card" style="overflow:hidden;">
+          <div class="chart-header" style="margin-bottom:16px;">
+            <div>
+              <div class="chart-title" data-i18n="table_title">Zone Data Table</div>
+              <div class="chart-sub" data-i18n="table_sub">Click column headers to sort · All 12 zones</div>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <input type="text" class="table-search" id="zoneTableSearch" placeholder="Filter zones..." oninput="filterZoneTable(this.value)" data-i18n-placeholder="table_search_placeholder" placeholder="Filter zones...">
+            </div>
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="data-table" id="zoneDataTable">
+              <thead>
+                <tr>
+                  <th onclick="sortZoneTable(0)" class="sort-asc"><span data-i18n="th_zone">Zone</span><span class="sort-arrow"></span></th>
+                  <th onclick="sortZoneTable(1)"><span data-i18n="th_crop">Crop</span><span class="sort-arrow"></span></th>
+                  <th onclick="sortZoneTable(2)"><span data-i18n="th_area">Area (ha)</span><span class="sort-arrow"></span></th>
+                  <th onclick="sortZoneTable(3)"><span data-i18n="th_moisture">Moisture %</span><span class="sort-arrow"></span></th>
+                  <th onclick="sortZoneTable(4)"><span data-i18n="th_ph">pH</span><span class="sort-arrow"></span></th>
+                  <th onclick="sortZoneTable(5)"><span data-i18n="th_health">Health</span><span class="sort-arrow"></span></th>
+                  <th><span data-i18n="th_status">Status</span></th>
+                </tr>
+              </thead>
+              <tbody id="zoneTableBody">
+                <tr data-zone="Wheat Zone A1" data-crop="Wheat" data-area="847" data-moisture="22" data-ph="6.3" data-health="28">
+                  <td><strong>Wheat Zone A1</strong></td><td>🌾 Wheat</td><td>847</td>
+                  <td><span style="color:var(--red);font-weight:600;">22%</span></td>
+                  <td>6.3</td>
+                  <td><div class="tbl-health-bar"><div class="tbl-health-fill" style="width:28%;background:var(--red)"></div></div><span style="font-size:11px;color:var(--text2);margin-left:6px;">28</span></td>
+                  <td><span class="tbl-badge crit" data-i18n="status_critical_short">Critical</span></td>
+                </tr>
+                <tr data-zone="Wheat Zone A2" data-crop="Wheat" data-area="620" data-moisture="45" data-ph="6.8" data-health="72">
+                  <td><strong>Wheat Zone A2</strong></td><td>🌾 Wheat</td><td>620</td>
+                  <td>45%</td>
+                  <td>6.8</td>
+                  <td><div class="tbl-health-bar"><div class="tbl-health-fill" style="width:72%;background:var(--amber)"></div></div><span style="font-size:11px;color:var(--text2);margin-left:6px;">72</span></td>
+                  <td><span class="tbl-badge warn" data-i18n="status_warning_short">Warning</span></td>
+                </tr>
+                <tr data-zone="Corn Zone B1" data-crop="Corn" data-area="410" data-moisture="58" data-ph="6.9" data-health="90">
+                  <td><strong>Corn Zone B1</strong></td><td>🌽 Corn</td><td>410</td>
+                  <td><span style="color:var(--green);">58%</span></td>
+                  <td>6.9</td>
+                  <td><div class="tbl-health-bar"><div class="tbl-health-fill" style="width:90%;background:var(--green)"></div></div><span style="font-size:11px;color:var(--text2);margin-left:6px;">90</span></td>
+                  <td><span class="tbl-badge good" data-i18n="status_healthy_short">Healthy</span></td>
+                </tr>
+                <tr data-zone="Corn Zone B2" data-crop="Corn" data-area="380" data-moisture="38" data-ph="5.1" data-health="75">
+                  <td><strong>Corn Zone B2</strong></td><td>🌽 Corn</td><td>380</td>
+                  <td>38%</td>
+                  <td><span style="color:var(--amber);">5.1</span></td>
+                  <td><div class="tbl-health-bar"><div class="tbl-health-fill" style="width:75%;background:var(--amber)"></div></div><span style="font-size:11px;color:var(--text2);margin-left:6px;">75</span></td>
+                  <td><span class="tbl-badge warn" data-i18n="status_warning_short">Warning</span></td>
+                </tr>
+                <tr data-zone="Potato Field East" data-crop="Potato" data-area="290" data-moisture="61" data-ph="7.2" data-health="65">
+                  <td><strong>Potato Field East</strong></td><td>🥔 Potato</td><td>290</td>
+                  <td>61%</td>
+                  <td>7.2</td>
+                  <td><div class="tbl-health-bar"><div class="tbl-health-fill" style="width:65%;background:var(--amber)"></div></div><span style="font-size:11px;color:var(--text2);margin-left:6px;">65</span></td>
+                  <td><span class="tbl-badge warn" data-i18n="status_warning_short">Warning</span></td>
+                </tr>
+                <tr data-zone="Potato Field West" data-crop="Potato" data-area="310" data-moisture="55" data-ph="7.0" data-health="85">
+                  <td><strong>Potato Field West</strong></td><td>🥔 Potato</td><td>310</td>
+                  <td><span style="color:var(--green);">55%</span></td>
+                  <td>7.0</td>
+                  <td><div class="tbl-health-bar"><div class="tbl-health-fill" style="width:85%;background:var(--green)"></div></div><span style="font-size:11px;color:var(--text2);margin-left:6px;">85</span></td>
+                  <td><span class="tbl-badge good" data-i18n="status_healthy_short">Healthy</span></td>
+                </tr>
+                <tr data-zone="Cattle Pasture A" data-crop="Pasture" data-area="1200" data-moisture="72" data-ph="6.5" data-health="88">
+                  <td><strong>Cattle Pasture A</strong></td><td>🐄 Pasture</td><td>1,200</td>
+                  <td><span style="color:var(--green);">72%</span></td>
+                  <td>6.5</td>
+                  <td><div class="tbl-health-bar"><div class="tbl-health-fill" style="width:88%;background:var(--green)"></div></div><span style="font-size:11px;color:var(--text2);margin-left:6px;">88</span></td>
+                  <td><span class="tbl-badge good" data-i18n="status_healthy_short">Healthy</span></td>
+                </tr>
+                <tr data-zone="Cattle Pasture C" data-crop="Pasture" data-area="980" data-moisture="41" data-ph="6.4" data-health="55">
+                  <td><strong>Cattle Pasture C</strong></td><td>🐄 Pasture</td><td>980</td>
+                  <td>41%</td>
+                  <td>6.4</td>
+                  <td><div class="tbl-health-bar"><div class="tbl-health-fill" style="width:55%;background:var(--amber)"></div></div><span style="font-size:11px;color:var(--text2);margin-left:6px;">55</span></td>
+                  <td><span class="tbl-badge warn" data-i18n="status_warning_short">Warning</span></td>
+                </tr>
+                <tr data-zone="Barley Zone Z5" data-crop="Barley" data-area="520" data-moisture="49" data-ph="6.8" data-health="86">
+                  <td><strong>Barley Zone Z5</strong></td><td>🌾 Barley</td><td>520</td>
+                  <td><span style="color:var(--green);">49%</span></td>
+                  <td>6.8</td>
+                  <td><div class="tbl-health-bar"><div class="tbl-health-fill" style="width:86%;background:var(--green)"></div></div><span style="font-size:11px;color:var(--text2);margin-left:6px;">86</span></td>
+                  <td><span class="tbl-badge good" data-i18n="status_healthy_short">Healthy</span></td>
+                </tr>
+                <tr data-zone="Sunflower Zone D1" data-crop="Sunflower" data-area="340" data-moisture="44" data-ph="6.6" data-health="79">
+                  <td><strong>Sunflower Zone D1</strong></td><td>🌻 Sunflower</td><td>340</td>
+                  <td>44%</td>
+                  <td>6.6</td>
+                  <td><div class="tbl-health-bar"><div class="tbl-health-fill" style="width:79%;background:var(--green)"></div></div><span style="font-size:11px;color:var(--text2);margin-left:6px;">79</span></td>
+                  <td><span class="tbl-badge good" data-i18n="status_healthy_short">Healthy</span></td>
+                </tr>
+                <tr data-zone="Rapeseed Zone F2" data-crop="Rapeseed" data-area="260" data-moisture="51" data-ph="6.7" data-health="82">
+                  <td><strong>Rapeseed Zone F2</strong></td><td>🟡 Rapeseed</td><td>260</td>
+                  <td><span style="color:var(--green);">51%</span></td>
+                  <td>6.7</td>
+                  <td><div class="tbl-health-bar"><div class="tbl-health-fill" style="width:82%;background:var(--green)"></div></div><span style="font-size:11px;color:var(--text2);margin-left:6px;">82</span></td>
+                  <td><span class="tbl-badge good" data-i18n="status_healthy_short">Healthy</span></td>
+                </tr>
+                <tr data-zone="Soybean Zone G3" data-crop="Soybean" data-area="195" data-moisture="39" data-ph="5.8" data-health="61">
+                  <td><strong>Soybean Zone G3</strong></td><td>🫘 Soybean</td><td>195</td>
+                  <td>39%</td>
+                  <td><span style="color:var(--amber);">5.8</span></td>
+                  <td><div class="tbl-health-bar"><div class="tbl-health-fill" style="width:61%;background:var(--amber)"></div></div><span style="font-size:11px;color:var(--text2);margin-left:6px;">61</span></td>
+                  <td><span class="tbl-badge warn" data-i18n="status_warning_short">Warning</span></td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -3351,43 +3795,43 @@ G.Chart = AgroChart;
         </div>
         <div style="display:grid;grid-template-columns:200px 1fr;gap:20px;">
           <div>
-            <div id="sn-farm" class="settings-nav-item active" onclick="switchSettings(this,'sfarm')">🌾 Farm Profile</div>
-            <div class="settings-nav-item" onclick="switchSettings(this,'steam')">👥 Team & Access</div>
-            <div class="settings-nav-item" onclick="switchSettings(this,'sdevices')">📡 IoT Devices</div>
-            <div class="settings-nav-item" onclick="switchSettings(this,'sintegrations')">🔗 Integrations</div>
-            <div class="settings-nav-item" onclick="switchSettings(this,'snotif')">🔔 Notifications</div>
-            <div class="settings-nav-item" onclick="switchSettings(this,'sapi')">⚙ API & Export</div>
+            <div id="sn-farm" class="settings-nav-item active" onclick="switchSettings(this,'sfarm')">🌾 <span data-i18n="sn_farm">Farm Profile</span></div>
+            <div class="settings-nav-item" onclick="switchSettings(this,'steam')">👥 <span data-i18n="sn_team">Team & Access</span></div>
+            <div class="settings-nav-item" onclick="switchSettings(this,'sdevices')">📡 <span data-i18n="sn_devices">IoT Devices</span></div>
+            <div class="settings-nav-item" onclick="switchSettings(this,'sintegrations')">🔗 <span data-i18n="sn_integrations">Integrations</span></div>
+            <div class="settings-nav-item" onclick="switchSettings(this,'snotif')">🔔 <span data-i18n="sn_notif">Notifications</span></div>
+            <div class="settings-nav-item" onclick="switchSettings(this,'sapi')">⚙ <span data-i18n="sn_api">API & Export</span></div>
           </div>
           <div>
             <div class="settings-content" id="sfarm">
               <div class="settings-section">
-                <h3>Farm Information</h3>
-                <div class="setting-row"><div class="setting-info"><h4>Farm Name</h4><p>Display name across the platform</p></div><div style="font-size:13px;font-family:var(--font-mono);color:var(--text2);">Алматы Агро Холдинг</div></div>
-                <div class="setting-row"><div class="setting-info"><h4>Region</h4><p>Kazakhstan administrative region</p></div><div style="font-size:13px;color:var(--text2);">Almaty Region</div></div>
-                <div class="setting-row"><div class="setting-info"><h4>Total Area</h4><p>Registered farm area</p></div><div style="font-size:13px;font-family:var(--font-mono);color:var(--green);">3,200 ha</div></div>
-                <div class="setting-row"><div class="setting-info"><h4>Farm Type</h4><p>Primary agricultural activity</p></div><div style="font-size:13px;color:var(--text2);">Mixed (Crop + Livestock)</div></div>
+                <h3 data-i18n="sh_farm_info">Farm Information</h3>
+                <div class="setting-row"><div class="setting-info"><h4 data-i18n="sl_farm_name">Farm Name</h4><p data-i18n="sl_farm_name_p">Display name across the platform</p></div><div style="font-size:13px;font-family:var(--font-mono);color:var(--text2);">Алматы Агро Холдинг</div></div>
+                <div class="setting-row"><div class="setting-info"><h4 data-i18n="sl_region">Region</h4><p data-i18n="sl_region_p">Kazakhstan administrative region</p></div><div style="font-size:13px;color:var(--text2);">Almaty Region</div></div>
+                <div class="setting-row"><div class="setting-info"><h4 data-i18n="sl_area">Total Area</h4><p data-i18n="sl_area_p">Registered farm area</p></div><div style="font-size:13px;font-family:var(--font-mono);color:var(--green);">3,200 ha</div></div>
+                <div class="setting-row"><div class="setting-info"><h4 data-i18n="sl_farm_type">Farm Type</h4><p data-i18n="sl_farm_type_p">Primary agricultural activity</p></div><div style="font-size:13px;color:var(--text2);">Mixed (Crop + Livestock)</div></div>
               </div>
               <div class="settings-section">
-                <h3>AI & Monitoring Settings</h3>
-                <div class="setting-row"><div class="setting-info"><h4>AI Auto-Recommendations</h4><p>Automatically generate action recommendations</p></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
-                <div class="setting-row"><div class="setting-info"><h4>Predictive Alerts</h4><p>Alert before conditions become critical</p></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
-                <div class="setting-row"><div class="setting-info"><h4>Satellite Image Processing</h4><p>Daily NDVI and imagery updates</p></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
-                <div class="setting-row"><div class="setting-info"><h4>Drone Auto-Dispatch</h4><p>Auto-send drones on critical fire alerts</p></div><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+                <h3 data-i18n="sh_ai_settings">AI & Monitoring Settings</h3>
+                <div class="setting-row"><div class="setting-info"><h4 data-i18n="sl_ai_rec">AI Auto-Recommendations</h4><p data-i18n="sl_ai_rec_p">Automatically generate action recommendations</p></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+                <div class="setting-row"><div class="setting-info"><h4 data-i18n="sl_pred_alerts">Predictive Alerts</h4><p data-i18n="sl_pred_alerts_p">Alert before conditions become critical</p></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+                <div class="setting-row"><div class="setting-info"><h4 data-i18n="sl_satellite">Satellite Image Processing</h4><p data-i18n="sl_satellite_p">Daily NDVI and imagery updates</p></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+                <div class="setting-row"><div class="setting-info"><h4 data-i18n="sl_drone_auto">Drone Auto-Dispatch</h4><p data-i18n="sl_drone_auto_p">Auto-send drones on critical fire alerts</p></div><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
               </div>
             </div>
             <div class="settings-content" id="steam" style="display:none">
               <div class="settings-section">
-                <h3>Team Members</h3>
-                <div class="member-row"><div class="member-avatar">АА</div><div><div class="member-name">Айгерим Ахметова</div><div class="member-email">aigerim@almatyagro.kz</div></div><div style="margin-left:auto"><span class="role-badge role-admin">Admin</span></div></div>
-                <div class="member-row"><div class="member-avatar" style="background:linear-gradient(135deg,var(--blue),var(--green))">БС</div><div><div class="member-name">Бауыржан Сейткали</div><div class="member-email">bauyr@almatyagro.kz</div></div><div style="margin-left:auto"><span class="role-badge role-manager">Manager</span></div></div>
-                <div class="member-row"><div class="member-avatar" style="background:linear-gradient(135deg,var(--amber),var(--red))">ДМ</div><div><div class="member-name">Дина Муратова</div><div class="member-email">dina@almatyagro.kz</div></div><div style="margin-left:auto"><span class="role-badge role-viewer">Viewer</span></div></div>
+                <h3 data-i18n="sh_team">Team Members</h3>
+                <div class="member-row"><div class="member-avatar">АА</div><div><div class="member-name">Айгерим Ахметова</div><div class="member-email">aigerim@almatyagro.kz</div></div><div style="margin-left:auto"><span class="role-badge role-admin" data-i18n="role_admin">Admin</span></div></div>
+                <div class="member-row"><div class="member-avatar" style="background:linear-gradient(135deg,var(--blue),var(--green))">БС</div><div><div class="member-name">Бауыржан Сейткали</div><div class="member-email">bauyr@almatyagro.kz</div></div><div style="margin-left:auto"><span class="role-badge role-manager" data-i18n="role_manager">Manager</span></div></div>
+                <div class="member-row"><div class="member-avatar" style="background:linear-gradient(135deg,var(--amber),var(--red))">ДМ</div><div><div class="member-name">Дина Муратова</div><div class="member-email">dina@almatyagro.kz</div></div><div style="margin-left:auto"><span class="role-badge role-viewer" data-i18n="role_viewer">Viewer</span></div></div>
                 <div class="member-row"><div class="member-avatar" style="background:linear-gradient(135deg,#7C3AED,var(--blue))">НА</div><div><div class="member-name">Нурлан Абдуллаев</div><div class="member-email">nurlan@almatyagro.kz</div></div><div style="margin-left:auto"><span class="role-badge role-manager">Manager</span></div></div>
               </div>
-              <button class="btn-outline" style="margin-top:8px;">+ Invite Team Member</button>
+              <button class="btn-outline" style="margin-top:8px;" data-i18n="btn_invite">+ Invite Team Member</button>
             </div>
             <div class="settings-content" id="sdevices" style="display:none">
               <div class="settings-section">
-                <h3>Connected IoT Devices</h3>
+                <h3 data-i18n="sh_devices">Connected IoT Devices</h3>
                 <div class="device-card"><div class="device-icon">💧</div><div><div class="device-name">Soil Moisture Network (×12)</div><div class="device-meta">AgriSens Pro v3 · LoRaWAN</div></div><div class="device-status online">● Online</div></div>
                 <div class="device-card"><div class="device-icon">🌡️</div><div><div class="device-name">Temperature Array (×8)</div><div class="device-meta">Davis Instruments · WiFi</div></div><div class="device-status online">● Online</div></div>
                 <div class="device-card"><div class="device-icon">🔥</div><div><div class="device-name">Smoke Detectors (×6)</div><div class="device-meta">FireGuard Pro · 4G LTE</div></div><div class="device-status online">● Online</div></div>
@@ -3395,41 +3839,41 @@ G.Chart = AgroChart;
                 <div class="device-card"><div class="device-icon">🛰️</div><div><div class="device-name">Sentinel-2 Satellite Feed</div><div class="device-meta">ESA · Daily update · 10m resolution</div></div><div class="device-status online">● Active</div></div>
                 <div class="device-card"><div class="device-icon">🚰</div><div><div class="device-name">Water Flow Meters (×4)</div><div class="device-meta">AquaMetro · M-Bus</div></div><div class="device-status offline">○ 1 Offline</div></div>
               </div>
-              <button class="btn-outline">+ Connect New Device</button>
+              <button class="btn-outline" data-i18n="btn_connect_dev">+ Connect New Device</button>
             </div>
             <div class="settings-content" id="sintegrations" style="display:none">
               <div class="settings-section">
-                <h3>External Integrations</h3>
-                <div class="integration-card"><div class="int-logo">🌤️</div><div><div class="int-name">KazHydroMet</div><div class="int-meta">National weather service · Real-time data</div></div><button class="int-btn connected">● Connected</button></div>
+                <h3 data-i18n="sh_integrations">External Integrations</h3>
+                <div class="integration-card"><div class="int-logo">🌤️</div><div><div class="int-name">KazHydroMet</div><div class="int-meta">National weather service · Real-time data</div></div><button class="int-btn connected" data-i18n="int_connected">● Connected</button></div>
                 <div class="integration-card"><div class="int-logo">🛰️</div><div><div class="int-name">ESA Copernicus Hub</div><div class="int-meta">Satellite imagery · NDVI processing</div></div><button class="int-btn connected">● Connected</button></div>
-                <div class="integration-card"><div class="int-logo">🗺️</div><div><div class="int-name">Google Earth Engine</div><div class="int-meta">Advanced geospatial analytics</div></div><button class="int-btn">Connect</button></div>
+                <div class="integration-card"><div class="int-logo">🗺️</div><div><div class="int-name">Google Earth Engine</div><div class="int-meta">Advanced geospatial analytics</div></div><button class="int-btn" data-i18n="int_connect">Connect</button></div>
                 <div class="integration-card"><div class="int-logo">🏦</div><div><div class="int-name">KazAgroFinance</div><div class="int-meta">Subsidy tracking · Yield reporting</div></div><button class="int-btn">Connect</button></div>
                 <div class="integration-card"><div class="int-logo">📱</div><div><div class="int-name">Telegram Bot Alerts</div><div class="int-meta">Push notifications to team</div></div><button class="int-btn connected">● Connected</button></div>
               </div>
             </div>
             <div class="settings-content" id="snotif" style="display:none">
               <div class="settings-section">
-                <h3>Notification Preferences</h3>
-                <div class="setting-row"><div class="setting-info"><h4>Critical Alerts — SMS</h4><p>Fire, flood, equipment failure</p></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
-                <div class="setting-row"><div class="setting-info"><h4>Daily Summary Email</h4><p>Morning digest of farm status</p></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
-                <div class="setting-row"><div class="setting-info"><h4>AI Recommendation Push</h4><p>New insights and opportunities</p></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
-                <div class="setting-row"><div class="setting-info"><h4>Sensor Offline Alerts</h4><p>When sensors lose connectivity</p></div><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
-                <div class="setting-row"><div class="setting-info"><h4>Weekly Performance Report</h4><p>Every Monday morning</p></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+                <h3 data-i18n="sh_notif_prefs">Notification Preferences</h3>
+                <div class="setting-row"><div class="setting-info"><h4 data-i18n="sn_crit_sms">Critical Alerts — SMS</h4><p data-i18n="sn_crit_sms_p">Fire, flood, equipment failure</p></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+                <div class="setting-row"><div class="setting-info"><h4 data-i18n="sn_daily_email">Daily Summary Email</h4><p data-i18n="sn_daily_email_p">Morning digest of farm status</p></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+                <div class="setting-row"><div class="setting-info"><h4 data-i18n="sn_ai_push">AI Recommendation Push</h4><p data-i18n="sn_ai_push_p">New insights and opportunities</p></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+                <div class="setting-row"><div class="setting-info"><h4 data-i18n="sn_sensor_off">Sensor Offline Alerts</h4><p data-i18n="sn_sensor_off_p">When sensors lose connectivity</p></div><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+                <div class="setting-row"><div class="setting-info"><h4 data-i18n="sn_weekly">Weekly Performance Report</h4><p data-i18n="sn_weekly_p">Every Monday morning</p></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
               </div>
             </div>
             <div class="settings-content" id="sapi" style="display:none">
               <div class="settings-section">
-                <h3>API Access</h3>
+                <h3 data-i18n="sh_api_access">API Access</h3>
                 <div class="setting-row"><div class="setting-info"><h4>API Key</h4><p>For third-party integrations</p></div><div style="font-family:var(--font-mono);font-size:12px;color:var(--text3);">ask-kz-•••••••••••••4f2a</div></div>
                 <div class="setting-row"><div class="setting-info"><h4>Webhook URL</h4><p>Receive real-time event streams</p></div><div style="font-size:12px;color:var(--text2);">Not configured</div></div>
               </div>
               <div class="settings-section">
-                <h3>Data Export</h3>
+                <h3 data-i18n="sh_data_export">Data Export</h3>
                 <div style="display:flex;gap:8px;flex-wrap:wrap;">
-                  <button class="btn-outline">📄 Export All Data (CSV)</button>
-                  <button class="btn-outline">📊 Season Report (PDF)</button>
-                  <button class="btn-outline">🗺 Zone Geodata (GeoJSON)</button>
-                  <button class="btn-outline">📡 Sensor History (JSON)</button>
+                  <button class="btn-outline" data-i18n="btn_exp_csv">📄 Export All Data (CSV)</button>
+                  <button class="btn-outline" data-i18n="btn_exp_pdf">📊 Season Report (PDF)</button>
+                  <button class="btn-outline" data-i18n="btn_exp_geo">🗺 Zone Geodata (GeoJSON)</button>
+                  <button class="btn-outline" data-i18n="btn_exp_json">📡 Sensor History (JSON)</button>
                 </div>
               </div>
             </div>
@@ -3444,8 +3888,8 @@ G.Chart = AgroChart;
             <div class="page-sub" id="plan-page-sub">Priority-sorted steps to improve your farm right now</div>
           </div>
           <div style="display:flex;gap:8px;">
-            <button class="btn-outline" onclick="markAllPlanDone()" id="btn-mark-all">✓ Mark All Done</button>
-            <button class="btn-outline" onclick="resetPlan()" id="btn-reset-plan">⟳ Reset</button>
+            <button class="btn-outline" onclick="markAllPlanDone()" id="btn-mark-all" data-i18n="plan_mark_all">✓ Mark All Done</button>
+            <button class="btn-outline" onclick="resetPlan()" id="btn-reset-plan" data-i18n="plan_reset">⟳ Reset</button>
           </div>
         </div>
         <div class="plan-header-bar">
@@ -4249,7 +4693,9 @@ function showPage(page,navEl){
     const items=document.querySelectorAll('.nav-item');
     if(items[map[page]])items[map[page]].classList.add('active');
   }
-  if(page==='analytics')setTimeout(initAnalyticsCharts,100);
+  if(page==='analytics') setTimeout(initAnalyticsCharts,80);
+  // Re-draw overview charts after page becomes visible (so offsetWidth is real)
+  if(page==='overview') requestAnimationFrame(()=>setTimeout(_drawOverviewCharts,60));
 }
  
 // ══════════════════════════════════════════
@@ -4417,6 +4863,45 @@ const I18N = {
     plan_footer_risk:'At Risk',
     plan_footer_time:'Est. Time',
     plan_footer_msg:'Completing all 9 tasks protects an estimated <strong>₸ 3.1M</strong> in crop and livestock value.',
+    // Overview charts
+    chart_7day_title:'7-Day Moisture Trend',
+    chart_7day_sub:'Soil moisture % · Primary crop zones',
+    chart_zones_title:'Zone Health',
+    chart_zones_sub:'12 zones · current status',
+    chart_perf_title:'Zone Performance Overview',
+    chart_perf_sub:'Click a metric to compare all zones',
+    status_healthy:'Healthy (7)',
+    status_warning:'Warning (3)',
+    status_critical:'Critical (2)',
+    metric_moisture:'Moisture',
+    metric_health:'Health',
+    metric_temp:'Temp °C',
+    kpi_soil_detail:'9 of 12 zones stable',
+    kpi_trend8:'↑ vs baseline',
+    ai_sub:'Updated 4 minutes ago · Processing 847 sensor data points',
+    ai_urgency:'⚡ HIGH URGENCY',
+    // Analytics
+    period_7d:'7 Days', period_30d:'30 Days', period_season:'Full Season',
+    rp_water_saved:'Water Saved This Season',
+    rp_yield_growth:'Estimated Yield Growth',
+    rp_co2:'CO₂ Reduction vs Baseline',
+    rp_value_protected:'Estimated Value Protected',
+    btn_export_csv:'Export CSV', btn_export_pdf:'Print Report',
+    chart_trend_title:'Crop Health Index — Season Trend',
+    chart_trend_sub:'Hover over data points to see exact values',
+    chart_irrigation_title:'Irrigation Efficiency',
+    chart_irrigation_sub:'m³/ha · decreasing = improving',
+    chart_yield_title:'Yield Forecast vs Regional Avg',
+    chart_yield_sub:'Score index per zone (100 = optimal)',
+    chart_zone_comp_title:'Zone Performance Comparison',
+    chart_zone_comp_sub:'Health index 0–100 · Red = critical · Green = optimal',
+    legend_wheat:'Wheat', legend_corn:'Corn', legend_barley:'Barley',
+    table_title:'Zone Data Table',
+    table_sub:'Click column headers to sort · All 12 zones',
+    table_search_placeholder:'Filter zones...',
+    th_zone:'Zone', th_crop:'Crop', th_area:'Area (ha)',
+    th_moisture:'Moisture %', th_ph:'pH', th_health:'Health', th_status:'Status',
+    status_healthy_short:'Healthy', status_warning_short:'Warning', status_critical_short:'Critical',
   },
   RU: {
     nav_overview:'Обзор', nav_zones:'Зоны', nav_sensors:'Датчики',
@@ -4573,6 +5058,45 @@ const I18N = {
     plan_footer_risk:'Под угрозой',
     plan_footer_time:'Ест. время',
     plan_footer_msg:'Выполнение всех 9 задач сегодня защищает около <strong>₸ 3.1M</strong> стоимости урожая и скота. Критические задачи (1 и 2) — сначала. Остальные можно делегировать полевым работникам.',
+    // Overview charts
+    chart_7day_title:'Тренд влажности за 7 дней',
+    chart_7day_sub:'Влажность почвы % · Основные зоны',
+    chart_zones_title:'Здоровье зон',
+    chart_zones_sub:'12 зон · текущий статус',
+    chart_perf_title:'Обзор показателей зон',
+    chart_perf_sub:'Нажмите на метрику для сравнения всех зон',
+    status_healthy:'Здоровые (7)',
+    status_warning:'Предупреждение (3)',
+    status_critical:'Критические (2)',
+    metric_moisture:'Влажность',
+    metric_health:'Здоровье',
+    metric_temp:'Темп. °C',
+    kpi_soil_detail:'9 из 12 зон стабильны',
+    kpi_trend8:'↑ от базового уровня',
+    ai_sub:'Обновлено 4 мин. назад · Обработано 847 точек данных',
+    ai_urgency:'⚡ ВЫСОКИЙ ПРИОРИТЕТ',
+    // Analytics
+    period_7d:'7 дней', period_30d:'30 дней', period_season:'Весь сезон',
+    rp_water_saved:'Сэкономлено воды',
+    rp_yield_growth:'Прирост урожая',
+    rp_co2:'Сокращение CO₂',
+    rp_value_protected:'Защищённая стоимость',
+    btn_export_csv:'Экспорт CSV', btn_export_pdf:'Печать отчёта',
+    chart_trend_title:'Индекс здоровья — тренд сезона',
+    chart_trend_sub:'Наведите на точку для просмотра значения',
+    chart_irrigation_title:'Эффективность полива',
+    chart_irrigation_sub:'м³/га · снижение = улучшение',
+    chart_yield_title:'Прогноз урожая vs Регион',
+    chart_yield_sub:'Индекс по зонам (100 = оптимум)',
+    chart_zone_comp_title:'Сравнение показателей зон',
+    chart_zone_comp_sub:'Индекс здоровья 0–100',
+    legend_wheat:'Пшеница', legend_corn:'Кукуруза', legend_barley:'Ячмень',
+    table_title:'Таблица данных зон',
+    table_sub:'Нажмите заголовок для сортировки · Все 12 зон',
+    table_search_placeholder:'Фильтр зон...',
+    th_zone:'Зона', th_crop:'Культура', th_area:'Площадь (га)',
+    th_moisture:'Влажность %', th_ph:'pH', th_health:'Здоровье', th_status:'Статус',
+    status_healthy_short:'Норма', status_warning_short:'Внимание', status_critical_short:'Критично',
   },
   KZ: {
     nav_overview:'Шолу', nav_zones:'Аймақтар', nav_sensors:'Сенсорлар',
@@ -4712,6 +5236,45 @@ const I18N = {
     plan_footer_risk:'Тәуекелде',
     plan_footer_time:'Болж. уақыт',
     plan_footer_msg:'Бүгін 9 тапсырманы орындау шамамен <strong>₸ 3.1M</strong> дақыл және мал шаруашылығын қорғайды.',
+    // Overview charts
+    chart_7day_title:'7 күндік ылғалдылық тренді',
+    chart_7day_sub:'Топырақ ылғалдылығы % · Негізгі аймақтар',
+    chart_zones_title:'Аймақтардың денсаулығы',
+    chart_zones_sub:'12 аймақ · ағымдағы жай-күй',
+    chart_perf_title:'Аймақ көрсеткіштерін шолу',
+    chart_perf_sub:'Барлық аймақтарды салыстыру үшін метриканы таңдаңыз',
+    status_healthy:'Сау (7)',
+    status_warning:'Ескерту (3)',
+    status_critical:'Критикалық (2)',
+    metric_moisture:'Ылғалдылық',
+    metric_health:'Денсаулық',
+    metric_temp:'Темп. °C',
+    kpi_soil_detail:'12-нің 9 аймағы тұрақты',
+    kpi_trend8:'↑ базалық деңгейден',
+    ai_sub:'4 минут бұрын жаңартылды · 847 сенсор нүктесі өңделді',
+    ai_urgency:'⚡ ЖОҒАРЫ БАСЫМДЫЛЫҚ',
+    // Analytics
+    period_7d:'7 күн', period_30d:'30 күн', period_season:'Толық маусым',
+    rp_water_saved:'Үнемделген су',
+    rp_yield_growth:'Өнімділік өсімі',
+    rp_co2:'CO₂ азаюы',
+    rp_value_protected:'Қорғалған құн',
+    btn_export_csv:'CSV экспорт', btn_export_pdf:'Есепті басып шығару',
+    chart_trend_title:'Денсаулық индексі — маусым тренді',
+    chart_trend_sub:'Нақты мәндерді көру үшін нүктеге апарыңыз',
+    chart_irrigation_title:'Суару тиімділігі',
+    chart_irrigation_sub:'м³/га · азаю = жақсару',
+    chart_yield_title:'Өнімділік болжамы vs Аймақ',
+    chart_yield_sub:'Аймақ бойынша индекс (100 = оптимум)',
+    chart_zone_comp_title:'Аймақтар көрсеткіштерін салыстыру',
+    chart_zone_comp_sub:'Денсаулық индексі 0–100',
+    legend_wheat:'Бидай', legend_corn:'Жүгері', legend_barley:'Арпа',
+    table_title:'Аймақтар деректер кестесі',
+    table_sub:'Сұрыптау үшін баған атауын басыңыз · Барлық 12 аймақ',
+    table_search_placeholder:'Аймақтарды сүзу...',
+    th_zone:'Аймақ', th_crop:'Дақыл', th_area:'Ауданы (га)',
+    th_moisture:'Ылғалдылық %', th_ph:'pH', th_health:'Денсаулық', th_status:'Мәртебе',
+    status_healthy_short:'Сау', status_warning_short:'Ескерту', status_critical_short:'Критикалық',
   }
 };
  
@@ -4989,48 +5552,224 @@ if(typeof Chart!=='undefined'&&Chart.defaults){
   Chart.defaults.borderColor='rgba(255,255,255,0.05)';
   if(Chart.defaults.font)Chart.defaults.font.family="'Outfit',sans-serif";
 }
- 
+
+// ── Sparkline generator ──
+function renderSparkline(id, vals, color){
+  const el=document.getElementById(id); if(!el)return;
+  el.innerHTML='';
+  const max=Math.max(...vals), min=Math.min(...vals), rng=max-min||1;
+  vals.forEach(v=>{
+    const bar=document.createElement('div');
+    const h=Math.max(20,Math.round(((v-min)/rng)*100))+'%';
+    bar.className='kpi-spark-bar';
+    bar.style.cssText=`height:${h};background:${color};opacity:0.7;`;
+    el.appendChild(bar);
+  });
+}
+
+// Overview metric data
+const OV_METRICS = {
+  moisture: { label: 'Moisture %', data:[22,45,58,38,61,55,72,41,49,44,51,39], max:100,
+    barColors: d=>d.v<35?'rgba(255,92,107,0.75)':d.v<50?'rgba(245,183,49,0.75)':'rgba(0,214,143,0.75)' },
+  health:   { label: 'Health Index', data:[28,72,90,75,65,85,88,55,86,79,82,61], max:100,
+    barColors: d=>d.v<40?'rgba(255,92,107,0.75)':d.v<70?'rgba(245,183,49,0.75)':'rgba(0,214,143,0.75)' },
+  temp:     { label: 'Temp °C', data:[31,27,24,28,25,23,22,26,24,27,23,25], max:40,
+    barColors: d=>d.v>30?'rgba(255,92,107,0.75)':d.v>27?'rgba(245,183,49,0.75)':'rgba(59,158,255,0.75)' }
+};
+const OV_ZONE_LABELS=['A1','A2','B1','B2','P-E','P-W','PA','PC','Z5','D1','F2','G3'];
+
 function initCharts(){
-  const isLight = document.documentElement.getAttribute('data-theme') === 'light';
-  const gridCol = isLight ? 'rgba(0,0,0,0.06)' : 'rgba(255,255,255,0.04)';
-  const months=['Jan','Feb','Mar','Apr','May','Jun'];
-  const ctx1=document.getElementById('healthChart');
-  if(ctx1&&ctx1._ac){ctx1._ac.destroy();}
-  if(!ctx1)return;
-  new Chart(ctx1,{type:'line',data:{labels:months,datasets:[
-    {label:'Wheat',data:[72,74,76,78,75,78],borderColor:'#00D68F',backgroundColor:'rgba(0,214,143,0.08)',tension:0.4,pointRadius:4,pointBackgroundColor:'#00D68F'},
-    {label:'Corn', data:[68,70,74,80,82,84],borderColor:'#3B9EFF',backgroundColor:'rgba(59,158,255,0.08)',tension:0.4,pointRadius:4,pointBackgroundColor:'#3B9EFF'},
-    {label:'Potato',data:[65,68,70,72,69,71],borderColor:'#F5B731',backgroundColor:'rgba(245,183,49,0.08)',tension:0.4,pointRadius:4,pointBackgroundColor:'#F5B731'}
-  ]},options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:{color:gridCol}},y:{min:60,max:90,grid:{color:gridCol}}}}});
- 
-  const ctx2=document.getElementById('zoneChart');
-  if(ctx2&&ctx2._ac){ctx2._ac.destroy();}
-  if(!ctx2)return;
-  new Chart(ctx2,{type:'doughnut',data:{labels:['Healthy','Warning','Critical'],datasets:[{data:[7,3,2],backgroundColor:['rgba(0,214,143,0.85)','rgba(245,183,49,0.85)','rgba(255,92,107,0.85)'],borderWidth:0}]},options:{responsive:true,cutout:'68%',plugins:{legend:{position:'bottom',labels:{padding:14,font:{size:11}}}}}});
+  // Defer so DOM layout is fully settled before measuring widths
+  requestAnimationFrame(()=>setTimeout(_drawOverviewCharts, 60));
 }
- 
+
+function _drawOverviewCharts(){
+  // Sparklines
+  renderSparkline('spark-zones',[8,9,9,10,10,11,11,12,12],'#3B9EFF');
+  renderSparkline('spark-health',[71,72,74,75,74,76,77,77,78],'#00D68F');
+  renderSparkline('spark-water',[85,86,87,88,89,90,90,91,91],'#00D68F');
+  renderSparkline('spark-fire',[2.1,2.4,2.2,2.8,3.0,2.9,3.1,3.2,3.2],'#F5B731');
+  renderSparkline('spark-ai',[82,83,84,84,85,86,86,87,87],'#3B9EFF');
+  renderSparkline('spark-moisture',[42,40,38,37,36,35,34,34,34],'#F5B731');
+  renderSparkline('spark-yield',[8,9,10,11,11,12,13,14,14],'#00D68F');
+
+  // 7-day trend chart
+  const tcEl=document.getElementById('overviewTrendChart');
+  if(tcEl){
+    const days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+    new SvgChart(tcEl,{type:'line',height:180,data:{labels:days,datasets:[
+      {label:'Wheat A1',color:'#FF5C6B',data:[26,24,22,23,21,22,22],tension:0.4,fill:true,lineWidth:2.5},
+      {label:'Corn B1', color:'#00D68F',data:[60,59,58,60,58,57,58],tension:0.4,fill:true,lineWidth:2.5},
+      {label:'Barley Z5',color:'#3B9EFF',data:[52,51,50,49,50,49,49],tension:0.4,fill:true,lineWidth:2.5}
+    ]},options:{scales:{y:{min:10,max:75}}}});
+  }
+
+  // Donut
+  const doEl=document.getElementById('overviewDonutChart');
+  if(doEl){
+    new SvgChart(doEl,{type:'donut',height:150,data:{
+      labels:['Healthy','Warning','Critical'],
+      datasets:[{data:[7,3,2],backgroundColor:['rgba(0,214,143,.85)','rgba(245,183,49,.85)','rgba(255,92,107,.85)']}]
+    }});
+  }
+
+  // Bar chart — default moisture
+  renderOvBar('moisture');
+}
+
+function renderOvBar(metric){
+  const el=document.getElementById('overviewBarChart'); if(!el)return;
+  const m=OV_METRICS[metric];
+  new SvgChart(el,{type:'hbar',data:{
+    labels:OV_ZONE_LABELS,
+    datasets:[{
+      label:m.label,
+      data:m.data,
+      backgroundColor:(m.barColors?({dataIndex:i})=>m.barColors({v:m.data[i]}):undefined)||'rgba(0,214,143,0.7)'
+    }]
+  },options:{scales:{x:{max:m.max}}}});
+}
+
+function setOvMetric(btn,metric){
+  document.querySelectorAll('#ov-metric-moisture,#ov-metric-health,#ov-metric-temp').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderOvBar(metric);
+}
+
+// ── Report period data ──
+const REPORT_DATA = {
+  '7d':{
+    labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+    wheat:[74,75,75,76,75,76,76], corn:[82,83,83,84,84,85,85], barley:[83,84,84,85,84,85,86],
+    irr:[285,282,278,274,270,268,265],
+    waterSaved:'192 m³', yieldGrowth:'+11%', co2:'2.8 t', valueProt:'₸ 1.9M'
+  },
+  '30d':{
+    labels:['Wk1','Wk2','Wk3','Wk4'],
+    wheat:[72,74,75,76], corn:[80,82,84,85], barley:[81,83,84,86],
+    irr:[310,295,280,265],
+    waterSaved:'412 m³', yieldGrowth:'+12%', co2:'5.1 t', valueProt:'₸ 3.8M'
+  },
+  season:{
+    labels:['Oct','Nov','Dec','Jan','Feb','Mar','Apr'],
+    wheat:[65,68,72,74,73,75,76], corn:[68,70,74,80,82,83,85], barley:[70,73,77,81,82,84,86],
+    irr:[320,310,295,280,270,265,250],
+    waterSaved:'847 m³', yieldGrowth:'+14%', co2:'12.4 t', valueProt:'₸ 8.2M'
+  }
+};
+let _curPeriod='season';
+
 function initAnalyticsCharts(){
-  const isLight = document.documentElement.getAttribute('data-theme') === 'light';
-  const gridCol = isLight ? 'rgba(0,0,0,0.06)' : 'rgba(255,255,255,0.04)';
-  const months=['Oct','Nov','Dec','Jan','Feb','Mar','Apr'];
+  requestAnimationFrame(()=>setTimeout(()=>_renderAnalytics(_curPeriod), 60));
+}
+
+function setReportPeriod(btn,period){
+  document.querySelectorAll('.analytics-periods .chart-period-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  _curPeriod=period;
+  // Page is already visible, render immediately
+  requestAnimationFrame(()=>_renderAnalytics(period));
+  // Update KPI summary
+  const d=REPORT_DATA[period];
+  const safe=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  safe('rp-water-saved',d.waterSaved);
+  safe('rp-yield-growth',d.yieldGrowth);
+  safe('rp-co2',d.co2);
+  safe('rp-value',d.valueProt);
+}
+
+function _renderAnalytics(period){
+  const d=REPORT_DATA[period];
+
+  // Trend chart
   const t1=document.getElementById('trendChart');
-  if(t1){if(t1._ac)t1._ac.destroy();
-    new Chart(t1,{type:'line',data:{labels:months,datasets:[{data:[65,68,72,75,73,76,78],borderColor:'#00D68F',backgroundColor:'rgba(0,214,143,0.08)',fill:true,tension:0.4,pointRadius:4,pointBackgroundColor:'#00D68F'}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:{color:gridCol}},y:{min:60,max:85,grid:{color:gridCol}}}}}); 
-  }
-  const t2=document.getElementById('yieldChart');
-  if(t2){if(t2._ac)t2._ac.destroy();
-    new Chart(t2,{type:'bar',data:{labels:['W-A1','W-A2','Corn B1','Corn B2','Potato E','Barley Z5'],datasets:[{label:'AgroSense',data:[28,84,90,75,82,86],backgroundColor:'rgba(0,214,143,0.7)'},{label:'Regional Avg',data:[72,72,72,72,72,72],backgroundColor:'rgba(59,158,255,0.4)'}]},options:{responsive:true,plugins:{legend:{position:'bottom',labels:{font:{size:10}}}},scales:{x:{grid:{color:gridCol}},y:{grid:{color:gridCol}}}}}); 
-  }
+  if(t1) new SvgChart(t1,{type:'line',height:220,data:{labels:d.labels,datasets:[
+    {label:'Wheat',color:'#00D68F',data:d.wheat,fill:true,tension:0.38,lineWidth:2.5},
+    {label:'Corn',color:'#3B9EFF',data:d.corn,fill:true,tension:0.38,lineWidth:2.5},
+    {label:'Barley',color:'#F5B731',data:d.barley,fill:true,tension:0.38,lineWidth:2.5}
+  ]},options:{scales:{y:{min:60,max:92}}}});
+
+  // Irrigation
   const t3=document.getElementById('irrChart');
-  if(t3){if(t3._ac)t3._ac.destroy();
-    new Chart(t3,{type:'line',data:{labels:months,datasets:[{label:'m³/ha',data:[320,310,290,280,265,250,240],borderColor:'#3B9EFF',backgroundColor:'rgba(59,158,255,0.08)',fill:true,tension:0.4,pointRadius:3}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:{color:gridCol}},y:{grid:{color:gridCol}}}}}); 
-  }
+  if(t3) new SvgChart(t3,{type:'line',height:200,data:{labels:d.labels,datasets:[
+    {label:'m³/ha',color:'#3B9EFF',data:d.irr,fill:true,tension:0.38,lineWidth:2.5}
+  ]},options:{scales:{y:{min:220,max:340}}}});
+
+  // Yield bar
+  const t2=document.getElementById('yieldChart');
+  if(t2) new SvgChart(t2,{type:'bar',height:200,data:{
+    labels:['A1','A2','B1','B2','P-E','P-W'],
+    datasets:[
+      {label:'AgroSense',color:'#00D68F',backgroundColor:'rgba(0,214,143,0.72)',data:[28,84,90,75,82,86]},
+      {label:'Regional Avg',color:'#3B9EFF',backgroundColor:'rgba(59,158,255,0.45)',data:[72,72,72,72,72,72]}
+    ]
+  },options:{scales:{y:{min:0,max:105}}}});
+
+  // Zone comparison hbar
   const t4=document.getElementById('zoneCompChart');
-  if(t4){if(t4._ac)t4._ac.destroy();
-    new Chart(t4,{type:'bar',data:{labels:['A1','A2','B1','B2','P-E','P-W','Z5','PA','PC'],datasets:[{data:[28,72,90,75,65,85,86,88,55],backgroundColor:d=>['rgba(255,92,107,0.7)','rgba(245,183,49,0.7)','rgba(0,214,143,0.7)','rgba(245,183,49,0.7)','rgba(255,92,107,0.7)','rgba(0,214,143,0.7)','rgba(0,214,143,0.7)','rgba(0,214,143,0.7)','rgba(245,183,49,0.7)'][d.dataIndex]}]},options:{responsive:true,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{min:0,max:100,grid:{color:gridCol}},y:{grid:{color:gridCol}}}}}); 
+  if(t4){
+    const zoneVals=[28,72,90,75,65,85,88,55,86,79,82,61];
+    const zoneLabels=['A1','A2','B1','B2','P-E','P-W','PA','PC','Z5','D1','F2','G3'];
+    new SvgChart(t4,{type:'hbar',data:{
+      labels:zoneLabels,
+      datasets:[{label:'Health Index',data:zoneVals,
+        backgroundColor:({dataIndex:i})=>zoneVals[i]<40?'rgba(255,92,107,0.75)':zoneVals[i]<70?'rgba(245,183,49,0.75)':'rgba(0,214,143,0.75)'
+      }]
+    },options:{scales:{x:{max:100}}}});
   }
 }
+
+// ── Table sort & filter ──
+let _sortCol=0,_sortAsc=true;
+function sortZoneTable(col){
+  const tbody=document.getElementById('zoneTableBody'); if(!tbody)return;
+  const ths=document.querySelectorAll('#zoneDataTable th');
+  ths.forEach((th,i)=>{
+    th.classList.remove('sort-asc','sort-desc');
+    if(i===col){ th.classList.add(_sortCol===col&&_sortAsc?'sort-desc':'sort-asc'); }
+  });
+  if(_sortCol===col){ _sortAsc=!_sortAsc; } else { _sortCol=col; _sortAsc=true; }
+  const rows=[...tbody.querySelectorAll('tr')];
+  const keys=['zone','crop','area','moisture','ph','health'];
+  rows.sort((a,b)=>{
+    const av=+a.dataset[keys[col]]||a.dataset[keys[col]]||'';
+    const bv=+b.dataset[keys[col]]||b.dataset[keys[col]]||'';
+    if(typeof av==='number'&&typeof bv==='number') return _sortAsc?av-bv:bv-av;
+    return _sortAsc?String(av).localeCompare(bv):String(bv).localeCompare(av);
+  });
+  rows.forEach(r=>tbody.appendChild(r));
+}
+
+function filterZoneTable(q){
+  const tbody=document.getElementById('zoneTableBody'); if(!tbody)return;
+  const lq=q.toLowerCase();
+  tbody.querySelectorAll('tr').forEach(r=>{
+    r.style.display=r.dataset.zone.toLowerCase().includes(lq)||r.dataset.crop.toLowerCase().includes(lq)?'':'none';
+  });
+}
+
+function exportCSV(){
+  const rows=[['Zone','Crop','Area (ha)','Moisture %','pH','Health Index','Status']];
+  document.querySelectorAll('#zoneTableBody tr').forEach(r=>{
+    const badge=r.querySelector('.tbl-badge');
+    rows.push([r.dataset.zone,r.dataset.crop,r.dataset.area,r.dataset.moisture+'%',r.dataset.ph,r.dataset.health,badge?badge.textContent:'']);
+  });
+  const csv=rows.map(r=>r.map(v=>`"${v}"`).join(',')).join('\n');
+  const a=document.createElement('a'); a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv); a.download='agrosense-zones.csv'; a.click();
+}
  
+// ── Window resize → redraw visible charts ──
+let _resizeTimer=null;
+window.addEventListener('resize',()=>{
+  clearTimeout(_resizeTimer);
+  _resizeTimer=setTimeout(()=>{
+    if(typeof activePage!=='undefined'){
+      if(activePage==='overview') _drawOverviewCharts();
+      if(activePage==='analytics') _renderAnalytics(_curPeriod);
+    }
+  },200);
+});
+
 // ── LIVE CLOCK update ──
 setInterval(()=>{
   const conn=document.querySelector('.nav-conn span');
@@ -6238,6 +6977,62 @@ const I18N_FULL = {
     plan_mark_all:'✓ Mark All Done', plan_reset:'⟳ Reset',
     plan_footer_done:'Done', plan_footer_total:'Total', plan_footer_risk:'At Risk', plan_footer_time:'Est. Time',
 
+    // ── NEW UI ELEMENTS ──
+    // Alert filters & actions
+    af_all:'All (4)', af_critical:'Critical (2)', af_unresolved:'Unresolved (4)', af_ai:'AI Generated (3)',
+    btn_ack:'✓ Acknowledge', btn_view_map:'🗺 View on Map', btn_drone_dispatch:'🚁 Drone Dispatch',
+    btn_call_sup:'📞 Call Supervisor', btn_activate_irr:'💧 Activate Irrigation',
+    btn_ai_rec:'✦ AI Recommendation', btn_relocation:'📋 Relocation Plan', btn_treatment:'📋 Treatment Plan',
+    // Alert severity badges
+    sev_critical:'CRITICAL', sev_high:'HIGH', sev_medium:'MEDIUM', sev_low:'LOW', sev_opp:'OPPORTUNITY',
+    // Alert time labels
+    time_today:'Today', time_yesterday:'Yesterday',
+    // Settings nav items
+    sn_farm:'Farm Profile', sn_team:'Team & Access', sn_devices:'IoT Devices',
+    sn_integrations:'Integrations', sn_notif:'Notifications', sn_api:'API & Export',
+    // Settings section headers
+    sh_farm_info:'Farm Information', sh_ai_settings:'AI & Monitoring Settings',
+    sh_team:'Team Members', sh_devices:'Connected IoT Devices',
+    sh_integrations:'External Integrations', sh_notif_prefs:'Notification Preferences',
+    sh_api_access:'API Access', sh_data_export:'Data Export',
+    // Settings field labels
+    sl_farm_name:'Farm Name', sl_farm_name_p:'Display name across the platform',
+    sl_region:'Region', sl_region_p:'Kazakhstan administrative region',
+    sl_area:'Total Area', sl_area_p:'Registered farm area',
+    sl_farm_type:'Farm Type', sl_farm_type_p:'Primary agricultural activity',
+    sl_ai_rec:'AI Auto-Recommendations', sl_ai_rec_p:'Automatically generate action recommendations',
+    sl_pred_alerts:'Predictive Alerts', sl_pred_alerts_p:'Alert before conditions become critical',
+    sl_satellite:'Satellite Image Processing', sl_satellite_p:'Daily NDVI and imagery updates',
+    sl_drone_auto:'Drone Auto-Dispatch', sl_drone_auto_p:'Auto-send drones on critical fire alerts',
+    sn_crit_sms:'Critical Alerts — SMS', sn_crit_sms_p:'Fire, flood, equipment failure',
+    sn_daily_email:'Daily Summary Email', sn_daily_email_p:'Morning digest of farm status',
+    sn_ai_push:'AI Recommendation Push', sn_ai_push_p:'New insights and opportunities',
+    sn_sensor_off:'Sensor Offline Alerts', sn_sensor_off_p:'When sensors lose connectivity',
+    sn_weekly:'Weekly Performance Report', sn_weekly_p:'Every Monday morning',
+    // Team roles
+    role_admin:'Admin', role_manager:'Manager', role_viewer:'Viewer',
+    // Integration buttons
+    int_connected:'● Connected', int_connect:'Connect',
+    // Device & export buttons
+    btn_connect_dev:'+ Connect New Device', btn_invite:'+ Invite Team Member',
+    btn_exp_csv:'📄 Export All Data (CSV)', btn_exp_pdf:'📊 Season Report (PDF)',
+    btn_exp_geo:'🗺 Zone Geodata (GeoJSON)', btn_exp_json:'📡 Sensor History (JSON)',
+    // Profile popup
+    pp_name_label:'Name', pp_phone_label:'Phone Number',
+    pp_notif_title:'SMS Notifications', pp_notif_sub:'Critical alerts to your number',
+    pp_cancel:'Cancel', pp_save:'✓ Save', pp_role:'Farm Manager',
+    // Nav
+    nav_systems_online:'All Systems Online',
+    // Onboarding (missed)
+    ob_crop_farming:'Crop Farming', ob_crop_desc:'Wheat, corn, barley, sunflower',
+    ob_livestock:'Livestock', ob_livestock_desc:'Cattle, sheep, horse breeding',
+    ob_mixed:'Mixed Farm', ob_mixed_desc:'Combined crop & livestock',
+    ob_small:'Small', ob_small_desc:'< 500 ha',
+    ob_medium:'Medium', ob_medium_desc:'500–5,000 ha',
+    ob_large:'Large', ob_large_desc:'5,000–50,000 ha',
+    ob_enterprise:'Enterprise', ob_enterprise_desc:'> 50,000 ha',
+    ins_activate_irr:'▶ Activate Irrigation Now', ins_add_plan:'📋 Add to Plan',
+
   },
   RU: {
     ob_tagline:'Умная платформа сельскохозяйственного интеллекта',
@@ -6379,6 +7174,72 @@ const I18N_FULL = {
     plan_weather_title:'🌤️ Прогноз на неделю',
     plan_mark_all:'✓ Отметить всё', plan_reset:'⟳ Сбросить',
     plan_footer_done:'Выполнено', plan_footer_total:'Всего', plan_footer_risk:'Под угрозой', plan_footer_time:'Ест. время',
+    // Overview & Analytics charts (RU)
+    chart_7day_title:'Тренд влажности — 7 дней', chart_7day_sub:'Влажность почвы % · Основные зоны',
+    chart_zones_title:'Здоровье зон', chart_zones_sub:'12 зон · текущий статус',
+    chart_perf_title:'Показатели зон', chart_perf_sub:'Нажмите метрику для сравнения',
+    status_healthy:'Здоровые (7)', status_warning:'Внимание (3)', status_critical:'Критические (2)',
+    metric_moisture:'Влажность', metric_health:'Здоровье', metric_temp:'Темп. °C',
+    kpi_soil_detail:'9 из 12 зон стабильны', kpi_trend8:' от базового',
+    ai_sub:'Обновлено 4 мин. назад · 847 точек данных', ai_urgency:'⚡ ВЫСОКИЙ ПРИОРИТЕТ',
+    period_7d:'7 дней', period_30d:'30 дней', period_season:'Весь сезон',
+    rp_water_saved:'Сэкономлено воды', rp_yield_growth:'Прирост урожая',
+    rp_co2:'Сокращение CO₂', rp_value_protected:'Защищённая стоимость',
+    btn_export_csv:'Экспорт CSV', btn_export_pdf:'Печать',
+    chart_trend_title:'Индекс здоровья — тренд сезона', chart_trend_sub:'Наведите на точку',
+    chart_irrigation_title:'Эффективность полива', chart_irrigation_sub:'м³/га · снижение = улучшение',
+    chart_yield_title:'Прогноз vs Регион', chart_yield_sub:'Индекс по зонам (100 = оптимум)',
+    chart_zone_comp_title:'Сравнение зон', chart_zone_comp_sub:'Индекс здоровья 0–100',
+    legend_wheat:'Пшеница', legend_corn:'Кукуруза', legend_barley:'Ячмень',
+    table_title:'Таблица данных зон', table_sub:'Нажмите заголовок для сортировки · 12 зон',
+    table_search_placeholder:'Фильтр зон...',
+    th_zone:'Зона', th_crop:'Культура', th_area:'Площадь (га)',
+    th_moisture:'Влажность %', th_ph:'pH', th_health:'Здоровье', th_status:'Статус',
+    status_healthy_short:'Норма', status_warning_short:'Внимание', status_critical_short:'Критично',
+
+    // ── NEW UI ELEMENTS RU ──
+    af_all:'Все (4)', af_critical:'Критические (2)', af_unresolved:'Нерешённые (4)', af_ai:'От ИИ (3)',
+    btn_ack:'✓ Подтвердить', btn_view_map:'🗺 На карте', btn_drone_dispatch:'🚁 Дрон',
+    btn_call_sup:'📞 Позвонить', btn_activate_irr:'💧 Включить полив',
+    btn_ai_rec:'✦ Рекомендация ИИ', btn_relocation:'📋 Plan переноса', btn_treatment:'📋 План лечения',
+    sev_critical:'КРИТИЧНО', sev_high:'ВЫСОКИЙ', sev_medium:'СРЕДНИЙ', sev_low:'НИЗКИЙ', sev_opp:'ВОЗМОЖНОСТЬ',
+    time_today:'Сегодня', time_yesterday:'Вчера',
+    sn_farm:'Профиль хозяйства', sn_team:'Команда', sn_devices:'IoT Устройства',
+    sn_integrations:'Интеграции', sn_notif:'Уведомления', sn_api:'API и экспорт',
+    sh_farm_info:'Информация о хозяйстве', sh_ai_settings:'ИИ и мониторинг',
+    sh_team:'Члены команды', sh_devices:'Подключённые IoT-устройства',
+    sh_integrations:'Внешние интеграции', sh_notif_prefs:'Настройки уведомлений',
+    sh_api_access:'Доступ к API', sh_data_export:'Экспорт данных',
+    sl_farm_name:'Название хозяйства', sl_farm_name_p:'Отображается по всей платформе',
+    sl_region:'Регион', sl_region_p:'Административный регион Казахстана',
+    sl_area:'Общая площадь', sl_area_p:'Зарегистрированная площадь хозяйства',
+    sl_farm_type:'Тип хозяйства', sl_farm_type_p:'Основной вид сельскохозяйственной деятельности',
+    sl_ai_rec:'ИИ Авторекомендации', sl_ai_rec_p:'Автоматически генерировать рекомендации',
+    sl_pred_alerts:'Прогностические оповещения', sl_pred_alerts_p:'Оповещать до наступления критических условий',
+    sl_satellite:'Обработка спутниковых снимков', sl_satellite_p:'Ежедневное обновление NDVI и снимков',
+    sl_drone_auto:'Авто-диспетчеризация дронов', sl_drone_auto_p:'Авто-отправка дронов при критических пожарных оповещениях',
+    sn_crit_sms:'Критические оповещения — SMS', sn_crit_sms_p:'Пожар, паводок, отказ оборудования',
+    sn_daily_email:'Ежедневная сводка Email', sn_daily_email_p:'Утренний дайджест состояния хозяйства',
+    sn_ai_push:'Push-уведомления ИИ', sn_ai_push_p:'Новые инсайты и возможности',
+    sn_sensor_off:'Датчики офлайн', sn_sensor_off_p:'Когда датчики теряют связь',
+    sn_weekly:'Еженедельный отчёт', sn_weekly_p:'Каждый понедельник утром',
+    role_admin:'Админ', role_manager:'Менеджер', role_viewer:'Наблюдатель',
+    int_connected:'● Подключено', int_connect:'Подключить',
+    btn_connect_dev:'+ Подключить устройство', btn_invite:'+ Пригласить',
+    btn_exp_csv:'📄 Экспорт всех данных (CSV)', btn_exp_pdf:'📊 Отчёт сезона (PDF)',
+    btn_exp_geo:'🗺 Геоданные зон (GeoJSON)', btn_exp_json:'📡 История датчиков (JSON)',
+    pp_name_label:'Имя', pp_phone_label:'Номер телефона',
+    pp_notif_title:'SMS уведомления', pp_notif_sub:'Критические оповещения на ваш номер',
+    pp_cancel:'Отмена', pp_save:'✓ Сохранить', pp_role:'Руководитель хозяйства',
+    nav_systems_online:'Все системы онлайн',
+    ob_crop_farming:'Растениеводство', ob_crop_desc:'Пшеница, кукуруза, ячмень, подсолнечник',
+    ob_livestock:'Животноводство', ob_livestock_desc:'Крупный рогатый скот, овцы, коневодство',
+    ob_mixed:'Смешанное', ob_mixed_desc:'Растениеводство и животноводство',
+    ob_small:'Малое', ob_small_desc:'< 500 га',
+    ob_medium:'Среднее', ob_medium_desc:'500–5 000 га',
+    ob_large:'Крупное', ob_large_desc:'5 000–50 000 га',
+    ob_enterprise:'Агрохолдинг', ob_enterprise_desc:'> 50 000 га',
+    ins_activate_irr:'▶ Включить полив сейчас', ins_add_plan:'📋 Добавить в план',
 
   },
   KZ: {
@@ -6521,13 +7382,79 @@ const I18N_FULL = {
     plan_weather_title:'🌤️ Апта болжамы',
     plan_mark_all:'✓ Барлығын белгілеу', plan_reset:'⟳ Қалпына келтіру',
     plan_footer_done:'Орындалды', plan_footer_total:'Барлығы', plan_footer_risk:'Тәуекелде', plan_footer_time:'Болж. уақыт',
+    // Overview & Analytics charts (KZ)
+    chart_7day_title:'7 күндік ылғалдылық тренді', chart_7day_sub:'Топырақ ылғалдылығы % · Негізгі аймақтар',
+    chart_zones_title:'Аймақтардың денсаулығы', chart_zones_sub:'12 аймақ · ағымдағы жай-күй',
+    chart_perf_title:'Аймақ көрсеткіштері', chart_perf_sub:'Салыстыру үшін метриканы таңдаңыз',
+    status_healthy:'Сау (7)', status_warning:'Ескерту (3)', status_critical:'Сыни (2)',
+    metric_moisture:'Ылғалдылық', metric_health:'Денсаулық', metric_temp:'Темп. °C',
+    kpi_soil_detail:'12-нің 9 аймағы тұрақты', kpi_trend8:' базалықтан',
+    ai_sub:'4 мин бұрын жаңартылды · 847 нүкте өңделді', ai_urgency:'⚡ ЖОҒАРЫ БАСЫМДЫЛЫҚ',
+    period_7d:'7 күн', period_30d:'30 күн', period_season:'Толық маусым',
+    rp_water_saved:'Үнемделген су', rp_yield_growth:'Өнімділік өсімі',
+    rp_co2:'CO₂ азаюы', rp_value_protected:'Қорғалған құн',
+    btn_export_csv:'CSV экспорт', btn_export_pdf:'Басып шығару',
+    chart_trend_title:'Денсаулық индексі — маусым тренді', chart_trend_sub:'Нақты мән үшін нүктеге апарыңыз',
+    chart_irrigation_title:'Суару тиімділігі', chart_irrigation_sub:'м³/га · азаю = жақсару',
+    chart_yield_title:'Өнімділік болжамы vs Аймақ', chart_yield_sub:'Аймақ индексі (100 = оптимум)',
+    chart_zone_comp_title:'Аймақтарды салыстыру', chart_zone_comp_sub:'Денсаулық индексі 0–100',
+    legend_wheat:'Бидай', legend_corn:'Жүгері', legend_barley:'Арпа',
+    table_title:'Аймақтар деректер кестесі', table_sub:'Сұрыптау үшін баған атауын басыңыз',
+    table_search_placeholder:'Аймақтарды сүзу...',
+    th_zone:'Аймақ', th_crop:'Дақыл', th_area:'Ауданы (га)',
+    th_moisture:'Ылғалдылық %', th_ph:'pH', th_health:'Денсаулық', th_status:'Мәртебе',
+    status_healthy_short:'Сау', status_warning_short:'Ескерту', status_critical_short:'Сыни',
+
+    // ── NEW UI ELEMENTS KZ ──
+    af_all:'Барлығы (4)', af_critical:'Сыни (2)', af_unresolved:'Шешілмеген (4)', af_ai:'ЖИ жасаған (3)',
+    btn_ack:'✓ Растау', btn_view_map:'🗺 Картада', btn_drone_dispatch:'🚁 Дрон жіберу',
+    btn_call_sup:'📞 Қоңырау шалу', btn_activate_irr:'💧 Суаруды қосу',
+    btn_ai_rec:'✦ ЖИ ұсынысы', btn_relocation:'📋 Ауыстыру жоспары', btn_treatment:'📋 Емдеу жоспары',
+    sev_critical:'СЫНИ', sev_high:'ЖОҒАРЫ', sev_medium:'ОРТАША', sev_low:'ТӨМЕН', sev_opp:'МҮМКІНДІК',
+    time_today:'Бүгін', time_yesterday:'Кеше',
+    sn_farm:'Шаруашылық профилі', sn_team:'Команда', sn_devices:'IoT Құрылғылар',
+    sn_integrations:'Интеграциялар', sn_notif:'Хабарландырулар', sn_api:'API және экспорт',
+    sh_farm_info:'Шаруашылық туралы ақпарат', sh_ai_settings:'ЖИ және мониторинг',
+    sh_team:'Команда мүшелері', sh_devices:'Қосылған IoT-құрылғылар',
+    sh_integrations:'Сыртқы интеграциялар', sh_notif_prefs:'Хабарландыру параметрлері',
+    sh_api_access:'API-ге қол жеткізу', sh_data_export:'Деректерді экспорттау',
+    sl_farm_name:'Шаруашылық атауы', sl_farm_name_p:'Платформада көрсетілетін атау',
+    sl_region:'Аймақ', sl_region_p:'Қазақстанның әкімшілік аймағы',
+    sl_area:'Жалпы ауданы', sl_area_p:'Тіркелген шаруашылық ауданы',
+    sl_farm_type:'Шаруашылық түрі', sl_farm_type_p:'Негізгі ауыл шаруашылығы қызметі',
+    sl_ai_rec:'ЖИ авто-ұсыныстары', sl_ai_rec_p:'Іс-қимыл ұсыныстарын автоматты жасау',
+    sl_pred_alerts:'Болжамды ескертулер', sl_pred_alerts_p:'Сыни жағдайлар алдында ескерту',
+    sl_satellite:'Спутник суреттерін өңдеу', sl_satellite_p:'Күнделікті NDVI және суреттер жаңарту',
+    sl_drone_auto:'Дронды авто-жіберу', sl_drone_auto_p:'Сыни өрт ескертулерінде дронды авто-жіберу',
+    sn_crit_sms:'Сыни ескертулер — SMS', sn_crit_sms_p:'Өрт, су тасқыны, жабдық ақаулығы',
+    sn_daily_email:'Күнделікті қорытынды Email', sn_daily_email_p:'Таңғы шаруашылық жай-күй дайджесті',
+    sn_ai_push:'ЖИ Push-хабарламалар', sn_ai_push_p:'Жаңа талдаулар мен мүмкіндіктер',
+    sn_sensor_off:'Сенсор офлайн', sn_sensor_off_p:'Сенсорлар байланысты үзгенде',
+    sn_weekly:'Апталық есеп', sn_weekly_p:'Әр дүйсенбі таңертең',
+    role_admin:'Әкімші', role_manager:'Менеджер', role_viewer:'Бақылаушы',
+    int_connected:'● Қосылды', int_connect:'Қосу',
+    btn_connect_dev:'+ Құрылғы қосу', btn_invite:'+ Шақыру',
+    btn_exp_csv:'📄 Барлық деректер (CSV)', btn_exp_pdf:'📊 Маусым есебі (PDF)',
+    btn_exp_geo:'🗺 Аймақ геодеректері (GeoJSON)', btn_exp_json:'📡 Сенсор тарихы (JSON)',
+    pp_name_label:'Аты-жөні', pp_phone_label:'Телефон нөмірі',
+    pp_notif_title:'SMS хабарламалар', pp_notif_sub:'Сыни ескертулер нөміріңізге',
+    pp_cancel:'Болдырмау', pp_save:'✓ Сақтау', pp_role:'Шаруашылық басшысы',
+    nav_systems_online:'Барлық жүйелер желіде',
+    ob_crop_farming:'Егіншілік', ob_crop_desc:'Бидай, жүгері, арпа, күнбағыс',
+    ob_livestock:'Мал шаруашылығы', ob_livestock_desc:'Ірі қара, қой, жылқы өсіру',
+    ob_mixed:'Аралас', ob_mixed_desc:'Егіншілік және мал шаруашылығы',
+    ob_small:'Кіші', ob_small_desc:'< 500 га',
+    ob_medium:'Орташа', ob_medium_desc:'500–5 000 га',
+    ob_large:'Ірі', ob_large_desc:'5 000–50 000 га',
+    ob_enterprise:'Агрохолдинг', ob_enterprise_desc:'> 50 000 га',
+    ins_activate_irr:'▶ Суаруды қазір қосу', ins_add_plan:'📋 Жоспарға қосу',
 
   }
 };
 
 // ── MASTER applyAllI18n — translates EVERYTHING ──
 function applyAllI18n(lang) {
-  const d = Object.assign({}, I18N_FULL[lang] || I18N_FULL.EN);
+  const d = Object.assign({}, I18N[lang]||I18N.EN, I18N_FULL[lang]||I18N_FULL.EN);
 
   // 1. All data-i18n elements (innerHTML for HTML content, textContent for rest)
   document.querySelectorAll('[data-i18n]').forEach(el => {
@@ -6538,6 +7465,11 @@ function applyAllI18n(lang) {
     } else {
       el.textContent = d[key];
     }
+  });
+  // 1b. data-i18n-placeholder elements
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    if (d[key]) el.placeholder = d[key];
   });
 
   // 2. Nav items (sidebar) — preserve icon and badge
@@ -6729,6 +7661,85 @@ function applyAllI18n(lang) {
   document.documentElement.lang = lang.toLowerCase();
   document.documentElement.setAttribute('data-lang', lang);
   currentLang = lang;
+
+  // 17. Overview chart titles & metric buttons
+  (function(){
+    const chartTitles = {
+      'overviewTrendChart': ['chart_7day_title','chart_7day_sub'],
+      'overviewDonutChart': ['chart_zones_title','chart_zones_sub'],
+      'overviewBarChart':   ['chart_perf_title','chart_perf_sub']
+    };
+    Object.entries(chartTitles).forEach(([id,[tk,sk]])=>{
+      const el=document.getElementById(id); if(!el)return;
+      const card=el.closest('.chart-card,.glass-card'); if(!card)return;
+      const t2=card.querySelector('.chart-title'); if(t2&&d[tk])t2.textContent=d[tk];
+      const s2=card.querySelector('.chart-sub');   if(s2&&d[sk])s2.textContent=d[sk];
+    });
+    // Metric buttons
+    if(d.metric_moisture){ const b=document.getElementById('ov-metric-moisture'); if(b)b.textContent=d.metric_moisture; }
+    if(d.metric_health){   const b=document.getElementById('ov-metric-health');   if(b)b.textContent=d.metric_health; }
+    if(d.metric_temp){     const b=document.getElementById('ov-metric-temp');     if(b)b.textContent=d.metric_temp; }
+    // Donut legend
+    if(d.status_healthy||d.status_warning||d.status_critical){
+      const leg=document.querySelectorAll('.ov-donut-legend .legend-item span');
+      if(leg[0]&&d.status_healthy)  leg[0].textContent=d.status_healthy;
+      if(leg[1]&&d.status_warning)  leg[1].textContent=d.status_warning;
+      if(leg[2]&&d.status_critical) leg[2].textContent=d.status_critical;
+    }
+  })();
+
+  // 18. Analytics page i18n
+  (function(){
+    const ap=document.getElementById('page-analytics'); if(!ap)return;
+    // Period buttons
+    if(d.period_7d){ const b=document.getElementById('rp-7d'); if(b)b.textContent=d.period_7d; }
+    if(d.period_30d){ const b=document.getElementById('rp-30d'); if(b)b.textContent=d.period_30d; }
+    if(d.period_season){ const b=document.getElementById('rp-season'); if(b)b.textContent=d.period_season; }
+    // Chart card titles
+    const chartCards=ap.querySelectorAll('.chart-card-v2');
+    const ccKeys=[
+      ['chart_trend_title','chart_trend_sub'],
+      ['chart_irrigation_title','chart_irrigation_sub'],
+      ['chart_yield_title','chart_yield_sub'],
+      ['chart_zone_comp_title','chart_zone_comp_sub']
+    ];
+    chartCards.forEach((card,i)=>{
+      if(!ccKeys[i])return;
+      const t2=card.querySelector('.chart-title'); if(t2&&d[ccKeys[i][0]])t2.textContent=d[ccKeys[i][0]];
+      const s2=card.querySelector('.chart-sub');   if(s2&&d[ccKeys[i][1]])s2.textContent=d[ccKeys[i][1]];
+    });
+    // Legend items
+    const legs=ap.querySelectorAll('.chart-legend .legend-item span');
+    const legKeys=['legend_wheat','legend_corn','legend_barley'];
+    legs.forEach((el,i)=>{ if(d[legKeys[i]])el.textContent=d[legKeys[i]]; });
+    // Table headers
+    const thKeys=['th_zone','th_crop','th_area','th_moisture','th_ph','th_health','th_status'];
+    ap.querySelectorAll('.data-table th span[data-i18n]').forEach(el=>{
+      const k=el.getAttribute('data-i18n'); if(d[k])el.textContent=d[k];
+    });
+    // Table search placeholder
+    const ts=document.getElementById('zoneTableSearch');
+    if(ts&&d.table_search_placeholder)ts.placeholder=d.table_search_placeholder;
+    // Status badges
+    ap.querySelectorAll('.tbl-badge').forEach(b=>{
+      if(b.classList.contains('good')&&d.status_healthy_short)  b.textContent=d.status_healthy_short;
+      if(b.classList.contains('warn')&&d.status_warning_short)  b.textContent=d.status_warning_short;
+      if(b.classList.contains('crit')&&d.status_critical_short) b.textContent=d.status_critical_short;
+    });
+    // Glass card table title
+    const glassTitle=ap.querySelector('.glass-card .chart-title');
+    if(glassTitle&&d.table_title)glassTitle.textContent=d.table_title;
+    const glassSub=ap.querySelector('.glass-card .chart-sub');
+    if(glassSub&&d.table_sub)glassSub.textContent=d.table_sub;
+    // Exec card labels
+    const execKeys=['rp_water_saved','rp_yield_growth','rp_co2','rp_value_protected'];
+    ap.querySelectorAll('.exec-label[data-i18n]').forEach(el=>{
+      const k=el.getAttribute('data-i18n'); if(d[k])el.textContent=d[k];
+    });
+    // Export buttons
+    const exportBtns=ap.querySelectorAll('[data-i18n="btn_export_csv"],[data-i18n="btn_export_pdf"]');
+    exportBtns.forEach(el=>{ const k=el.getAttribute('data-i18n'); if(d[k])el.textContent=d[k]; });
+  })();
 }
 
 
