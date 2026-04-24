@@ -37,11 +37,11 @@
   --font-body:'Outfit',sans-serif;
   --font-mono:'JetBrains Mono',monospace;
 }
-body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;font-size:14px;}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;font-size:14px;-webkit-text-size-adjust:100%;}
  
 /* ── ONBOARDING ── */
-#onboarding{position:fixed;inset:0;background:var(--bg);z-index:1000;display:flex;align-items:center;justify-content:center;background-image:radial-gradient(ellipse 80% 60% at 50% -10%,rgba(0,214,143,0.08) 0%,transparent 60%),radial-gradient(ellipse 50% 40% at 80% 80%,rgba(59,158,255,0.06) 0%,transparent 60%);}
-.ob-wrap{width:560px;text-align:center;}
+#onboarding{position:fixed;inset:0;background:var(--bg);z-index:1000;display:flex;align-items:flex-start;justify-content:center;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;background-image:radial-gradient(ellipse 80% 60% at 50% -10%,rgba(0,214,143,0.08) 0%,transparent 60%),radial-gradient(ellipse 50% 40% at 80% 80%,rgba(59,158,255,0.06) 0%,transparent 60%);}
+.ob-wrap{width:560px;text-align:center;padding:40px 20px 60px;min-height:100%;}
 .ob-logo{font-family:var(--font-head);font-size:22px;font-weight:800;color:var(--green);letter-spacing:-0.5px;margin-bottom:8px;}
 .ob-logo span{color:var(--text2);}
 .ob-tagline{color:var(--text2);font-size:13px;margin-bottom:48px;}
@@ -1298,6 +1298,670 @@ body{overflow-x:hidden;}
 /* Mobile menu button always shown on small screens */
 .mobile-menu-btn{flex-shrink:0;}
 
+
+/* ═══════════════════════════════════════════════════
+   COMPREHENSIVE MOBILE SCROLL & LAYOUT FIXES
+   These override earlier rules and fix the core issues:
+   1. Onboarding not scrollable / Continue button hidden
+   2. App pages not scrollable on mobile
+   3. Layout collapsing on small screens
+═══════════════════════════════════════════════════ */
+
+/* ── ONBOARDING MOBILE ── */
+@media (max-width: 768px) {
+  #onboarding {
+    align-items: flex-start;
+    padding-top: 0;
+  }
+  .ob-wrap {
+    width: 100%;
+    max-width: 100%;
+    padding: 28px 16px 80px;
+    /* 80px bottom padding so Continue button clears the bottom of the screen */
+  }
+  .ob-tagline {
+    margin-bottom: 28px;
+  }
+  .ob-step p {
+    margin-bottom: 20px;
+  }
+  .ob-cards {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .ob-card {
+    padding: 16px 14px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-align: left;
+  }
+  .ob-card .ob-icon {
+    font-size: 26px;
+    margin-bottom: 0;
+    flex-shrink: 0;
+  }
+  .ob-regions {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  .ob-sizes {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  .ob-step h2 {
+    font-size: 20px;
+    margin-bottom: 6px;
+  }
+  .ob-step p {
+    font-size: 13px;
+  }
+  .ob-progress {
+    margin-bottom: 24px;
+  }
+  .btn-primary {
+    width: 100%;
+    padding: 16px;
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 420px) {
+  .ob-wrap {
+    padding: 20px 12px 80px;
+  }
+  .ob-regions {
+    grid-template-columns: 1fr;
+  }
+  .ob-sizes {
+    grid-template-columns: 1fr 1fr;
+  }
+  .ob-step h2 {
+    font-size: 18px;
+  }
+}
+
+/* ── APP LAYOUT MOBILE FIX ── */
+/* 
+  THE CORE PROBLEM: 
+  Desktop: #app is height:100vh flex column → .body-layout fills remaining space
+           → .main-content has overflow-y:auto and a fixed height → pages scroll inside it
+  
+  Mobile: When .body-layout becomes display:block and .sidebar is hidden,
+          .main-content has no explicit height, so overflow-y:auto has nothing to scroll.
+          The page content just overflows invisibly. 
+  
+  FIX: On mobile, #app switches from fixed-height to min-height,
+       body-layout becomes flex-column taking full remaining height,
+       and main-content grows naturally. The PAGE itself and the BODY scroll.
+*/
+@media (max-width: 768px) {
+  /* Make #app fill screen but allow growth */
+  #app {
+    height: auto !important;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  #app.ready {
+    display: flex;
+  }
+
+  /* Topnav stays compact — don't let it wrap */
+  .topnav {
+    height: 56px !important;
+    flex-wrap: nowrap !important;
+    padding: 0 12px !important;
+    gap: 10px !important;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  /* Hide non-essential topnav items on mobile */
+  .nav-search,
+  .nav-weather,
+  .nav-conn,
+  .nav-lang,
+  .nav-btn,
+  .nav-spacer {
+    display: none !important;
+  }
+
+  /* body-layout: flex column, fills remaining space */
+  .body-layout {
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 !important;
+    overflow: visible !important;
+    /* CRITICAL: remove overflow:hidden so content can flow */
+    min-height: 0;
+  }
+
+  /* sidebar hidden on mobile (shown via hamburger overlay) */
+  .sidebar {
+    display: none;
+  }
+
+  /* main-content: fills space, scrolls naturally */
+  .main-content {
+    flex: 1 !important;
+    width: 100% !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    /* Account for fixed bottom nav */
+    padding-bottom: 70px !important;
+    /* Give it a proper height context */
+    min-height: 0;
+  }
+
+  /* Pages: normal block flow, no height constraints */
+  .page {
+    display: none;
+    padding: 14px 14px 20px !important;
+    min-height: auto !important;
+    height: auto !important;
+  }
+  .page.active {
+    display: block !important;
+  }
+
+  /* Zones layout special case — was causing height issues */
+  .zones-layout {
+    display: flex !important;
+    flex-direction: column !important;
+    height: auto !important;
+    min-height: auto !important;
+    margin: 0 !important;
+    overflow: visible !important;
+  }
+  .zones-list {
+    max-height: 320px;
+    overflow-y: auto;
+    border-right: none !important;
+    border-bottom: 1px solid var(--border);
+    padding: 12px !important;
+  }
+  .map-area {
+    height: 260px !important;
+    min-height: 260px !important;
+    max-height: 260px !important;
+    flex-shrink: 0;
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 0 0 12px !important;
+  }
+  .zone-profile {
+    border-left: none !important;
+    border-top: 1px solid var(--border);
+    padding: 12px !important;
+    overflow: visible !important;
+    height: auto !important;
+  }
+
+  /* Right panel hidden */
+  .right-panel {
+    display: none !important;
+  }
+}
+
+/* ── VERY SMALL SCREENS (SE, Galaxy A series small) ── */
+@media (max-width: 400px) {
+  .topnav {
+    padding: 0 10px !important;
+  }
+  .nav-logo {
+    font-size: 14px !important;
+  }
+  .logo-badge {
+    display: none;
+  }
+  .page {
+    padding: 10px !important;
+  }
+  .kpi-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+  }
+  .kpi-value {
+    font-size: 20px !important;
+  }
+  .poa-hero {
+    padding: 14px !important;
+  }
+  .poa-summary-row {
+    grid-template-columns: 1fr !important;
+  }
+  .sensor-main-v3 .value {
+    font-size: 22px !important;
+  }
+}
+
+/* ── SAFE AREA INSETS (iPhone notch/home bar) ── */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .mobile-bottom-nav {
+    padding-bottom: env(safe-area-inset-bottom);
+    height: calc(60px + env(safe-area-inset-bottom));
+  }
+  .main-content {
+    padding-bottom: calc(70px + env(safe-area-inset-bottom)) !important;
+  }
+}
+
+/* ── TOUCH IMPROVEMENTS ── */
+@media (max-width: 768px) {
+  /* Bigger tap targets */
+  .mob-nav-item {
+    padding: 8px 12px !important;
+    min-width: 52px;
+  }
+  .zone-tab {
+    padding: 10px 14px !important;
+    min-height: 40px;
+  }
+  .nav-item {
+    padding: 12px !important;
+    min-height: 44px;
+  }
+  /* Zone tabs scroll horizontally instead of wrapping */
+  .zone-tabs {
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    padding-bottom: 4px;
+    gap: 8px !important;
+    /* Hide scrollbar but keep functionality */
+    scrollbar-width: none;
+  }
+  .zone-tabs::-webkit-scrollbar {
+    display: none;
+  }
+  .zone-tab {
+    flex-shrink: 0 !important;
+    white-space: nowrap;
+  }
+  /* Sensor grid 1 col */
+  .sensors-grid, .v3-grid {
+    grid-template-columns: 1fr !important;
+  }
+  /* KPI 2 cols */
+  .kpi-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  /* Charts 1 col */
+  .chart-row, .analytics-grid {
+    grid-template-columns: 1fr !important;
+  }
+  /* Recs 1 col */
+  .recs-grid {
+    grid-template-columns: 1fr !important;
+  }
+  /* Exec cards 2 col */
+  .exec-cards {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  /* Insight chain 1 col */
+  .insight-chain {
+    grid-template-columns: 1fr !important;
+  }
+  /* AI actions vertical */
+  .ai-actions {
+    flex-direction: column !important;
+  }
+  .btn-action {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+  /* Sensor tooltip full-width on mobile */
+  .sensor-tooltip {
+    width: calc(100vw - 40px) !important;
+    max-width: 320px;
+    left: 50% !important;
+    transform: translateX(-50%);
+    right: auto !important;
+  }
+  /* Sensor history modal */
+  .sh-box {
+    width: 95vw !important;
+    max-height: 85vh !important;
+  }
+  .sh-stats-row {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  .sh-body {
+    padding: 14px !important;
+  }
+  /* Modal boxes */
+  .modal-box {
+    width: 95vw !important;
+    max-height: 90vh !important;
+  }
+  /* Settings stacked */
+  #page-settings > div {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0 !important;
+  }
+  #page-settings > div > div:first-child {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+    margin-bottom: 16px !important;
+    background: var(--card) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: var(--radius) !important;
+    padding: 10px !important;
+  }
+  .settings-nav-item {
+    padding: 8px 12px !important;
+    font-size: 12px !important;
+    border-radius: var(--radius-sm) !important;
+  }
+  .settings-content {
+    padding: 12px 0 !important;
+  }
+  /* Page header */
+  .page-header {
+    flex-direction: column !important;
+    gap: 10px !important;
+    margin-bottom: 16px !important;
+  }
+  .page-header > div:last-child {
+    width: 100% !important;
+    flex-wrap: wrap !important;
+    display: flex !important;
+  }
+  .page-header > div:last-child button,
+  .page-header > div:last-child .btn-outline {
+    flex: 1 !important;
+    justify-content: center !important;
+    min-width: 120px !important;
+  }
+  /* Plan of action */
+  .poa-summary-row {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  .poa-task {
+    padding: 12px 12px !important;
+  }
+  .poa-task-actions {
+    flex-direction: column !important;
+  }
+  .poa-btn {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+  /* Alert actions */
+  .alert-actions {
+    flex-wrap: wrap !important;
+  }
+  .alert-meta {
+    flex-wrap: wrap !important;
+    gap: 5px !important;
+  }
+  /* Alert btn */
+  .alert-btn {
+    font-size: 11px !important;
+    padding: 5px 10px !important;
+  }
+  /* Zone profile grid */
+  .zp-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+}
+
+
+/* ════════════════════════════════════════════
+   USER GUIDE PAGE
+════════════════════════════════════════════ */
+.guide-hero{
+  background:linear-gradient(135deg,rgba(59,158,255,0.07) 0%,rgba(0,214,143,0.07) 100%);
+  border:1px solid rgba(59,158,255,0.2);
+  border-radius:var(--radius);
+  padding:28px 32px;
+  margin-bottom:24px;
+  position:relative;overflow:hidden;
+}
+.guide-hero::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--blue),var(--green),transparent);}
+.guide-hero-row{display:flex;align-items:center;gap:16px;margin-bottom:6px;}
+.guide-hero-icon{width:52px;height:52px;background:var(--blue-dim);border:1px solid rgba(59,158,255,0.3);
+  border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;}
+.guide-hero-title{font-family:var(--font-head);font-size:22px;font-weight:800;line-height:1.1;}
+.guide-hero-sub{font-size:13px;color:var(--text2);margin-top:4px;}
+.guide-search-bar{
+  display:flex;align-items:center;gap:10px;margin-top:16px;
+  background:var(--card);border:1px solid var(--border2);
+  border-radius:var(--radius-sm);padding:10px 14px;
+  font-size:13px;color:var(--text3);cursor:text;
+  transition:border-color 0.2s;
+}
+.guide-search-bar:hover{border-color:rgba(59,158,255,0.3);}
+
+/* Quick nav chips */
+.guide-nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;}
+.guide-chip{
+  background:var(--card);border:1px solid var(--border2);border-radius:999px;
+  padding:6px 14px;font-size:12px;cursor:pointer;transition:all 0.2s;
+  display:flex;align-items:center;gap:6px;
+}
+.guide-chip:hover,.guide-chip.active{
+  background:var(--blue-dim);border-color:rgba(59,158,255,0.35);color:var(--blue);
+}
+
+/* Section grid */
+.guide-sections{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;}
+.guide-section-card{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:20px;transition:all 0.2s;cursor:pointer;
+}
+.guide-section-card:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,0.2);}
+.gs-icon{font-size:28px;margin-bottom:12px;}
+.gs-title{font-family:var(--font-head);font-size:15px;font-weight:700;margin-bottom:6px;}
+.gs-desc{font-size:12px;color:var(--text2);line-height:1.6;}
+.gs-link{font-size:11px;color:var(--blue);margin-top:10px;display:flex;align-items:center;gap:4px;}
+
+/* Feature cards row */
+.guide-features{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px;}
+.gf-card{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:16px;display:flex;flex-direction:column;gap:8px;
+}
+.gf-badge{font-size:9px;font-family:var(--font-mono);font-weight:700;letter-spacing:1px;
+  padding:2px 8px;border-radius:999px;display:inline-flex;width:fit-content;}
+.gf-badge.new{background:var(--green-dim);color:var(--green);border:1px solid rgba(0,214,143,0.3);}
+.gf-badge.core{background:var(--blue-dim);color:var(--blue);border:1px solid rgba(59,158,255,0.3);}
+.gf-badge.ai{background:var(--amber-dim);color:var(--amber);border:1px solid rgba(245,183,49,0.3);}
+.gf-title{font-family:var(--font-head);font-size:13px;font-weight:600;}
+.gf-desc{font-size:11px;color:var(--text2);line-height:1.55;}
+
+/* Step-by-step guide accordion */
+.guide-accordion{margin-bottom:24px;}
+.ga-item{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);margin-bottom:8px;overflow:hidden;
+  transition:border-color 0.2s;
+}
+.ga-item.open{border-color:rgba(59,158,255,0.25);}
+.ga-header{
+  display:flex;align-items:center;gap:14px;padding:16px 18px;
+  cursor:pointer;user-select:none;
+}
+.ga-header:hover{background:rgba(255,255,255,0.02);}
+.ga-num{
+  width:28px;height:28px;border-radius:50%;
+  background:var(--blue-dim);border:1px solid rgba(59,158,255,0.3);
+  color:var(--blue);font-family:var(--font-head);font-size:12px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.ga-icon{font-size:20px;flex-shrink:0;}
+.ga-label{font-family:var(--font-head);font-size:14px;font-weight:600;flex:1;}
+.ga-badge{font-size:10px;font-family:var(--font-mono);padding:2px 8px;border-radius:999px;
+  background:var(--card2);border:1px solid var(--border2);color:var(--text2);white-space:nowrap;}
+.ga-arrow{font-size:12px;color:var(--text3);transition:transform 0.25s;flex-shrink:0;}
+.ga-item.open .ga-arrow{transform:rotate(180deg);}
+.ga-body{display:none;padding:0 18px 18px 60px;border-top:1px solid var(--border);}
+.ga-item.open .ga-body{display:block;}
+.ga-body p{font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:10px;}
+.ga-body p:last-child{margin-bottom:0;}
+.ga-steps{list-style:none;display:flex;flex-direction:column;gap:6px;}
+.ga-steps li{
+  display:flex;align-items:flex-start;gap:10px;
+  font-size:13px;color:var(--text2);line-height:1.6;
+  padding:8px 12px;background:rgba(0,0,0,0.15);border-radius:var(--radius-sm);
+}
+.ga-steps li .step-dot{
+  width:20px;height:20px;border-radius:50%;
+  background:var(--blue-dim);border:1px solid rgba(59,158,255,0.3);
+  color:var(--blue);font-size:10px;font-family:var(--font-mono);font-weight:700;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;
+}
+.ga-steps li strong{color:var(--text);}
+
+/* FAQ section */
+.guide-faq{margin-bottom:24px;}
+.guide-faq-title{font-family:var(--font-head);font-size:15px;font-weight:700;margin-bottom:12px;
+  display:flex;align-items:center;gap:8px;}
+.faq-item{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);
+  padding:14px 16px;margin-bottom:6px;cursor:pointer;transition:all 0.2s;
+}
+.faq-item:hover{border-color:var(--border2);}
+.faq-item.open{border-color:rgba(59,158,255,0.25);}
+.faq-q{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:500;}
+.faq-q .faq-icon{font-size:16px;flex-shrink:0;}
+.faq-q .faq-arr{margin-left:auto;font-size:12px;color:var(--text3);transition:transform 0.2s;}
+.faq-item.open .faq-arr{transform:rotate(180deg);}
+.faq-a{display:none;margin-top:10px;font-size:12px;color:var(--text2);line-height:1.65;
+  padding-top:10px;border-top:1px solid var(--border);}
+.faq-item.open .faq-a{display:block;}
+
+/* Color legend for sensor status */
+.guide-legend{
+  display:flex;flex-wrap:wrap;gap:8px;
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:14px 16px;margin-bottom:24px;
+}
+.gl-item{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text2);}
+.gl-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+
+/* Keyboard shortcuts table */
+.guide-shortcuts{
+  display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px;
+}
+.gs-shortcut{
+  display:flex;align-items:center;gap:10px;
+  background:rgba(0,0,0,0.15);border-radius:var(--radius-sm);
+  padding:8px 12px;font-size:12px;color:var(--text2);
+}
+.gs-key{
+  font-family:var(--font-mono);font-size:10px;
+  background:var(--card2);border:1px solid var(--border2);
+  border-radius:4px;padding:2px 7px;color:var(--text);
+  white-space:nowrap;
+}
+
+/* Mobile guide responsive */
+@media(max-width:900px){
+  .guide-sections{grid-template-columns:1fr;}
+  .guide-features{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:600px){
+  .guide-features{grid-template-columns:1fr;}
+  .guide-hero{padding:18px 16px;}
+  .guide-hero-title{font-size:18px;}
+  .guide-shortcuts{grid-template-columns:1fr;}
+  .ga-body{padding:0 14px 14px 14px;}
+}
+
+/* ════════════════════════════════════════════
+   PLAN OF ACTION — extra elements
+════════════════════════════════════════════ */
+/* Weather forecast strip inside POA */
+.poa-weather-strip{
+  display:flex;gap:10px;
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:14px 16px;margin-bottom:16px;align-items:center;flex-wrap:wrap;
+}
+.poa-weather-title{font-size:11px;font-family:var(--font-mono);color:var(--text3);
+  text-transform:uppercase;letter-spacing:0.8px;margin-right:4px;flex-shrink:0;}
+.poa-weather-day{
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  flex:1;min-width:48px;max-width:70px;text-align:center;
+}
+.pwd-label{font-size:10px;color:var(--text3);}
+.pwd-icon{font-size:18px;}
+.pwd-temp{font-size:12px;font-weight:600;font-family:var(--font-head);}
+.pwd-note{font-size:9px;font-family:var(--font-mono);padding:1px 5px;border-radius:999px;}
+.pwd-note.hot{background:var(--red-dim);color:var(--red);}
+.pwd-note.ok{background:var(--green-dim);color:var(--green);}
+.pwd-note.warn{background:var(--amber-dim);color:var(--amber);}
+
+/* Resource checklist per step */
+.poa-checklist{
+  display:flex;flex-direction:column;gap:4px;margin-top:10px;
+  padding:10px 12px;background:rgba(0,0,0,0.15);border-radius:var(--radius-sm);
+}
+.poa-checklist-title{font-size:10px;font-family:var(--font-mono);color:var(--text3);
+  text-transform:uppercase;letter-spacing:0.8px;margin-bottom:4px;}
+.poa-cl-item{
+  display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2);
+  cursor:pointer;padding:2px 0;transition:color 0.15s;
+}
+.poa-cl-item:hover{color:var(--text);}
+.poa-cl-check{
+  width:16px;height:16px;border-radius:4px;border:1.5px solid var(--border2);
+  flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  font-size:9px;transition:all 0.15s;
+}
+.poa-cl-item.done-cl .poa-cl-check{background:var(--green);border-color:var(--green);color:#021A0D;}
+.poa-cl-item.done-cl span{text-decoration:line-through;opacity:0.5;}
+
+/* Estimated duration tag */
+.poa-duration{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:10px;font-family:var(--font-mono);
+  background:rgba(59,158,255,0.1);border:1px solid rgba(59,158,255,0.2);
+  color:var(--blue);border-radius:999px;padding:2px 9px;
+}
+
+/* Notes field */
+.poa-notes-wrap{margin-top:10px;}
+.poa-notes-label{font-size:10px;font-family:var(--font-mono);color:var(--text3);
+  text-transform:uppercase;letter-spacing:0.8px;margin-bottom:4px;}
+.poa-notes-input{
+  width:100%;background:rgba(0,0,0,0.15);border:1px solid var(--border);
+  border-radius:var(--radius-sm);padding:8px 10px;
+  color:var(--text2);font-family:var(--font-body);font-size:12px;
+  outline:none;resize:none;line-height:1.5;
+  transition:border-color 0.2s;
+}
+.poa-notes-input:focus{border-color:rgba(0,214,143,0.3);color:var(--text);}
+.poa-notes-input::placeholder{color:var(--text3);}
+
+/* Plan footer summary bar */
+.poa-footer-bar{
+  background:linear-gradient(135deg,rgba(0,214,143,0.05),rgba(59,158,255,0.05));
+  border:1px solid rgba(0,214,143,0.15);border-radius:var(--radius);
+  padding:16px 20px;margin-top:20px;
+  display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+}
+.poa-footer-stat{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:60px;}
+.poa-footer-val{font-family:var(--font-head);font-size:20px;font-weight:700;}
+.poa-footer-lbl{font-size:10px;color:var(--text2);font-family:var(--font-mono);text-transform:uppercase;letter-spacing:0.5px;}
+.poa-footer-divider{width:1px;height:36px;background:var(--border);}
+.poa-footer-msg{flex:1;font-size:12px;color:var(--text2);line-height:1.6;min-width:160px;}
+
+@media(max-width:600px){
+  .poa-footer-bar{flex-direction:column;align-items:flex-start;}
+  .poa-footer-divider{width:100%;height:1px;}
+  .poa-weather-strip{gap:6px;}
+}
+
 </style>
 </head>
 <body>
@@ -1453,6 +2117,7 @@ body{overflow-x:hidden;}
       <div class="nav-item" onclick="showPage('insights',this)"><span class="nav-icon">✦</span> AI Insights<span class="nav-badge green">AI</span></div>
       <div class="nav-item" onclick="showPage('alerts',this)"><span class="nav-icon">⚠</span> Alerts<span class="nav-badge">4</span></div>
       <div class="nav-item" id="nav-plan" onclick="showPage('plan',this)"><span class="nav-icon">📋</span> Plan of Action</div>
+      <div class="nav-item" onclick="showPage('guide',this)"><span class="nav-icon">📖</span> Guide</div>
       <div class="sidebar-section">Analytics</div>
       <div class="nav-item" onclick="showPage('analytics',this)"><span class="nav-icon">📊</span> Reports</div>
       <div class="sidebar-section">System</div>
@@ -2141,6 +2806,512 @@ body{overflow-x:hidden;}
         </div>
       </div>
  
+      <div class="page" id="page-plan">
+        <div class="page-header">
+          <div>
+            <div class="page-title" id="plan-page-title">Plan of Action</div>
+            <div class="page-sub" id="plan-page-sub">Priority-sorted steps to improve your farm right now</div>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn-outline" onclick="markAllPlanDone()" id="btn-mark-all">✓ Mark All Done</button>
+            <button class="btn-outline" onclick="resetPlan()" id="btn-reset-plan">⟳ Reset</button>
+          </div>
+        </div>
+        <div class="plan-header-bar">
+          <div class="plan-header-icon">📋</div>
+          <div class="plan-header-text">
+            <h2 id="plan-ai-title">AI-Generated Action Plan</h2>
+            <p id="plan-ai-sub">Updated based on current sensor readings · 9 actions queued</p>
+          </div>
+          <div class="plan-stats">
+            <div class="plan-stat"><div class="plan-stat-val" style="color:var(--red)">2</div><div class="plan-stat-lbl" id="plan-stat-crit">CRITICAL</div></div>
+            <div class="plan-stat"><div class="plan-stat-val" style="color:var(--amber)">3</div><div class="plan-stat-lbl" id="plan-stat-high">HIGH</div></div>
+            <div class="plan-stat"><div class="plan-stat-val" style="color:var(--blue)">4</div><div class="plan-stat-lbl" id="plan-stat-rout">ROUTINE</div></div>
+          </div>
+        </div>
+
+
+        <!-- WEATHER CONTEXT STRIP -->
+        <div class="poa-weather-strip">
+          <span class="poa-weather-title">🌤️ Week Forecast</span>
+          <div class="poa-weather-day">
+            <div class="pwd-label">Today</div>
+            <div class="pwd-icon">☀️</div>
+            <div class="pwd-temp" style="color:var(--amber)">+31°</div>
+            <div class="pwd-note hot">HOT</div>
+          </div>
+          <div class="poa-weather-day">
+            <div class="pwd-label">Tue</div>
+            <div class="pwd-icon">🌤️</div>
+            <div class="pwd-temp">+29°</div>
+            <div class="pwd-note warn">WARM</div>
+          </div>
+          <div class="poa-weather-day">
+            <div class="pwd-label">Wed</div>
+            <div class="pwd-icon">⛅</div>
+            <div class="pwd-temp">+26°</div>
+            <div class="pwd-note ok">OK</div>
+          </div>
+          <div class="poa-weather-day">
+            <div class="pwd-label">Thu</div>
+            <div class="pwd-icon">🌦️</div>
+            <div class="pwd-temp" style="color:var(--blue)">+22°</div>
+            <div class="pwd-note ok">RAIN</div>
+          </div>
+          <div class="poa-weather-day">
+            <div class="pwd-label">Fri</div>
+            <div class="pwd-icon">🌤️</div>
+            <div class="pwd-temp">+24°</div>
+            <div class="pwd-note ok">OK</div>
+          </div>
+          <div style="margin-left:auto;font-size:11px;color:var(--text2);padding-left:8px;border-left:1px solid var(--border);">
+            💡 Plan is optimized for<br>today's hot, dry conditions
+          </div>
+        </div>
+        <div class="plan-section-lbl" id="plan-sec-urgent">🔴 Urgent — Act Within 6 Hours</div>
+        <div class="plan-step critical" id="ps1">
+          <div class="plan-step-num">1</div><div class="plan-step-icon">💧</div>
+          <div class="plan-step-body">
+            <div class="plan-step-title" id="ps1-title">Activate drip irrigation — Wheat Zone A1</div>
+            <div class="plan-step-desc" id="ps1-desc">Soil moisture at 22% is critically below the 40% minimum. Temperature 31°C is accelerating evaporation. Immediate drip irrigation is needed to prevent irreversible drought stress and protect an estimated ₸ 2.4M of crop value.</div>
+            <div class="plan-step-meta"><span class="ps-zone">Wheat Zone A1</span><span class="ps-prio critical" id="ps1-prio">CRITICAL</span><span class="ps-time" id="ps1-time">⏱ Within 6 hours</span><span class="poa-duration">⏳ ~30 min on-site</span></div>
+            <div class="poa-checklist">
+              <div class="poa-checklist-title">Equipment Checklist</div>
+              <div class="poa-cl-item" onclick="toggleCL(this)"><div class="poa-cl-check"></div><span>Irrigation control box key (Sector A entry gate)</span></div>
+              <div class="poa-cl-item" onclick="toggleCL(this)"><div class="poa-cl-check"></div><span>Check valve #3 is not blocked or corroded</span></div>
+              <div class="poa-cl-item" onclick="toggleCL(this)"><div class="poa-cl-check"></div><span>Confirm water supply pressure is adequate</span></div>
+              <div class="poa-cl-item" onclick="toggleCL(this)"><div class="poa-cl-check"></div><span>Set 4-hour timer before leaving</span></div>
+            </div>
+            <div class="poa-notes-wrap">
+              <div class="poa-notes-label">Field Notes</div>
+              <textarea class="poa-notes-input" rows="2" placeholder="Add notes, observations, or issues found on-site..."></textarea>
+            </div>
+          </div>
+          <button class="plan-done-btn" onclick="markPlanStep('ps1',this)" id="ps1-btn">✓ Done</button>
+        </div>
+        <div class="plan-step critical" id="ps2">
+          <div class="plan-step-num">2</div><div class="plan-step-icon">🚁</div>
+          <div class="plan-step-body">
+            <div class="plan-step-title" id="ps2-title">Dispatch drone — Potato Field East smoke anomaly</div>
+            <div class="plan-step-desc" id="ps2-desc">Smoke at 148 µg/m³ — hazardous level. NNE wind at 18 km/h is carrying particles toward adjacent pastures. Confirm the source (active fire / stubble burn / industrial) before escalating to emergency services.</div>
+            <div class="plan-step-meta"><span class="ps-zone">Potato Field East</span><span class="ps-prio critical" id="ps2-prio">CRITICAL</span><span class="ps-time" id="ps2-time">⏱ Immediately</span><span class="poa-duration">⏳ ~45 min flight + review</span></div>
+            <div class="poa-checklist">
+              <div class="poa-checklist-title">Pre-Dispatch Checklist</div>
+              <div class="poa-cl-item" onclick="toggleCL(this)"><div class="poa-cl-check"></div><span>DJI Agras T40 battery charged ≥ 80%</span></div>
+              <div class="poa-cl-item" onclick="toggleCL(this)"><div class="poa-cl-check"></div><span>Set flight zone: Potato Field East perimeter</span></div>
+              <div class="poa-cl-item" onclick="toggleCL(this)"><div class="poa-cl-check"></div><span>Notify supervisor before dispatch</span></div>
+              <div class="poa-cl-item" onclick="toggleCL(this)"><div class="poa-cl-check"></div><span>Log results in Alert #PE-02</span></div>
+            </div>
+            <div class="poa-notes-wrap">
+              <div class="poa-notes-label">Field Notes</div>
+              <textarea class="poa-notes-input" rows="2" placeholder="Confirm smoke source, wind direction, visible flames..."></textarea>
+            </div>
+          </div>
+          <button class="plan-done-btn" onclick="markPlanStep('ps2',this)" id="ps2-btn">✓ Done</button>
+        </div>
+
+        <div class="plan-section-lbl" id="plan-sec-today">🟡 Today — Complete by End of Day</div>
+        <div class="plan-step high" id="ps3">
+          <div class="plan-step-num">3</div><div class="plan-step-icon">🐄</div>
+          <div class="plan-step-body">
+            <div class="plan-step-title" id="ps3-title">Relocate herd from Cattle Pasture C</div>
+            <div class="plan-step-desc" id="ps3-desc">Grass density at 39% — below the 50% sustainable grazing threshold. Move at least 200 head to Pasture A (currently at 81% density) to allow Pasture C a minimum 3-week recovery rest period.</div>
+            <div class="plan-step-meta"><span class="ps-zone">Cattle Pasture C</span><span class="ps-prio high" id="ps3-prio">HIGH</span><span class="ps-time" id="ps3-time">⏱ Today</span><span class="poa-duration">⏳ 2–3 hours</span></div>
+            <div class="poa-checklist">
+              <div class="poa-checklist-title">Herd Move Checklist</div>
+              <div class="poa-cl-item" onclick="toggleCL(this)"><div class="poa-cl-check"></div><span>Open gate between Pasture C and Pasture A</span></div>
+              <div class="poa-cl-item" onclick="toggleCL(this)"><div class="poa-cl-check"></div><span>Confirm Pasture A water tank level ≥ 60%</span></div>
+              <div class="poa-cl-item" onclick="toggleCL(this)"><div class="poa-cl-check"></div><span>Count head moved (target: 200+ head)</span></div>
+              <div class="poa-cl-item" onclick="toggleCL(this)"><div class="poa-cl-check"></div><span>Close and lock Pasture C gate</span></div>
+              <div class="poa-cl-item" onclick="toggleCL(this)"><div class="poa-cl-check"></div><span>Mark rest period start date in system</span></div>
+            </div>
+          </div>
+          <button class="plan-done-btn" onclick="markPlanStep('ps3',this)" id="ps3-btn">✓ Done</button>
+        </div>
+        <div class="plan-step high" id="ps4">
+          <div class="plan-step-num">4</div><div class="plan-step-icon">🧪</div>
+          <div class="plan-step-body">
+            <div class="plan-step-title" id="ps4-title">Apply lime to correct pH — Corn Zone B2</div>
+            <div class="plan-step-desc" id="ps4-desc">Soil pH at 5.1 is significantly below the 6.0–7.0 optimal range. Acidic soil blocks phosphorus, calcium, and magnesium absorption. Apply agricultural lime at 2–3 t/ha. Re-test soil pH in 2 weeks.</div>
+            <div class="plan-step-meta"><span class="ps-zone">Corn Zone B2</span><span class="ps-prio high" id="ps4-prio">HIGH</span><span class="ps-time" id="ps4-time">⏱ Within 48 hours</span></div>
+          </div>
+          <button class="plan-done-btn" onclick="markPlanStep('ps4',this)" id="ps4-btn">✓ Done</button>
+        </div>
+        <div class="plan-step high" id="ps5">
+          <div class="plan-step-num">5</div><div class="plan-step-icon">🚰</div>
+          <div class="plan-step-body">
+            <div class="plan-step-title" id="ps5-title">Refill water tank — Cattle Pasture C</div>
+            <div class="plan-step-desc" id="ps5-desc">Water tank at 42% and dropping. With 691 head of cattle and dry conditions (humidity 46%), the tank will reach critical level within 18–24 hours. Arrange tanker refill or pipeline top-up today.</div>
+            <div class="plan-step-meta"><span class="ps-zone">Cattle Pasture C</span><span class="ps-prio high" id="ps5-prio">HIGH</span><span class="ps-time" id="ps5-time">⏱ Within 24 hours</span></div>
+          </div>
+          <button class="plan-done-btn" onclick="markPlanStep('ps5',this)" id="ps5-btn">✓ Done</button>
+        </div>
+
+        <div class="plan-section-lbl" id="plan-sec-week">🟢 This Week — Routine Maintenance</div>
+        <div class="plan-step medium" id="ps6">
+          <div class="plan-step-num">6</div><div class="plan-step-icon">🌾</div>
+          <div class="plan-step-body">
+            <div class="plan-step-title" id="ps6-title">Begin seeding operations — Barley Zone Z5</div>
+            <div class="plan-step-desc" id="ps6-desc">Optimal germination window: soil temp 18°C, moisture 49%, AI confidence 92%. Forecast shows 2–3 days of ideal conditions. Start seeding within 72 hours to capture +18% germination rate advantage before temperatures rise.</div>
+            <div class="plan-step-meta"><span class="ps-zone">Barley Zone Z5</span><span class="ps-prio medium" id="ps6-prio">OPPORTUNITY</span><span class="ps-time" id="ps6-time">⏱ Within 72 hours</span></div>
+          </div>
+          <button class="plan-done-btn" onclick="markPlanStep('ps6',this)" id="ps6-btn">✓ Done</button>
+        </div>
+        <div class="plan-step medium" id="ps7">
+          <div class="plan-step-num">7</div><div class="plan-step-icon">🧬</div>
+          <div class="plan-step-body">
+            <div class="plan-step-title" id="ps7-title">Apply nitrogen fertilizer — Wheat A1 &amp; Corn B2</div>
+            <div class="plan-step-desc" id="ps7-desc">Nitrogen at 41 ppm (Wheat A1) and 37 ppm (Corn B2) — below the 50–100 ppm optimal. Schedule foliar spray or soil application this week. Do not apply during active irrigation to avoid runoff loss.</div>
+            <div class="plan-step-meta"><span class="ps-zone">Wheat A1 · Corn B2</span><span class="ps-prio medium" id="ps7-prio">MEDIUM</span><span class="ps-time" id="ps7-time">⏱ This week</span></div>
+          </div>
+          <button class="plan-done-btn" onclick="markPlanStep('ps7',this)" id="ps7-btn">✓ Done</button>
+        </div>
+        <div class="plan-step medium" id="ps8">
+          <div class="plan-step-num">8</div><div class="plan-step-icon">💨</div>
+          <div class="plan-step-body">
+            <div class="plan-step-title" id="ps8-title">Raise humidity via morning misting — Wheat A1 &amp; Corn B2</div>
+            <div class="plan-step-desc" id="ps8-desc">Humidity at 38% (Wheat A1) and 44% (Corn B2) — below the 45–70% optimal range. Overhead misting at 6–8 AM raises ambient humidity and reduces crop heat stress without excessive water use.</div>
+            <div class="plan-step-meta"><span class="ps-zone">Wheat A1 · Corn B2</span><span class="ps-prio medium" id="ps8-prio">MEDIUM</span><span class="ps-time" id="ps8-time">⏱ This week</span></div>
+          </div>
+          <button class="plan-done-btn" onclick="markPlanStep('ps8',this)" id="ps8-btn">✓ Done</button>
+        </div>
+        <div class="plan-step low" id="ps9">
+          <div class="plan-step-num">9</div><div class="plan-step-icon">🔋</div>
+          <div class="plan-step-body">
+            <div class="plan-step-title" id="ps9-title">Calibrate sensors &amp; check GPS collar batteries</div>
+            <div class="plan-step-desc" id="ps9-desc">Routine maintenance across all zones. Verify GPS collar batteries on 847 + 691 head in Pastures A and C. Calibrate smoke and temperature sensors. Schedule a system-wide audit before peak growing season.</div>
+            <div class="plan-step-meta"><span class="ps-zone">All Zones</span><span class="ps-prio low" id="ps9-prio">ROUTINE</span><span class="ps-time" id="ps9-time">⏱ This week</span></div>
+          </div>
+          <button class="plan-done-btn" onclick="markPlanStep('ps9',this)" id="ps9-btn">✓ Done</button>
+        </div>
+
+        <!-- PLAN FOOTER SUMMARY -->
+        <div class="poa-footer-bar">
+          <div class="poa-footer-stat">
+            <div class="poa-footer-val" style="color:var(--green)" id="poa-done-count">0</div>
+            <div class="poa-footer-lbl">Done</div>
+          </div>
+          <div class="poa-footer-divider"></div>
+          <div class="poa-footer-stat">
+            <div class="poa-footer-val" style="color:var(--amber)">9</div>
+            <div class="poa-footer-lbl">Total</div>
+          </div>
+          <div class="poa-footer-divider"></div>
+          <div class="poa-footer-stat">
+            <div class="poa-footer-val" style="color:var(--red)">₸3.1M</div>
+            <div class="poa-footer-lbl">At Risk</div>
+          </div>
+          <div class="poa-footer-divider"></div>
+          <div class="poa-footer-stat">
+            <div class="poa-footer-val" style="color:var(--blue)">~8h</div>
+            <div class="poa-footer-lbl">Est. Time</div>
+          </div>
+          <div class="poa-footer-divider"></div>
+          <div class="poa-footer-msg">
+            Completing all 9 tasks today protects an estimated <strong style="color:var(--green)">₸ 3.1M</strong> in crop and livestock value.
+            Critical tasks (1 &amp; 2) must be done first — all others can be delegated to field workers.
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ═══ GUIDE ═══ -->
+      <div class="page" id="page-guide">
+        <div class="page-header">
+          <div>
+            <div class="page-title">User Guide</div>
+            <div class="page-sub">Everything you need to know about AgroSense KZ</div>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn-outline" onclick="showPage('plan')">📋 Go to Plan</button>
+            <button class="btn-outline" style="border-color:rgba(0,214,143,0.3);color:var(--green);" onclick="showPage('overview')">◈ Back to Dashboard</button>
+          </div>
+        </div>
+
+        <!-- Hero banner -->
+        <div class="guide-hero">
+          <div class="guide-hero-row">
+            <div class="guide-hero-icon">📖</div>
+            <div>
+              <div class="guide-hero-title">Welcome to AgroSense KZ</div>
+              <div class="guide-hero-sub">Smart Agricultural Intelligence Platform — built for Kazakhstani farmers</div>
+            </div>
+          </div>
+          <div style="font-size:13px;color:var(--text2);line-height:1.7;margin-top:8px;">
+            AgroSense KZ monitors your fields 24/7 using a network of IoT sensors, AI analysis, and satellite imagery.
+            This guide will teach you how to read your data, respond to alerts, and get the most out of every feature.
+          </div>
+        </div>
+
+        <!-- Quick navigation chips -->
+        <div class="guide-nav">
+          <div class="guide-chip" onclick="scrollToGuideSection('gs-start')">🚀 Getting Started</div>
+          <div class="guide-chip" onclick="scrollToGuideSection('gs-pages')">🗂 Pages Overview</div>
+          <div class="guide-chip" onclick="scrollToGuideSection('gs-sensors')">📡 Reading Sensors</div>
+          <div class="guide-chip" onclick="scrollToGuideSection('gs-alerts')">⚠️ Alerts</div>
+          <div class="guide-chip" onclick="scrollToGuideSection('gs-plan')">📋 Action Plan</div>
+          <div class="guide-chip" onclick="scrollToGuideSection('gs-faq')">❓ FAQ</div>
+        </div>
+
+        <!-- Status color legend -->
+        <div class="guide-legend">
+          <span style="font-size:11px;font-family:var(--font-mono);color:var(--text3);text-transform:uppercase;letter-spacing:0.8px;margin-right:4px;">Status Colors:</span>
+          <div class="gl-item"><div class="gl-dot" style="background:var(--green)"></div> <strong style="color:var(--green)">Green / NORMAL</strong> — Everything is healthy, no action needed</div>
+          <div class="gl-item"><div class="gl-dot" style="background:var(--amber)"></div> <strong style="color:var(--amber)">Amber / WATCH</strong> — Trend is concerning, monitor closely</div>
+          <div class="gl-item"><div class="gl-dot" style="background:var(--red)"></div> <strong style="color:var(--red)">Red / ALERT</strong> — Problem confirmed, action required now</div>
+          <div class="gl-item"><div class="gl-dot" style="background:var(--blue)"></div> <strong style="color:var(--blue)">Blue / INFO</strong> — Information or opportunity</div>
+        </div>
+
+        <!-- Section: Getting Started -->
+        <div id="gs-start" style="font-family:var(--font-head);font-size:16px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px;">🚀 Getting Started</div>
+        <div class="guide-sections" style="margin-bottom:24px;">
+          <div class="guide-section-card" onclick="showPage('overview')">
+            <div class="gs-icon">◈</div>
+            <div class="gs-title">1. Check the Overview first</div>
+            <div class="gs-desc">Every morning, open the Overview page. It shows your Farm Health score, the top AI recommendation, and today's most urgent KPIs — all in one glance. The AI box at the top will tell you exactly what needs attention.</div>
+            <div class="gs-link">→ Open Overview</div>
+          </div>
+          <div class="guide-section-card" onclick="showPage('plan')">
+            <div class="gs-icon">📋</div>
+            <div class="gs-title">2. Go to Plan of Action</div>
+            <div class="gs-desc">The Plan page translates sensor data into human tasks sorted by urgency. Start here every day — the tasks are in order: do #1 first, then #2, and so on. Each task has a checklist and a "Done" button.</div>
+            <div class="gs-link">→ Open Plan of Action</div>
+          </div>
+          <div class="guide-section-card" onclick="showPage('alerts')">
+            <div class="gs-icon">⚠️</div>
+            <div class="gs-title">3. Dismiss resolved alerts</div>
+            <div class="gs-desc">After fixing a problem in the field, go to the Alerts page and click "Acknowledge" on that alert. This keeps your team informed and helps the AI learn which problems were resolved.</div>
+            <div class="gs-link">→ Open Alerts</div>
+          </div>
+          <div class="guide-section-card" onclick="showPage('sensors')">
+            <div class="gs-icon">📡</div>
+            <div class="gs-title">4. Explore your Sensors</div>
+            <div class="gs-desc">The Sensors page shows live readings from all 48 sensors across every zone. Click any sensor card to see its 7-day history chart. Tap "? What does this mean" for a plain-language explanation of any reading.</div>
+            <div class="gs-link">→ Open Sensors</div>
+          </div>
+        </div>
+
+        <!-- Section: Pages Overview -->
+        <div id="gs-pages" style="font-family:var(--font-head);font-size:16px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px;">🗂 What Each Page Does</div>
+        <div class="guide-features">
+          <div class="gf-card">
+            <div class="gf-badge core">CORE</div>
+            <div class="gf-title">◈ Overview</div>
+            <div class="gf-desc">Your daily dashboard. Shows the 8 most important farm metrics (KPIs), the AI Control Center message, health trends chart, and top recommendations at a glance.</div>
+          </div>
+          <div class="gf-card">
+            <div class="gf-badge core">CORE</div>
+            <div class="gf-title">▣ Zones</div>
+            <div class="gf-desc">Interactive map of all your farm zones. Click a zone on the list or the map to see its health score, soil data, and risk matrix. You can also add new zones here.</div>
+          </div>
+          <div class="gf-card">
+            <div class="gf-badge core">CORE</div>
+            <div class="gf-title">◉ Sensors</div>
+            <div class="gf-desc">Live readings from all 48 IoT sensors. Switch between zones using the tabs at the top. Every sensor shows its current value, a normal-range bar, and a 7-day history chart.</div>
+          </div>
+          <div class="gf-card">
+            <div class="gf-badge new">NEW</div>
+            <div class="gf-title">📋 Plan of Action</div>
+            <div class="gf-desc">Step-by-step task list generated by the AI from your sensor data. Sorted by urgency. Each task has a plain-language description, equipment checklist, and a field notes box.</div>
+          </div>
+          <div class="gf-card">
+            <div class="gf-badge ai">AI</div>
+            <div class="gf-title">✦ AI Insights</div>
+            <div class="gf-desc">Deep analysis cards for each problem on your farm. Each card shows the cause, recommended action, expected impact, and what happens if you ignore it.</div>
+          </div>
+          <div class="gf-card">
+            <div class="gf-badge core">CORE</div>
+            <div class="gf-title">⚠ Alerts</div>
+            <div class="gf-desc">All active sensor alerts in one place. Filter by severity (Critical, High, Medium). Acknowledge resolved alerts, view them on the map, or get an AI recommendation.</div>
+          </div>
+          <div class="gf-card">
+            <div class="gf-badge core">CORE</div>
+            <div class="gf-title">📊 Reports</div>
+            <div class="gf-desc">Season-level analytics: crop health trends, yield forecasts, irrigation efficiency, and zone comparisons. Export to PDF or Excel for sharing with partners or banks.</div>
+          </div>
+          <div class="gf-card">
+            <div class="gf-badge core">CORE</div>
+            <div class="gf-title">⚙ Settings</div>
+            <div class="gf-desc">Configure your farm profile, manage team members, connect IoT devices, set up notification preferences, and manage API integrations like KazHydroMet and Telegram bot.</div>
+          </div>
+          <div class="gf-card">
+            <div class="gf-badge new">NEW</div>
+            <div class="gf-title">📖 This Guide</div>
+            <div class="gf-desc">You are here! Come back anytime you have questions about a feature, sensor reading, or how to respond to an alert.</div>
+          </div>
+        </div>
+
+        <!-- Section: How to read sensors (accordion) -->
+        <div id="gs-sensors" style="font-family:var(--font-head);font-size:16px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px;">📡 How to Read Your Sensor Data</div>
+        <div class="guide-accordion">
+          <div class="ga-item" id="ga1">
+            <div class="ga-header" onclick="toggleGuideAccordion('ga1')">
+              <div class="ga-num">1</div>
+              <div class="ga-icon">💧</div>
+              <div class="ga-label">Soil Moisture</div>
+              <div class="ga-badge">Normal: 40–65%</div>
+              <div class="ga-arrow">▼</div>
+            </div>
+            <div class="ga-body">
+              <p>Soil moisture tells you how much water is in the ground. Think of it like a sponge — you want it between 40–65% full for most crops.</p>
+              <ul class="ga-steps">
+                <li><span class="step-dot">!</span><strong>Below 35%</strong> — Very dry. Irrigate immediately. Roots can't absorb nutrients without water.</li>
+                <li><span class="step-dot">✓</span><strong>35–65%</strong> — Healthy range. Monitor but no action needed.</li>
+                <li><span class="step-dot">!</span><strong>Above 75%</strong> — Too wet. Stop irrigation. Risk of root rot and fungal disease.</li>
+              </ul>
+              <p style="margin-top:10px;">The range bar on each sensor card shows a green zone (normal) and a moving dot showing the current value. If the dot is outside the green zone, the reading needs your attention.</p>
+            </div>
+          </div>
+          <div class="ga-item" id="ga2">
+            <div class="ga-header" onclick="toggleGuideAccordion('ga2')">
+              <div class="ga-num">2</div>
+              <div class="ga-icon">🧪</div>
+              <div class="ga-label">Soil pH</div>
+              <div class="ga-badge">Normal: 6.0–7.0 pH</div>
+              <div class="ga-arrow">▼</div>
+            </div>
+            <div class="ga-body">
+              <p>pH measures how acidic or alkaline your soil is. pH 7 is neutral; lower = more acidic, higher = more alkaline. Most crops grow best between 6.0 and 7.0.</p>
+              <ul class="ga-steps">
+                <li><span class="step-dot">!</span><strong>Below 6.0 (acidic)</strong> — Apply agricultural lime (calcite or dolomite). Acidic soil locks out phosphorus, calcium, and magnesium.</li>
+                <li><span class="step-dot">✓</span><strong>6.0–7.0</strong> — Ideal for most crops. No action needed.</li>
+                <li><span class="step-dot">!</span><strong>Above 7.5 (alkaline)</strong> — Apply sulphur or ammonium sulphate. Alkaline soil blocks iron and manganese.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="ga-item" id="ga3">
+            <div class="ga-header" onclick="toggleGuideAccordion('ga3')">
+              <div class="ga-num">3</div>
+              <div class="ga-icon">🔥</div>
+              <div class="ga-label">Smoke / Air Quality</div>
+              <div class="ga-badge">Normal: 0–15 ppm</div>
+              <div class="ga-arrow">▼</div>
+            </div>
+            <div class="ga-body">
+              <p>Smoke sensors detect fine particles in the air. Normal air is 0–15 ppm. Readings above 50 ppm indicate nearby burning or fire.</p>
+              <ul class="ga-steps">
+                <li><span class="step-dot">✓</span><strong>0–15 ppm</strong> — Clean air, no concern.</li>
+                <li><span class="step-dot">!</span><strong>15–50 ppm</strong> — Mild smoke. Check for burning in adjacent fields or livestock areas.</li>
+                <li><span class="step-dot">!</span><strong>Above 50 ppm</strong> — Active smoke. Dispatch inspection immediately. Do not send workers into the area without visual confirmation.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="ga-item" id="ga4">
+            <div class="ga-header" onclick="toggleGuideAccordion('ga4')">
+              <div class="ga-num">4</div>
+              <div class="ga-icon">🌿</div>
+              <div class="ga-label">Grass Density (Pastures)</div>
+              <div class="ga-badge">Normal: 50–100%</div>
+              <div class="ga-arrow">▼</div>
+            </div>
+            <div class="ga-body">
+              <p>For pasture zones, grass density shows what percentage of the ground has healthy grass cover. Below 50% means the pasture is being overgrazed.</p>
+              <ul class="ga-steps">
+                <li><span class="step-dot">!</span><strong>Below 40%</strong> — Move cattle out immediately. The land needs at least 3 weeks of rest to recover.</li>
+                <li><span class="step-dot">✓</span><strong>50–100%</strong> — Healthy pasture. Animals have enough to eat.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section: Alerts guide -->
+        <div id="gs-alerts" style="font-family:var(--font-head);font-size:16px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px;">⚠️ How to Handle Alerts</div>
+        <div class="guide-accordion">
+          <div class="ga-item" id="ga5">
+            <div class="ga-header" onclick="toggleGuideAccordion('ga5')">
+              <div class="ga-num">1</div>
+              <div class="ga-icon">🔴</div>
+              <div class="ga-label">Critical Alert — What to do</div>
+              <div class="ga-badge">Act within 1–2 hours</div>
+              <div class="ga-arrow">▼</div>
+            </div>
+            <div class="ga-body">
+              <ul class="ga-steps">
+                <li><span class="step-dot">1</span>Open <strong>Alerts page</strong> and find the Critical (red) item.</li>
+                <li><span class="step-dot">2</span>Read the description to understand the problem and zone.</li>
+                <li><span class="step-dot">3</span>Click <strong>"View on Map"</strong> to see where it is.</li>
+                <li><span class="step-dot">4</span>Click <strong>"AI Recommendation"</strong> to see what to do.</li>
+                <li><span class="step-dot">5</span>Go to the <strong>Plan of Action</strong> — this alert will have a task already created.</li>
+                <li><span class="step-dot">6</span>After fixing, return here and click <strong>"✓ Acknowledge"</strong>.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="ga-item" id="ga6">
+            <div class="ga-header" onclick="toggleGuideAccordion('ga6')">
+              <div class="ga-num">2</div>
+              <div class="ga-icon">🟡</div>
+              <div class="ga-label">High Priority Alert — What to do</div>
+              <div class="ga-badge">Act today</div>
+              <div class="ga-arrow">▼</div>
+            </div>
+            <div class="ga-body">
+              <ul class="ga-steps">
+                <li><span class="step-dot">1</span>Check the alert and add it to your <strong>daily work plan</strong>.</li>
+                <li><span class="step-dot">2</span>Delegate to a field worker if the critical tasks are already handled.</li>
+                <li><span class="step-dot">3</span>The situation can wait a few hours but should not be left until tomorrow.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section: Plan of Action guide -->
+        <div id="gs-plan" style="font-family:var(--font-head);font-size:16px;font-weight:700;margin-bottom:12px;margin-top:24px;display:flex;align-items:center;gap:8px;">📋 Using the Plan of Action</div>
+        <div class="guide-accordion">
+          <div class="ga-item open" id="ga7">
+            <div class="ga-header" onclick="toggleGuideAccordion('ga7')">
+              <div class="ga-num">1</div>
+              <div class="ga-icon">📋</div>
+              <div class="ga-label">Daily workflow with the Plan</div>
+              <div class="ga-badge">Recommended daily routine</div>
+              <div class="ga-arrow">▼</div>
+            </div>
+            <div class="ga-body">
+              <ul class="ga-steps">
+                <li><span class="step-dot">☀️</span><strong>Morning (7–8 AM):</strong> Open AgroSense, go to Plan of Action. Review the task list generated overnight from sensor data.</li>
+                <li><span class="step-dot">1</span><strong>Start with task #1</strong> (always the most critical). Read the description and checklist, then go to the field.</li>
+                <li><span class="step-dot">✓</span>After completing each task, come back and click <strong>"✓ Done"</strong>. This tracks progress and updates the footer summary.</li>
+                <li><span class="step-dot">👥</span><strong>Delegate:</strong> Tasks #3–9 (routine/medium) can be assigned to field workers. Show them the description on the app.</li>
+                <li><span class="step-dot">🌙</span><strong>Evening:</strong> Mark remaining tasks done. The system resets the next morning with a fresh AI-generated plan.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section: FAQ -->
+        <div id="gs-faq" style="font-family:var(--font-head);font-size:16px;font-weight:700;margin-bottom:12px;margin-top:24px;display:flex;align-items:center;gap:8px;">❓ Frequently Asked Questions</div>
+        <div class="guide-faq">
+          <div class="faq-item" onclick="toggleFAQ(this)">
+            <div class="faq-q"><span class="faq-icon">💡</span> What does the percentage next to "Health Score" mean?<span class="faq-arr">▼</span></div>
+            <div class="faq-a">The Health Score (0–100) is calculated from the soil moisture reading of that zone. A score below 35 = Critical (red), 35–60 = Warning (amber), above 60 = Healthy (green). For livestock pastures, it reflects the water tank level instead.</div>
+          </div>
+          <div class="faq-item" onclick="toggleFAQ(this)">
+            <div class="faq-q"><span class="faq-icon">📡</span> Why are some sensors showing "WATCH" when the value looks normal?<span class="faq-arr">▼</span></div>
+            <div class="faq-a">WATCH means the value is currently within range but trending in a bad direction — for example, soil moisture is at 38% but has been dropping for 3 days. The AI flags it early so you can act before it becomes a CRITICAL alert.</div>
+          </div>
+          <div class="faq-item" onclick="toggleFAQ(this)">
+            <div class="faq-q"><span class="faq-icon">🌾</span> How often does the AI update the Plan of Action?<span class="faq-arr">▼</span></div>
+            <div class="faq-a">The Plan is regenerated every time sensor data is synced (every 3 seconds in the live simulation). In a real deployment with IoT sensors, it would update every 15–30 minutes. The plan always reflects the current state of your farm.</div>
+          </div>
+          <div class="faq-item" onclick="toggleFAQ(this)">
+            <div class="faq-q"><span class="faq-icon">➕</span> How do I add a new zone to my farm?<span class="faq-arr">▼</span></div>
+            <div class="faq-a">Go to the Zones page. Click the "⊕ Add Zone" button in the zone list on the left. Fill in the zone name, crop type, area (hectares), water source, and soil data, then click "Add Zone". The new zone appears on the map immediately.</div>
+          </div>
+          <div class="faq-item" onclick="toggleFAQ(this)">
+            <div class="faq-q"><span class="faq-icon">📱</span> Does AgroSense work on mobile phones?<span class="faq-arr">▼</span></div>
+            <div class="faq-a">Yes. The app is fully responsive. On mobile, use the bottom navigation bar (Home, Zones, Sensors, Alerts, Plan, Guide). The hamburger menu (☰) in the top-left opens the full sidebar. All pages are optimized for phone screens.</div>
+          </div>
+          <div class="faq-item" onclick="toggleFAQ(this)">
+            <div class="faq-q"><span class="faq-icon">🔔</span> How are alerts sent to my team?<span class="faq-arr">▼</span></div>
+            <div class="faq-a">Critical alerts are sent via Telegram bot (already connected) and SMS if enabled in Settings → Notifications. You can also configure email digests and push notifications. Go to Settings → Notifications to manage these preferences.</div>
+          </div>
+          <div class="faq-item" onclick="toggleFAQ(this)">
+            <div class="faq-q"><span class="faq-icon">🌐</span> How do I change the language?<span class="faq-arr">▼</span></div>
+            <div class="faq-a">On desktop: use the KZ / RU / EN language switcher in the top navigation bar. On mobile: open the sidebar using the ☰ menu button, and the language switcher is accessible there. Switching language instantly translates all labels, titles, and navigation items.</div>
+          </div>
+        </div>
+
+      </div>
+
     </main>
  
     <!-- RIGHT PANEL -->
@@ -2237,125 +3408,13 @@ body{overflow-x:hidden;}
   <div class="mob-nav-item" id="mob-plan" onclick="showPage('plan',null);setMobActive('mob-plan')">
     <span class="mob-icon">📋</span>Plan
   </div>
-  <div class="mob-nav-item" id="mob-insights" onclick="showPage('insights',null);setMobActive('mob-insights')">
-    <span class="mob-icon">✦</span>AI
+  <div class="mob-nav-item" id="mob-guide" onclick="showPage('guide',null);setMobActive('mob-guide')">
+    <span class="mob-icon">📖</span>Guide
   </div>
 </nav>
  
 
       <!-- ═══ PLAN OF ACTION ═══ -->
-      <div class="page" id="page-plan">
-        <div class="page-header">
-          <div>
-            <div class="page-title" id="plan-page-title">Plan of Action</div>
-            <div class="page-sub" id="plan-page-sub">Priority-sorted steps to improve your farm right now</div>
-          </div>
-          <div style="display:flex;gap:8px;">
-            <button class="btn-outline" onclick="markAllPlanDone()" id="btn-mark-all">✓ Mark All Done</button>
-            <button class="btn-outline" onclick="resetPlan()" id="btn-reset-plan">⟳ Reset</button>
-          </div>
-        </div>
-        <div class="plan-header-bar">
-          <div class="plan-header-icon">📋</div>
-          <div class="plan-header-text">
-            <h2 id="plan-ai-title">AI-Generated Action Plan</h2>
-            <p id="plan-ai-sub">Updated based on current sensor readings · 9 actions queued</p>
-          </div>
-          <div class="plan-stats">
-            <div class="plan-stat"><div class="plan-stat-val" style="color:var(--red)">2</div><div class="plan-stat-lbl" id="plan-stat-crit">CRITICAL</div></div>
-            <div class="plan-stat"><div class="plan-stat-val" style="color:var(--amber)">3</div><div class="plan-stat-lbl" id="plan-stat-high">HIGH</div></div>
-            <div class="plan-stat"><div class="plan-stat-val" style="color:var(--blue)">4</div><div class="plan-stat-lbl" id="plan-stat-rout">ROUTINE</div></div>
-          </div>
-        </div>
-
-        <div class="plan-section-lbl" id="plan-sec-urgent">🔴 Urgent — Act Within 6 Hours</div>
-        <div class="plan-step critical" id="ps1">
-          <div class="plan-step-num">1</div><div class="plan-step-icon">💧</div>
-          <div class="plan-step-body">
-            <div class="plan-step-title" id="ps1-title">Activate drip irrigation — Wheat Zone A1</div>
-            <div class="plan-step-desc" id="ps1-desc">Soil moisture at 22% is critically below the 40% minimum. Temperature 31°C is accelerating evaporation. Immediate drip irrigation is needed to prevent irreversible drought stress and protect an estimated ₸ 2.4M of crop value.</div>
-            <div class="plan-step-meta"><span class="ps-zone">Wheat Zone A1</span><span class="ps-prio critical" id="ps1-prio">CRITICAL</span><span class="ps-time" id="ps1-time">⏱ Within 6 hours</span></div>
-          </div>
-          <button class="plan-done-btn" onclick="markPlanStep('ps1',this)" id="ps1-btn">✓ Done</button>
-        </div>
-        <div class="plan-step critical" id="ps2">
-          <div class="plan-step-num">2</div><div class="plan-step-icon">🚁</div>
-          <div class="plan-step-body">
-            <div class="plan-step-title" id="ps2-title">Dispatch drone — Potato Field East smoke anomaly</div>
-            <div class="plan-step-desc" id="ps2-desc">Smoke at 148 µg/m³ — hazardous level. NNE wind at 18 km/h is carrying particles toward adjacent pastures. Confirm the source (active fire / stubble burn / industrial) before escalating to emergency services.</div>
-            <div class="plan-step-meta"><span class="ps-zone">Potato Field East</span><span class="ps-prio critical" id="ps2-prio">CRITICAL</span><span class="ps-time" id="ps2-time">⏱ Immediately</span></div>
-          </div>
-          <button class="plan-done-btn" onclick="markPlanStep('ps2',this)" id="ps2-btn">✓ Done</button>
-        </div>
-
-        <div class="plan-section-lbl" id="plan-sec-today">🟡 Today — Complete by End of Day</div>
-        <div class="plan-step high" id="ps3">
-          <div class="plan-step-num">3</div><div class="plan-step-icon">🐄</div>
-          <div class="plan-step-body">
-            <div class="plan-step-title" id="ps3-title">Relocate herd from Cattle Pasture C</div>
-            <div class="plan-step-desc" id="ps3-desc">Grass density at 39% — below the 50% sustainable grazing threshold. Move at least 200 head to Pasture A (currently at 81% density) to allow Pasture C a minimum 3-week recovery rest period.</div>
-            <div class="plan-step-meta"><span class="ps-zone">Cattle Pasture C</span><span class="ps-prio high" id="ps3-prio">HIGH</span><span class="ps-time" id="ps3-time">⏱ Today</span></div>
-          </div>
-          <button class="plan-done-btn" onclick="markPlanStep('ps3',this)" id="ps3-btn">✓ Done</button>
-        </div>
-        <div class="plan-step high" id="ps4">
-          <div class="plan-step-num">4</div><div class="plan-step-icon">🧪</div>
-          <div class="plan-step-body">
-            <div class="plan-step-title" id="ps4-title">Apply lime to correct pH — Corn Zone B2</div>
-            <div class="plan-step-desc" id="ps4-desc">Soil pH at 5.1 is significantly below the 6.0–7.0 optimal range. Acidic soil blocks phosphorus, calcium, and magnesium absorption. Apply agricultural lime at 2–3 t/ha. Re-test soil pH in 2 weeks.</div>
-            <div class="plan-step-meta"><span class="ps-zone">Corn Zone B2</span><span class="ps-prio high" id="ps4-prio">HIGH</span><span class="ps-time" id="ps4-time">⏱ Within 48 hours</span></div>
-          </div>
-          <button class="plan-done-btn" onclick="markPlanStep('ps4',this)" id="ps4-btn">✓ Done</button>
-        </div>
-        <div class="plan-step high" id="ps5">
-          <div class="plan-step-num">5</div><div class="plan-step-icon">🚰</div>
-          <div class="plan-step-body">
-            <div class="plan-step-title" id="ps5-title">Refill water tank — Cattle Pasture C</div>
-            <div class="plan-step-desc" id="ps5-desc">Water tank at 42% and dropping. With 691 head of cattle and dry conditions (humidity 46%), the tank will reach critical level within 18–24 hours. Arrange tanker refill or pipeline top-up today.</div>
-            <div class="plan-step-meta"><span class="ps-zone">Cattle Pasture C</span><span class="ps-prio high" id="ps5-prio">HIGH</span><span class="ps-time" id="ps5-time">⏱ Within 24 hours</span></div>
-          </div>
-          <button class="plan-done-btn" onclick="markPlanStep('ps5',this)" id="ps5-btn">✓ Done</button>
-        </div>
-
-        <div class="plan-section-lbl" id="plan-sec-week">🟢 This Week — Routine Maintenance</div>
-        <div class="plan-step medium" id="ps6">
-          <div class="plan-step-num">6</div><div class="plan-step-icon">🌾</div>
-          <div class="plan-step-body">
-            <div class="plan-step-title" id="ps6-title">Begin seeding operations — Barley Zone Z5</div>
-            <div class="plan-step-desc" id="ps6-desc">Optimal germination window: soil temp 18°C, moisture 49%, AI confidence 92%. Forecast shows 2–3 days of ideal conditions. Start seeding within 72 hours to capture +18% germination rate advantage before temperatures rise.</div>
-            <div class="plan-step-meta"><span class="ps-zone">Barley Zone Z5</span><span class="ps-prio medium" id="ps6-prio">OPPORTUNITY</span><span class="ps-time" id="ps6-time">⏱ Within 72 hours</span></div>
-          </div>
-          <button class="plan-done-btn" onclick="markPlanStep('ps6',this)" id="ps6-btn">✓ Done</button>
-        </div>
-        <div class="plan-step medium" id="ps7">
-          <div class="plan-step-num">7</div><div class="plan-step-icon">🧬</div>
-          <div class="plan-step-body">
-            <div class="plan-step-title" id="ps7-title">Apply nitrogen fertilizer — Wheat A1 &amp; Corn B2</div>
-            <div class="plan-step-desc" id="ps7-desc">Nitrogen at 41 ppm (Wheat A1) and 37 ppm (Corn B2) — below the 50–100 ppm optimal. Schedule foliar spray or soil application this week. Do not apply during active irrigation to avoid runoff loss.</div>
-            <div class="plan-step-meta"><span class="ps-zone">Wheat A1 · Corn B2</span><span class="ps-prio medium" id="ps7-prio">MEDIUM</span><span class="ps-time" id="ps7-time">⏱ This week</span></div>
-          </div>
-          <button class="plan-done-btn" onclick="markPlanStep('ps7',this)" id="ps7-btn">✓ Done</button>
-        </div>
-        <div class="plan-step medium" id="ps8">
-          <div class="plan-step-num">8</div><div class="plan-step-icon">💨</div>
-          <div class="plan-step-body">
-            <div class="plan-step-title" id="ps8-title">Raise humidity via morning misting — Wheat A1 &amp; Corn B2</div>
-            <div class="plan-step-desc" id="ps8-desc">Humidity at 38% (Wheat A1) and 44% (Corn B2) — below the 45–70% optimal range. Overhead misting at 6–8 AM raises ambient humidity and reduces crop heat stress without excessive water use.</div>
-            <div class="plan-step-meta"><span class="ps-zone">Wheat A1 · Corn B2</span><span class="ps-prio medium" id="ps8-prio">MEDIUM</span><span class="ps-time" id="ps8-time">⏱ This week</span></div>
-          </div>
-          <button class="plan-done-btn" onclick="markPlanStep('ps8',this)" id="ps8-btn">✓ Done</button>
-        </div>
-        <div class="plan-step low" id="ps9">
-          <div class="plan-step-num">9</div><div class="plan-step-icon">🔋</div>
-          <div class="plan-step-body">
-            <div class="plan-step-title" id="ps9-title">Calibrate sensors &amp; check GPS collar batteries</div>
-            <div class="plan-step-desc" id="ps9-desc">Routine maintenance across all zones. Verify GPS collar batteries on 847 + 691 head in Pastures A and C. Calibrate smoke and temperature sensors. Schedule a system-wide audit before peak growing season.</div>
-            <div class="plan-step-meta"><span class="ps-zone">All Zones</span><span class="ps-prio low" id="ps9-prio">ROUTINE</span><span class="ps-time" id="ps9-time">⏱ This week</span></div>
-          </div>
-          <button class="plan-done-btn" onclick="markPlanStep('ps9',this)" id="ps9-btn">✓ Done</button>
-        </div>
-      </div>
-
 <!-- ADD ZONE MODAL -->
 <div class="modal-overlay" id="addZoneModal">
   <div class="modal-box">
@@ -2550,7 +3609,7 @@ function showPage(page,navEl){
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   if(navEl){navEl.classList.add('active');}
   else{
-    const map={overview:0,zones:1,sensors:2,insights:3,alerts:4,plan:5,analytics:6,settings:7};
+    const map={overview:0,zones:1,sensors:2,insights:3,alerts:4,plan:5,guide:6,analytics:7,settings:8};
     const items=document.querySelectorAll('.nav-item');
     if(items[map[page]])items[map[page]].classList.add('active');
   }
@@ -2564,7 +3623,7 @@ const I18N = {
   EN: {
     // Nav
     nav_overview:'Overview', nav_zones:'Zones', nav_sensors:'Sensors',
-    nav_insights:'AI Insights', nav_alerts:'Alerts', nav_reports:'Reports', nav_settings:'Settings',
+    nav_insights:'AI Insights', nav_alerts:'Alerts', nav_plan:'Plan of Action', nav_guide:'Guide', nav_reports:'Reports', nav_settings:'Settings',
     nav_navigation:'Navigation', nav_analytics:'Analytics', nav_system:'System',
     // Top bar
     nav_live_map:'Live Map',
@@ -2614,10 +3673,118 @@ const I18N = {
     sys_sensors:'Sensors Online', sys_ai:'AI Engine', sys_satellite:'Satellite Feed',
     sys_drone:'Drone Status', sys_latency:'Data Latency', sys_scan:'Last AI Scan',
     sys_op:'Operational', sys_active:'Active', sys_standby:'Standby',
+    // Guide page
+    pt_guide:'User Guide',
+    ps_guide:'Everything you need to know about AgroSense KZ',
+    guide_hero_title:'Welcome to AgroSense KZ',
+    guide_hero_sub:'Smart Agricultural Intelligence Platform — built for Kazakhstani farmers',
+    guide_hero_body:'AgroSense KZ monitors your fields 24/7 using IoT sensors, AI analysis, and satellite imagery. This guide teaches you how to read your data, respond to alerts, and get the most out of every feature.',
+    guide_legend_title:'Status Colors:',
+    guide_legend_green:'Green / NORMAL — everything is healthy, no action needed',
+    guide_legend_amber:'Amber / WATCH — trend is worsening, monitor closely',
+    guide_legend_red:'Red / ALERT — problem confirmed, action required now',
+    guide_legend_blue:'Blue / INFO — information or opportunity',
+    guide_sec_start:'🚀 Getting Started',
+    guide_sec_pages:'🗂 Pages Overview',
+    guide_sec_sensors:'📡 Reading Sensors',
+    guide_sec_alerts:'⚠️ Alerts',
+    guide_sec_plan:'📋 Action Plan',
+    guide_sec_faq:'❓ FAQ',
+    guide_chip1:'🚀 Getting Started',
+    guide_chip2:'🗂 Pages Overview',
+    guide_chip3:'📡 Sensors',
+    guide_chip4:'⚠️ Alerts',
+    guide_chip5:'📋 Action Plan',
+    guide_chip6:'❓ FAQ',
+    gs1_title:'1. Check the Overview first',
+    gs1_desc:'Every morning, open the Overview page. It shows your Farm Health score, the top AI recommendation, and most urgent KPIs — all in one glance.',
+    gs1_link:'→ Open Overview',
+    gs2_title:'2. Go to Plan of Action',
+    gs2_desc:'The Plan page translates sensor data into tasks sorted by urgency. Start here every day — tasks are in order: do #1 first, then #2. Each has a checklist and Done button.',
+    gs2_link:'→ Open Plan of Action',
+    gs3_title:'3. Dismiss resolved alerts',
+    gs3_desc:'After fixing a problem in the field, go to the Alerts page and click Acknowledge.',
+    gs3_link:'→ Open Alerts',
+    gs4_title:'4. Explore your Sensors',
+    gs4_desc:'The Sensors page shows live readings from all 48 sensors. Click any sensor card to see its 7-day history. Tap "? What does this mean" for plain-language explanation.',
+    gs4_link:'→ Open Sensors',
+    gf_overview_title:'◈ Overview',
+    gf_overview_desc:'Your daily dashboard. Shows 8 key farm metrics, the AI message, health trends, and top recommendations at a glance.',
+    gf_zones_title:'▣ Zones',
+    gf_zones_desc:'Interactive map of all farm zones. Click a zone to see its health score, soil data, and risk matrix. Add new zones here.',
+    gf_sensors_title:'◉ Sensors',
+    gf_sensors_desc:'Live readings from all 48 IoT sensors. Switch zones using the tabs. Each sensor shows current value, normal range bar, and 7-day history.',
+    gf_plan_title:'📋 Plan of Action',
+    gf_plan_desc:'AI-generated task list from sensor data. Sorted by urgency. Each task has a plain description, equipment checklist, and notes field.',
+    gf_insights_title:'✦ AI Insights',
+    gf_insights_desc:'Deep analysis for each farm problem: cause, recommended action, expected impact, and risk if ignored.',
+    gf_alerts_title:'⚠ Alerts',
+    gf_alerts_desc:'All active sensor alerts in one place. Filter by severity. Acknowledge resolved alerts or get an AI recommendation.',
+    gf_reports_title:'📊 Reports',
+    gf_reports_desc:'Season analytics: crop health trends, yield forecasts, irrigation efficiency, and zone comparisons. Export to PDF or Excel.',
+    gf_settings_title:'⚙ Settings',
+    gf_settings_desc:'Configure farm profile, manage team, connect devices, set notification preferences and integrations.',
+    gf_guide_title:'📖 This Guide',
+    gf_guide_desc:'You are here! Come back any time with questions about features, sensor readings, or how to respond to alerts.',
+    ga1_title:'Soil Moisture',
+    ga1_norm:'Normal: 40–65%',
+    ga1_body:'Soil moisture shows how much water is in the ground. Think of a sponge — most crops need 40–65% for healthy growth.',
+    ga1_low:'Below 35% — very dry. Irrigate immediately. Roots cannot absorb nutrients without water.',
+    ga1_ok:'35–65% — healthy range. Monitor but no action needed.',
+    ga1_high:'Above 75% — too wet. Stop irrigation. Risk of root rot and fungal disease.',
+    ga1_extra:'The range bar on each sensor card shows a green zone (normal) and a dot at the current value. If the dot is outside the green zone, attention is needed.',
+    ga2_title:'Soil pH',
+    ga2_norm:'Normal: 6.0–7.0 pH',
+    ga2_body:'pH measures how acidic or alkaline your soil is. pH 7 is neutral. Most crops grow best between 6–7.',
+    ga2_low:'Below 6.0 (acidic) — apply agricultural lime. Acidic soil blocks phosphorus, calcium, and magnesium.',
+    ga2_ok:'6.0–7.0 — ideal for most crops. No action needed.',
+    ga2_high:'Above 7.5 (alkaline) — apply sulphur or ammonium sulphate. Alkaline soil blocks iron and manganese.',
+    ga3_title:'Smoke / Air Quality',
+    ga3_norm:'Normal: 0–15 ppm',
+    ga3_body:'Smoke sensors detect fine particles in air. Clean air is 0–15 ppm. Above 50 ppm means nearby fire or burning.',
+    ga3_low:'0–15 ppm — clean air, no concern.',
+    ga3_mid:'15–50 ppm — mild smoke. Check for burning in adjacent fields.',
+    ga3_high:'Above 50 ppm — active smoke. Dispatch inspection immediately.',
+    ga4_title:'Grass Density (Pastures)',
+    ga4_norm:'Normal: 50–100%',
+    ga4_body:'For pasture zones, grass density shows what percentage of the ground has healthy grass cover. Below 50% means overgrazing.',
+    ga4_low:'Below 40% — move cattle out immediately. Land needs 3+ weeks rest to recover.',
+    ga4_ok:'50–100% — healthy pasture. Animals have enough to eat.',
+    faq1_q:'What does the percentage next to Health Score mean?',
+    faq1_a:'Health Score (0–100) is calculated from soil moisture. Below 35 = Critical (red), 35–60 = Warning (amber), above 60 = Healthy (green). For livestock zones it reflects the water tank level.',
+    faq2_q:'Why does a sensor show WATCH when the value looks normal?',
+    faq2_a:'WATCH means the value is within range but trending badly — e.g. moisture is 38% but has been dropping 3 days. The AI flags it early so you can act before it becomes CRITICAL.',
+    faq3_q:'How often does the AI update the Plan of Action?',
+    faq3_a:'The Plan regenerates every time sensor data syncs (every 3 seconds in demo). With real IoT sensors — every 15–30 minutes.',
+    faq4_q:'How do I add a new zone?',
+    faq4_a:'Go to Zones page. Click "⊕ Add Zone" in the left list. Fill in name, crop type, area (ha), water source, and soil data, then click Add Zone.',
+    faq5_q:'Does AgroSense work on mobile phones?',
+    faq5_a:'Yes. Fully responsive. On mobile use the bottom navigation bar. The ☰ button opens the full sidebar.',
+    faq6_q:'How are alerts sent to my team?',
+    faq6_a:'Critical alerts are sent via Telegram bot (already connected) and SMS if enabled in Settings → Notifications.',
+    faq7_q:'How do I change the language?',
+    faq7_a:'On desktop: use the KZ / RU / EN switcher in the top nav. On mobile: open sidebar with ☰ button.',
+    pt_plan:'Plan of Action',
+    ps_plan:'Priority-sorted steps to improve your farm right now',
+    plan_header_title:'AI-Generated Action Plan',
+    plan_header_sub:'Updated based on current sensor readings · 9 actions queued',
+    plan_stat_crit:'CRITICAL', plan_stat_high:'HIGH', plan_stat_rout:'ROUTINE',
+    plan_sec_urgent:'🔴 Urgent — Act Within 6 Hours',
+    plan_sec_today:'🟡 Today — Complete by End of Day',
+    plan_sec_week:'🟢 This Week — Routine Maintenance',
+    plan_weather_title:'🌤️ Week Forecast',
+    plan_weather_note:'💡 Plan is optimized for today\'s hot, dry conditions',
+    plan_mark_all:'✓ Mark All Done',
+    plan_reset:'⟳ Reset',
+    plan_footer_done:'Done',
+    plan_footer_total:'Total',
+    plan_footer_risk:'At Risk',
+    plan_footer_time:'Est. Time',
+    plan_footer_msg:'Completing all 9 tasks protects an estimated <strong>₸ 3.1M</strong> in crop and livestock value.',
   },
   RU: {
     nav_overview:'Обзор', nav_zones:'Зоны', nav_sensors:'Датчики',
-    nav_insights:'ИИ Анализ', nav_alerts:'Оповещения', nav_reports:'Отчёты', nav_settings:'Настройки',
+    nav_insights:'ИИ Анализ', nav_alerts:'Оповещения', nav_plan:'План действий', nav_guide:'Гайд', nav_reports:'Отчёты', nav_settings:'Настройки',
     nav_navigation:'Навигация', nav_analytics:'Аналитика', nav_system:'Система',
     nav_live_map:'Карта',
     pt_overview:'Умная с/х платформа',
@@ -2657,10 +3824,123 @@ const I18N = {
     sys_sensors:'Датчики онлайн', sys_ai:'ИИ Движок', sys_satellite:'Спутник',
     sys_drone:'Дрон', sys_latency:'Задержка', sys_scan:'Последний скан',
     sys_op:'Работает', sys_active:'Активен', sys_standby:'Ожидание',
+    // Guide page
+    pt_guide:'Руководство пользователя',
+    ps_guide:'Всё что нужно знать об AgroSense KZ',
+    guide_hero_title:'Добро пожаловать в AgroSense KZ',
+    guide_hero_sub:'Платформа умного сельского хозяйства — для фермеров Казахстана',
+    guide_hero_body:'AgroSense KZ отслеживает ваши поля 24/7 с помощью сети IoT-датчиков, ИИ-анализа и спутниковых снимков. Это руководство научит вас читать данные, реагировать на оповещения и использовать все возможности платформы.',
+    guide_legend_title:'Цвета статусов:',
+    guide_legend_green:'Зелёный / НОРМА — всё здорово, действий не нужно',
+    guide_legend_amber:'Жёлтый / ВНИМАНИЕ — тенденция ухудшается, следите',
+    guide_legend_red:'Красный / ТРЕВОГА — проблема подтверждена, действуйте',
+    guide_legend_blue:'Синий / ИНФО — информация или возможность',
+    guide_sec_start:'🚀 С чего начать',
+    guide_sec_pages:'🗂 Что делает каждая страница',
+    guide_sec_sensors:'📡 Как читать датчики',
+    guide_sec_alerts:'⚠️ Оповещения',
+    guide_sec_plan:'📋 План действий',
+    guide_sec_faq:'❓ Вопросы и ответы',
+    guide_chip1:'🚀 С чего начать',
+    guide_chip2:'🗂 Обзор страниц',
+    guide_chip3:'📡 Датчики',
+    guide_chip4:'⚠️ Оповещения',
+    guide_chip5:'📋 План действий',
+    guide_chip6:'❓ FAQ',
+    // Guide start cards
+    gs1_title:'1. Начните с Обзора',
+    gs1_desc:'Каждое утро открывайте страницу Обзора. Там показан индекс здоровья фермы, главная рекомендация ИИ и самые важные показатели за день — всё сразу. Блок ИИ вверху скажет, что требует внимания.',
+    gs1_link:'→ Открыть Обзор',
+    gs2_title:'2. Перейдите в План действий',
+    gs2_desc:'Страница Плана переводит данные датчиков в понятные задачи, отсортированные по срочности. Начинайте каждый день отсюда — задачи в порядке: сначала №1, потом №2. У каждой задачи есть чеклист и кнопка "Выполнено".',
+    gs2_link:'→ Открыть План действий',
+    gs3_title:'3. Закрывайте выполненные оповещения',
+    gs3_desc:'После устранения проблемы в поле откройте страницу Оповещений и нажмите "Подтвердить". Это информирует команду и помогает ИИ обучаться на решённых проблемах.',
+    gs3_link:'→ Открыть Оповещения',
+    gs4_title:'4. Изучите ваши датчики',
+    gs4_desc:'Страница Датчики показывает показания всех 48 датчиков по каждой зоне. Нажмите на карточку датчика — увидите историю за 7 дней. Нажмите "? Что это значит" — получите объяснение на понятном языке.',
+    gs4_link:'→ Открыть Датчики',
+    // Guide features
+    gf_overview_title:'◈ Обзор',
+    gf_overview_desc:'Ваш ежедневный дашборд. Показывает 8 важнейших показателей фермы, сообщение ИИ-центра, тренды здоровья и главные рекомендации одним взглядом.',
+    gf_zones_title:'▣ Зоны',
+    gf_zones_desc:'Интерактивная карта всех зон фермы. Нажмите зону в списке или на карте — увидите её оценку здоровья, данные почвы и матрицу рисков. Здесь же добавляются новые зоны.',
+    gf_sensors_title:'◉ Датчики',
+    gf_sensors_desc:'Показания всех 48 IoT-датчиков в реальном времени. Переключайте зоны вкладками вверху. Каждый датчик показывает текущее значение, шкалу нормы и историю за 7 дней.',
+    gf_plan_title:'📋 План действий',
+    gf_plan_desc:'Список задач, созданный ИИ на основе данных датчиков. Отсортирован по срочности. У каждой задачи есть понятное описание, чеклист оборудования и поле для заметок.',
+    gf_insights_title:'✦ ИИ Анализ',
+    gf_insights_desc:'Глубокий анализ каждой проблемы на ферме. Каждая карточка показывает причину, рекомендацию, ожидаемый результат и риски бездействия.',
+    gf_alerts_title:'⚠ Оповещения',
+    gf_alerts_desc:'Все активные оповещения датчиков в одном месте. Фильтруйте по серьёзности. Подтверждайте решённые оповещения, просматривайте на карте или получайте рекомендацию ИИ.',
+    gf_reports_title:'📊 Отчёты',
+    gf_reports_desc:'Аналитика за сезон: тренды здоровья культур, прогнозы урожая, эффективность полива и сравнение зон. Экспорт в PDF или Excel для банков и партнёров.',
+    gf_settings_title:'⚙ Настройки',
+    gf_settings_desc:'Настройте профиль фермы, управляйте командой, подключайте устройства, настройте уведомления и интеграции (КазГидроМет, Telegram-бот).',
+    gf_guide_title:'📖 Это руководство',
+    gf_guide_desc:'Вы здесь! Возвращайтесь сюда, когда возникнут вопросы о функциях, показаниях датчиков или как реагировать на оповещения.',
+    // Accordion sensors
+    ga1_title:'Влажность почвы',
+    ga1_norm:'Норма: 40–65%',
+    ga1_body:'Влажность почвы показывает, сколько воды в земле. Представьте губку — для большинства культур нужно 40–65% наполнения.',
+    ga1_low:'Ниже 35% — очень сухо. Срочно поливайте. Корни не могут поглощать питательные вещества без воды.',
+    ga1_ok:'35–65% — здоровый диапазон. Наблюдайте, действий не нужно.',
+    ga1_high:'Выше 75% — слишком влажно. Остановите полив. Риск гниения корней и грибковых болезней.',
+    ga1_extra:'Шкала нормы на карточке датчика показывает зелёную зону (норма) и точку с текущим значением. Если точка вне зелёной зоны — нужно внимание.',
+    ga2_title:'pH почвы',
+    ga2_norm:'Норма: 6.0–7.0 pH',
+    ga2_body:'pH измеряет кислотность или щёлочность почвы. pH 7 — нейтральный. Ниже — кислее, выше — щелочнее. Большинство культур лучше растут при 6–7.',
+    ga2_low:'Ниже 6.0 (кислая) — вносите сельскохозяйственную известь. Кислая почва блокирует фосфор, кальций и магний.',
+    ga2_ok:'6.0–7.0 — идеально для большинства культур. Действий не нужно.',
+    ga2_high:'Выше 7.5 (щелочная) — вносите серу или сульфат аммония. Щелочная почва блокирует железо и марганец.',
+    ga3_title:'Дым / Качество воздуха',
+    ga3_norm:'Норма: 0–15 ppm',
+    ga3_body:'Датчики дыма определяют мелкие частицы в воздухе. Чистый воздух — 0–15 ppm. Выше 50 ppm — горение или пожар поблизости.',
+    ga3_low:'0–15 ppm — чистый воздух, угрозы нет.',
+    ga3_mid:'15–50 ppm — небольшой дым. Проверьте горение на соседних полях или пастбищах.',
+    ga3_high:'Выше 50 ppm — активный дым. Срочно проведите осмотр. Не отправляйте работников в зону без визуального подтверждения.',
+    ga4_title:'Плотность травостоя (пастбища)',
+    ga4_norm:'Норма: 50–100%',
+    ga4_body:'Для пастбищных зон плотность травостоя показывает, какой процент земли покрыт здоровой травой. Ниже 50% — пастбище перегружено.',
+    ga4_low:'Ниже 40% — немедленно уберите скот. Земле нужен отдых минимум 3 недели для восстановления.',
+    ga4_ok:'50–100% — здоровое пастбище. Животным достаточно еды.',
+    // FAQ
+    faq1_q:'Что означает процент рядом с "Оценкой здоровья"?',
+    faq1_a:'Оценка здоровья (0–100) рассчитывается на основе влажности почвы в зоне. Ниже 35 = Критично (красный), 35–60 = Предупреждение (жёлтый), выше 60 = Здорово (зелёный). Для пастбищ отражает уровень воды в баке.',
+    faq2_q:'Почему датчики показывают "ВНИМАНИЕ" при нормальных значениях?',
+    faq2_a:'ВНИМАНИЕ означает, что значение сейчас в норме, но тренд ухудшается — например, влажность 38%, но падала 3 дня подряд. ИИ предупреждает заранее, чтобы вы действовали до появления ТРЕВОГИ.',
+    faq3_q:'Как часто ИИ обновляет План действий?',
+    faq3_a:'План перегенерируется каждый раз при синхронизации данных датчиков (каждые 3 секунды в демо). При реальном развёртывании с IoT-датчиками — каждые 15–30 минут. План всегда отражает текущее состояние фермы.',
+    faq4_q:'Как добавить новую зону?',
+    faq4_a:'Перейдите на страницу Зоны. Нажмите кнопку "⊕ Добавить зону" в списке слева. Заполните название, тип культуры, площадь (га), источник воды и данные почвы, затем нажмите "Добавить зону". Новая зона сразу появится на карте.',
+    faq5_q:'Работает ли AgroSense на мобильных телефонах?',
+    faq5_a:'Да. Приложение полностью адаптивное. На мобильном используйте нижнюю навигацию (Главная, Зоны, Датчики, Оповещения, План, Гайд). Кнопка ☰ вверху слева открывает полный сайдбар.',
+    faq6_q:'Как оповещения отправляются команде?',
+    faq6_a:'Критические оповещения отправляются через Telegram-бот (уже подключён) и SMS при включении в Настройки → Уведомления. Можно настроить email-дайджесты и push-уведомления.',
+    faq7_q:'Как сменить язык?',
+    faq7_a:'На десктопе: используйте переключатель KZ / RU / EN в верхней навигации. На мобильном: откройте сайдбар кнопкой ☰ и переключатель доступен там. Смена языка мгновенно переводит все элементы.',
+    // Plan page
+    pt_plan:'План действий',
+    ps_plan:'Приоритетные шаги для улучшения фермы прямо сейчас',
+    plan_header_title:'ИИ-план действий',
+    plan_header_sub:'Обновлено на основе текущих показаний датчиков · 9 действий в очереди',
+    plan_stat_crit:'КРИТИЧНО', plan_stat_high:'СРОЧНО', plan_stat_rout:'РУТИНА',
+    plan_sec_urgent:'🔴 Срочно — в течение 6 часов',
+    plan_sec_today:'🟡 Сегодня — до конца дня',
+    plan_sec_week:'🟢 На этой неделе — плановое обслуживание',
+    plan_weather_title:'🌤️ Прогноз на неделю',
+    plan_weather_note:'💡 План оптимизирован под жаркие и сухие условия сегодня',
+    plan_mark_all:'✓ Отметить всё',
+    plan_reset:'⟳ Сбросить',
+    plan_footer_done:'Выполнено',
+    plan_footer_total:'Всего',
+    plan_footer_risk:'Под угрозой',
+    plan_footer_time:'Ест. время',
+    plan_footer_msg:'Выполнение всех 9 задач сегодня защищает около <strong>₸ 3.1M</strong> стоимости урожая и скота. Критические задачи (1 и 2) — сначала. Остальные можно делегировать полевым работникам.',
   },
   KZ: {
     nav_overview:'Шолу', nav_zones:'Аймақтар', nav_sensors:'Сенсорлар',
-    nav_insights:'ЖИ Талдауы', nav_alerts:'Ескертулер', nav_reports:'Есептер', nav_settings:'Параметрлер',
+    nav_insights:'ЖИ Талдауы', nav_alerts:'Ескертулер', nav_plan:'Іс-әрекет жоспары', nav_guide:'Нұсқаулық', nav_reports:'Есептер', nav_settings:'Параметрлер',
     nav_navigation:'Навигация', nav_analytics:'Аналитика', nav_system:'Жүйе',
     nav_live_map:'Карта',
     pt_overview:'Ақылды ауыл шаруашылығы',
@@ -2700,6 +3980,102 @@ const I18N = {
     sys_sensors:'Желідегі сенсорлар', sys_ai:'ЖИ қозғалтқышы', sys_satellite:'Жерсерік',
     sys_drone:'Дрон', sys_latency:'Кідіріс', sys_scan:'Соңғы скан',
     sys_op:'Жұмыс істейді', sys_active:'Белсенді', sys_standby:'Күту режимі',
+    // Guide page
+    pt_guide:'Пайдаланушы нұсқаулығы',
+    ps_guide:'AgroSense KZ туралы білуге қажеттінің бәрі',
+    guide_hero_title:'AgroSense KZ-ге қош келдіңіз',
+    guide_hero_sub:'Ақылды ауыл шаруашылығы платформасы — Қазақстан фермерлері үшін',
+    guide_hero_body:'AgroSense KZ сіздің алқаптарыңызды IoT-сенсорлар, ЖИ-талдауы және жерсерік суреттері арқылы 24/7 бақылайды. Бұл нұсқаулық деректерді оқуды, ескертулерге жауап беруді және платформаның барлық мүмкіндіктерін пайдалануды үйретеді.',
+    guide_legend_title:'Күй түстері:',
+    guide_legend_green:'Жасыл / НОРМА — бәрі дұрыс, іс-әрекет қажет емес',
+    guide_legend_amber:'Сары / НАЗАР — тенденция нашарлауда, қадағалаңыз',
+    guide_legend_red:'Қызыл / ЕСКЕРТУ — мәселе расталды, қазір іс-әрекет қажет',
+    guide_legend_blue:'Көк / АҚПАРАТ — ақпарат немесе мүмкіндік',
+    guide_sec_start:'🚀 Бастау',
+    guide_sec_pages:'🗂 Беттер шолуы',
+    guide_sec_sensors:'📡 Сенсорларды оқу',
+    guide_sec_alerts:'⚠️ Ескертулер',
+    guide_sec_plan:'📋 Іс-әрекет жоспары',
+    guide_sec_faq:'❓ Жиі қойылатын сұрақтар',
+    guide_chip1:'🚀 Бастау',
+    guide_chip2:'🗂 Беттер шолуы',
+    guide_chip3:'📡 Сенсорлар',
+    guide_chip4:'⚠️ Ескертулер',
+    guide_chip5:'📋 Іс-әрекет жоспары',
+    guide_chip6:'❓ ЖҚС',
+    gs1_title:'1. Алдымен Шолуды тексеріңіз',
+    gs1_desc:'Күн сайын таңертең Шолу бетін ашыңыз. Ферма денсаулығының индексі, ЖИ ұсынысы және маңызды көрсеткіштер бір қарауда. ЖИ блогы не назар аударуды қажет ететінін айтады.',
+    gs1_link:'→ Шолуды ашу',
+    gs2_title:'2. Іс-әрекет жоспарына өтіңіз',
+    gs2_desc:'Жоспар беті сенсор деректерін шұғылдығы бойынша сұрыпталған тапсырмаларға аударады. Күн сайын осыдан бастаңыз — тапсырмалар ретімен: алдымен №1, содан №2.',
+    gs2_link:'→ Іс-әрекет жоспарын ашу',
+    gs3_title:'3. Шешілген ескертулерді жабыңыз',
+    gs3_desc:'Далада мәселені шешкеннен кейін Ескертулер бетіне өтіп, "Растау" батырмасын басыңыз.',
+    gs3_link:'→ Ескертулерді ашу',
+    gs4_title:'4. Сенсорларыңызды зерттеңіз',
+    gs4_desc:'Сенсорлар беті барлық 48 сенсордың тікелей көрсеткіштерін көрсетеді. Кез келген сенсор картасын басыңыз — 7 күндік тарих диаграммасын көресіз.',
+    gs4_link:'→ Сенсорларды ашу',
+    gf_overview_title:'◈ Шолу',
+    gf_overview_desc:'Күнделікті дашборд. Ферманың 8 маңызды көрсеткіші, ЖИ орталығының хабарламасы, денсаулық трендтері және негізгі ұсыныстар.',
+    gf_zones_title:'▣ Аймақтар',
+    gf_zones_desc:'Барлық ферма аймақтарының интерактивті картасы. Аймақты тізімде немесе картада басыңыз — денсаулық бағасын, топырақ деректерін және тәуекел матрицасын көресіз.',
+    gf_sensors_title:'◉ Сенсорлар',
+    gf_sensors_desc:'Барлық 48 IoT-сенсордың тікелей көрсеткіштері. Жоғарыдағы қойындылармен аймақтарды ауыстырыңыз. Әр сенсор ағымдағы мәнді, норма шкаласын және 7 күндік тарихты көрсетеді.',
+    gf_plan_title:'📋 Іс-әрекет жоспары',
+    gf_plan_desc:'Сенсор деректері негізінде ЖИ жасаған тапсырмалар тізімі. Шұғылдығы бойынша сұрыпталған. Әр тапсырмада сипаттама, жабдық тізімі және ескертпе жазу өрісі бар.',
+    gf_insights_title:'✦ ЖИ Талдауы',
+    gf_insights_desc:'Фермадағы әр мәселенің терең талдауы. Себеп, ұсыныс, күтілетін нәтиже және бездіректік тәуекелі.',
+    gf_alerts_title:'⚠ Ескертулер',
+    gf_alerts_desc:'Барлық белсенді сенсор ескертулері бір жерде. Ауырлық дәрежесі бойынша сүзіңіз. Шешілген ескертулерді растаңыз немесе ЖИ ұсынысын алыңыз.',
+    gf_reports_title:'📊 Есептер',
+    gf_reports_desc:'Маусымдық аналитика: дақыл денсаулығының трендтері, өнімділік болжамы, суару тиімділігі және аймақтарды салыстыру.',
+    gf_settings_title:'⚙ Параметрлер',
+    gf_settings_desc:'Ферма профилін баптаңыз, командаңызды басқарыңыз, құрылғыларды қосыңыз, хабарландырулар мен интеграцияларды реттеңіз.',
+    gf_guide_title:'📖 Бұл нұсқаулық',
+    gf_guide_desc:'Сіз осындасыз! Мүмкіндіктер, сенсор көрсеткіштері немесе ескертулерге қалай жауап беру туралы сұрақтар туындаса, осюда оралыңыз.',
+    ga1_title:'Топырақ ылғалдылығы',
+    ga1_norm:'Норма: 40–65%',
+    ga1_body:'Топырақ ылғалдылығы жердегі су мөлшерін көрсетеді. Губканы елестетіңіз — көптеген дақылдар үшін 40–65% толтырылуы қажет.',
+    ga2_title:'Топырақ рН (қышқылдық)',
+    ga2_norm:'Норма: 6.0–7.0 pH',
+    ga2_body:'рН топырақтың қышқылдығын немесе сілтілігін өлшейді. рН 7 — бейтарап. Көптеген дақылдар 6–7 аралығында жақсы өседі.',
+    ga3_title:'Түтін / Ауа сапасы',
+    ga3_norm:'Норма: 0–15 ppm',
+    ga3_body:'Түтін сенсорлары ауадағы ұсақ бөлшектерді анықтайды. Таза ауа — 0–15 ppm. 50 ppm-нен жоғары — жақын жерде өрт немесе жану бар.',
+    ga4_title:'Шөп тығыздығы (жайылымдар)',
+    ga4_norm:'Норма: 50–100%',
+    ga4_body:'Жайылым аймақтары үшін шөп тығыздығы жердің пайыздық жабынын көрсетеді. 50%-дан төмен — жайылым шамадан тыс жүктелген.',
+    faq1_q:'"Денсаулық бағасы" жанындағы пайыз нені білдіреді?',
+    faq1_a:'Денсаулық бағасы (0–100) аймақтың топырақ ылғалдылығы негізінде есептеледі. 35-тен төмен = Сыни (қызыл), 35–60 = Ескерту (сары), 60-тан жоғары = Сау (жасыл).',
+    faq2_q:'Мән қалыпты болса да сенсор "НАЗАР" көрсетуі неге?',
+    faq2_a:'НАЗАР — мән қазір нормада, бірақ тенденция нашарлауда. Мысалы, ылғалдылық 38%, бірақ 3 күн бойы төмендеуде. ЖИ ТРЕВОГА болмас бұрын ертерек ескертеді.',
+    faq3_q:'ЖИ Іс-әрекет жоспарын қаншалықты жиі жаңартады?',
+    faq3_a:'Жоспар сенсор деректері синхрондалған сайын қайта жасалады (демода әр 3 секунд сайын). Нақты IoT-сенсорлармен — әр 15–30 минут сайын.',
+    faq4_q:'Жаңа аймақты қалай қосуға болады?',
+    faq4_a:'Аймақтар бетіне өтіңіз. Сол жақтағы тізімдегі "⊕ Аймақ қосу" батырмасын басыңыз. Атауды, дақыл түрін, ауданды, су көзін және топырақ деректерін толтырып, "Аймақ қосу" батырмасын басыңыз.',
+    faq5_q:'AgroSense ұялы телефондарда жұмыс істей ме?',
+    faq5_a:'Иә. Қосымша толық адаптивті. Мобильді құрылғыда төменгі навигацияны пайдаланыңыз. ☰ батырмасы толық сайдбарды ашады.',
+    faq6_q:'Ескертулер командаға қалай жіберіледі?',
+    faq6_a:'Сыни ескертулер Telegram-бот (қосылған) және SMS арқылы жіберіледі. Параметрлер → Хабарландырулар бөлімінде баптауға болады.',
+    faq7_q:'Тілді қалай ауыстыруға болады?',
+    faq7_a:'Жоғарғы навигациядағы KZ / RU / EN ауыстырғышын пайдаланыңыз. Мобильді: ☰ батырмасымен сайдбарды ашыңыз.',
+    pt_plan:'Іс-әрекет жоспары',
+    ps_plan:'Ферманы жақсарту үшін басымдықпен сұрыпталған қадамдар',
+    plan_header_title:'ЖИ жасаған іс-әрекет жоспары',
+    plan_header_sub:'Ағымдағы сенсор деректері негізінде жаңартылды · 9 іс-әрекет кезекте',
+    plan_stat_crit:'СЫНИ', plan_stat_high:'ШҰҒЫЛ', plan_stat_rout:'ЖОСПАРЛЫ',
+    plan_sec_urgent:'🔴 Шұғыл — 6 сағат ішінде',
+    plan_sec_today:'🟡 Бүгін — күн соңына дейін',
+    plan_sec_week:'🟢 Осы аптада — жоспарлы техқызмет',
+    plan_weather_title:'🌤️ Апта болжамы',
+    plan_weather_note:'💡 Жоспар бүгінгі ыстық, құрғақ жағдайларға оңтайландырылған',
+    plan_mark_all:'✓ Барлығын белгілеу',
+    plan_reset:'⟳ Қалпына келтіру',
+    plan_footer_done:'Орындалды',
+    plan_footer_total:'Барлығы',
+    plan_footer_risk:'Тәуекелде',
+    plan_footer_time:'Болж. уақыт',
+    plan_footer_msg:'Бүгін 9 тапсырманы орындау шамамен <strong>₸ 3.1M</strong> дақыл және мал шаруашылығын қорғайды.',
   }
 };
  
@@ -2721,7 +4097,7 @@ function applyI18n(lang){
   const setT = (id, key) => { const el=document.getElementById(id); if(el) el.textContent=d[key]||el.textContent; };
   // Nav items (sidebar)
   const navItems = document.querySelectorAll('.nav-item');
-  const navKeys  = ['nav_overview','nav_zones','nav_sensors','nav_insights','nav_alerts','nav_plan_stub','nav_reports','nav_settings'];
+  const navKeys  = ['nav_overview','nav_zones','nav_sensors','nav_insights','nav_alerts','nav_plan','nav_guide','nav_reports','nav_settings'];
   navItems.forEach((el,i)=>{
     if(!navKeys[i]) return;
     const icon = el.querySelector('.nav-icon');
@@ -2738,6 +4114,120 @@ function applyI18n(lang){
   const secKeys = ['nav_navigation','nav_analytics','nav_system'];
   sidebarSections.forEach((el,i)=>{ if(secKeys[i]) el.textContent=d[secKeys[i]]||el.textContent; });
  
+
+  // ── GUIDE page ──
+  const gp = document.getElementById('page-guide');
+  if(gp){
+    const qt = gp.querySelector('.page-title'); if(qt) qt.textContent = d['pt_guide']||qt.textContent;
+    const qs = gp.querySelector('.page-sub');   if(qs) qs.textContent = d['ps_guide']||qs.textContent;
+    const ght = gp.querySelector('.guide-hero-title'); if(ght) ght.textContent = d['guide_hero_title']||ght.textContent;
+    const ghs = gp.querySelector('.guide-hero-sub');   if(ghs) ghs.textContent = d['guide_hero_sub']||ghs.textContent;
+    const ghb = gp.querySelector('.guide-hero > div:last-child'); if(ghb) ghb.textContent = d['guide_hero_body']||ghb.textContent;
+    // legend
+    const glItems = gp.querySelectorAll('.gl-item');
+    const glKeys = ['guide_legend_green','guide_legend_amber','guide_legend_red','guide_legend_blue'];
+    glItems.forEach((el,i)=>{
+      if(!glKeys[i])return;
+      const dot = el.querySelector('.gl-dot');
+      const strong = el.querySelector('strong');
+      const txt = d[glKeys[i]]||'';
+      if(txt && strong){
+        // split "Green / NORMAL — ..." into bold part and rest
+        const dashIdx = txt.indexOf(' — ');
+        if(dashIdx>-1){
+          strong.textContent = txt.slice(0,dashIdx);
+          // set the text node after strong
+          const nodes = el.childNodes;
+          for(let n of nodes){ if(n.nodeType===3) n.textContent = ' — '+txt.slice(dashIdx+3); }
+        }
+      }
+    });
+    // chips
+    const chips = gp.querySelectorAll('.guide-chip');
+    const chipKeys = ['guide_chip1','guide_chip2','guide_chip3','guide_chip4','guide_chip5','guide_chip6'];
+    chips.forEach((el,i)=>{ if(d[chipKeys[i]]) el.textContent=d[chipKeys[i]]; });
+    // section headers (the inline div headers)
+    const secIds = ['gs-start','gs-pages','gs-sensors','gs-alerts','gs-plan','gs-faq'];
+    const secKeys2 = ['guide_sec_start','guide_sec_pages','guide_sec_sensors','guide_sec_alerts','guide_sec_plan','guide_sec_faq'];
+    secIds.forEach((id,i)=>{ const el=document.getElementById(id); if(el&&d[secKeys2[i]]) el.textContent=d[secKeys2[i]]; });
+    // Getting started cards
+    const gsCards = gp.querySelectorAll('.guide-section-card');
+    const gscTitles = ['gs1_title','gs2_title','gs3_title','gs4_title'];
+    const gscDescs  = ['gs1_desc','gs2_desc','gs3_desc','gs4_desc'];
+    const gscLinks  = ['gs1_link','gs2_link','gs3_link','gs4_link'];
+    gsCards.forEach((card,i)=>{
+      const t2=card.querySelector('.gs-title'); if(t2&&d[gscTitles[i]]) t2.textContent=d[gscTitles[i]];
+      const d2=card.querySelector('.gs-desc');  if(d2&&d[gscDescs[i]])  d2.textContent=d[gscDescs[i]];
+      const l2=card.querySelector('.gs-link');  if(l2&&d[gscLinks[i]])  l2.textContent=d[gscLinks[i]];
+    });
+    // Feature cards
+    const gfCards = gp.querySelectorAll('.gf-card');
+    const gfTitles = ['gf_overview_title','gf_zones_title','gf_sensors_title','gf_plan_title','gf_insights_title','gf_alerts_title','gf_reports_title','gf_settings_title','gf_guide_title'];
+    const gfDescs  = ['gf_overview_desc','gf_zones_desc','gf_sensors_desc','gf_plan_desc','gf_insights_desc','gf_alerts_desc','gf_reports_desc','gf_settings_desc','gf_guide_desc'];
+    gfCards.forEach((card,i)=>{
+      const t2=card.querySelector('.gf-title'); if(t2&&d[gfTitles[i]]) t2.textContent=d[gfTitles[i]];
+      const d2=card.querySelector('.gf-desc');  if(d2&&d[gfDescs[i]])  d2.textContent=d[gfDescs[i]];
+    });
+    // Accordion items
+    const gaItems = gp.querySelectorAll('.ga-item');
+    const gaTitles= ['ga1_title','ga2_title','ga3_title','ga4_title','','',''];
+    const gaNorms = ['ga1_norm','ga2_norm','ga3_norm','ga4_norm'];
+    gaItems.forEach((item,i)=>{
+      const lbl=item.querySelector('.ga-label'); if(lbl&&d[gaTitles[i]]) lbl.textContent=d[gaTitles[i]];
+      const badge=item.querySelector('.ga-badge'); if(badge&&d[gaNorms[i]]) badge.textContent=d[gaNorms[i]];
+      const body=item.querySelector('.ga-body p');
+      const bodyKey='ga'+(i+1)+'_body';
+      if(body&&d[bodyKey]) body.textContent=d[bodyKey];
+      // step list items
+      const steps=item.querySelectorAll('.ga-steps li');
+      const stepKeys=['low','ok','high'];
+      steps.forEach((step,j)=>{
+        const sk='ga'+(i+1)+'_'+stepKeys[j];
+        if(d[sk]) step.lastChild.textContent=d[sk];
+      });
+    });
+    // FAQ
+    const faqItems = gp.querySelectorAll('.faq-item');
+    faqItems.forEach((item,i)=>{
+      const qk='faq'+(i+1)+'_q', ak='faq'+(i+1)+'_a';
+      const qEl=item.querySelector('.faq-q'); 
+      if(qEl&&d[qk]){
+        const icon=qEl.querySelector('.faq-icon');
+        const arr=qEl.querySelector('.faq-arr');
+        qEl.textContent='';
+        if(icon)qEl.appendChild(icon);
+        qEl.appendChild(document.createTextNode(' '+d[qk]));
+        if(arr)qEl.appendChild(arr);
+      }
+      const aEl=item.querySelector('.faq-a'); if(aEl&&d[ak]) aEl.textContent=d[ak];
+    });
+  }
+
+  // ── PLAN page ──
+  const pp = document.getElementById('page-plan');
+  if(pp){
+    const pt2=pp.querySelector('.page-title'); if(pt2&&d['pt_plan']) pt2.textContent=d['pt_plan'];
+    const ps2=pp.querySelector('.page-sub');   if(ps2&&d['ps_plan']) ps2.textContent=d['ps_plan'];
+    const pht=pp.querySelector('#plan-ai-title'); if(pht&&d['plan_header_title']) pht.textContent=d['plan_header_title'];
+    const phs=pp.querySelector('#plan-ai-sub');   if(phs&&d['plan_header_sub'])   phs.textContent=d['plan_header_sub'];
+    const psc=document.getElementById('plan-stat-crit'); if(psc&&d['plan_stat_crit']) psc.textContent=d['plan_stat_crit'];
+    const psh=document.getElementById('plan-stat-high'); if(psh&&d['plan_stat_high']) psh.textContent=d['plan_stat_high'];
+    const psr=document.getElementById('plan-stat-rout'); if(psr&&d['plan_stat_rout']) psr.textContent=d['plan_stat_rout'];
+    const psu=document.getElementById('plan-sec-urgent'); if(psu&&d['plan_sec_urgent']) psu.textContent=d['plan_sec_urgent'];
+    const pst=document.getElementById('plan-sec-today');  if(pst&&d['plan_sec_today'])  pst.textContent=d['plan_sec_today'];
+    const psw=document.getElementById('plan-sec-week');   if(psw&&d['plan_sec_week'])   psw.textContent=d['plan_sec_week'];
+    const pwt=pp.querySelector('.poa-weather-title'); if(pwt&&d['plan_weather_title']) pwt.textContent=d['plan_weather_title'];
+    // mark all / reset buttons
+    const bma=document.getElementById('btn-mark-all'); if(bma&&d['plan_mark_all']) bma.textContent=d['plan_mark_all'];
+    const brst=document.getElementById('btn-reset-plan'); if(brst&&d['plan_reset']) brst.textContent=d['plan_reset'];
+    // footer
+    const fls=pp.querySelectorAll('.poa-footer-lbl');
+    const flKeys=['plan_footer_done','plan_footer_total','plan_footer_risk','plan_footer_time'];
+    fls.forEach((el,i)=>{ if(d[flKeys[i]]) el.textContent=d[flKeys[i]]; });
+    const fmsg=pp.querySelector('.poa-footer-msg'); if(fmsg&&d['plan_footer_msg']) fmsg.innerHTML=d['plan_footer_msg'];
+  }
+
+  // ── Page title map — add plan and guide ──
   // Page titles
   const pageTitleMap = {
     'page-overview': ['pt_overview','ps_overview'],
@@ -4018,7 +5508,7 @@ const I18N_FULL = {
     nav_plan:'Plan of Action',
     // Misc
     nav_overview:'Overview', nav_zones:'Zones', nav_sensors:'Sensors',
-    nav_insights:'AI Insights', nav_alerts:'Alerts', nav_reports:'Reports', nav_settings:'Settings',
+    nav_insights:'AI Insights', nav_alerts:'Alerts', nav_plan:'Plan of Action', nav_guide:'Guide', nav_reports:'Reports', nav_settings:'Settings',
     nav_navigation:'Navigation', nav_analytics:'Analytics', nav_system:'System',
     nav_live_map:'Live Map',
     pt_overview:'Smart Agricultural Intelligence', ps_overview:'for Kazakhstan · Real-time monitoring across 12 active zones',
@@ -4042,6 +5532,66 @@ const I18N_FULL = {
     rp_ai_placeholder:'Ask about your farm...',
     sys_sensors:'Sensors Online', sys_ai:'AI Engine', sys_satellite:'Satellite Feed',
     sys_drone:'Drone Status', sys_latency:'Data Latency', sys_scan:'Last AI Scan',
+    // ── GUIDE & PLAN (new pages) ──
+    pt_guide:'User Guide', ps_guide:'Everything you need to know about AgroSense KZ',
+    pt_plan:'Plan of Action', ps_plan:'Priority-sorted steps to improve your farm right now',
+    guide_hero_title:'Welcome to AgroSense KZ',
+    guide_hero_sub:'Smart Agricultural Intelligence Platform — built for Kazakhstani farmers',
+    guide_hero_body:'AgroSense KZ monitors your fields 24/7 using IoT sensors, AI analysis, and satellite imagery. This guide teaches you how to read your data, respond to alerts, and get the most out of every feature.',
+    guide_chip1:'🚀 Getting Started', guide_chip2:'🗂 Pages Overview', guide_chip3:'📡 Sensors',
+    guide_chip4:'⚠️ Alerts', guide_chip5:'📋 Action Plan', guide_chip6:'❓ FAQ',
+    guide_sec_start:'🚀 Getting Started', guide_sec_pages:'🗂 What Each Page Does',
+    guide_sec_sensors:'📡 How to Read Your Sensor Data', guide_sec_alerts:'⚠️ How to Handle Alerts',
+    guide_sec_plan:'📋 Using the Plan of Action', guide_sec_faq:'❓ Frequently Asked Questions',
+    guide_legend_green:'Green / NORMAL — everything is healthy, no action needed',
+    guide_legend_amber:'Amber / WATCH — trend is worsening, monitor closely',
+    guide_legend_red:'Red / ALERT — problem confirmed, action required now',
+    guide_legend_blue:'Blue / INFO — information or opportunity',
+    gs1_title:'1. Check the Overview first', gs1_desc:'Every morning, open the Overview page. It shows your Farm Health score, the top AI recommendation, and most urgent KPIs — all in one glance. The AI box tells you exactly what needs attention.', gs1_link:'→ Open Overview',
+    gs2_title:'2. Go to Plan of Action', gs2_desc:'The Plan page translates sensor data into tasks sorted by urgency. Start here every day — tasks are in order: do #1 first, then #2. Each has a checklist and a Done button.', gs2_link:'→ Open Plan of Action',
+    gs3_title:'3. Dismiss resolved alerts', gs3_desc:'After fixing a problem in the field, go to the Alerts page and click Acknowledge. This keeps your team informed and helps the AI learn.', gs3_link:'→ Open Alerts',
+    gs4_title:'4. Explore your Sensors', gs4_desc:'The Sensors page shows live readings from all 48 sensors. Click any sensor card to see its 7-day history. Tap "? What does this mean" for a plain-language explanation.', gs4_link:'→ Open Sensors',
+    gf_overview_title:'◈ Overview', gf_overview_desc:'Your daily dashboard. Shows 8 key farm metrics, the AI message, health trends chart, and top recommendations at a glance.',
+    gf_zones_title:'▣ Zones', gf_zones_desc:'Interactive map of all farm zones. Click a zone to see its health score, soil data, and risk matrix. Add new zones here.',
+    gf_sensors_title:'◉ Sensors', gf_sensors_desc:'Live readings from all 48 IoT sensors. Switch zones using the tabs. Each sensor shows current value, normal range bar, and 7-day history.',
+    gf_plan_title:'📋 Plan of Action', gf_plan_desc:'AI-generated task list from sensor data. Sorted by urgency. Each task has a plain description, equipment checklist, and notes field.',
+    gf_insights_title:'✦ AI Insights', gf_insights_desc:'Deep analysis for each farm problem: cause, recommended action, expected impact, and risk if ignored.',
+    gf_alerts_title:'⚠ Alerts', gf_alerts_desc:'All active sensor alerts. Filter by severity. Acknowledge resolved alerts, view on map, or get an AI recommendation.',
+    gf_reports_title:'📊 Reports', gf_reports_desc:'Season analytics: crop health trends, yield forecasts, irrigation efficiency, and zone comparisons. Export to PDF or Excel.',
+    gf_settings_title:'⚙ Settings', gf_settings_desc:'Configure farm profile, manage team, connect devices, set notification preferences and integrations.',
+    gf_guide_title:'📖 This Guide', gf_guide_desc:'You are here! Come back any time with questions about features, sensor readings, or how to respond to alerts.',
+    ga1_title:'Soil Moisture', ga1_norm:'Normal: 40–65%', ga1_body:'Soil moisture shows how much water is in the ground. Think of a sponge — most crops need 40–65% for healthy growth.',
+    ga1_low:'Below 35% — very dry. Irrigate immediately. Roots cannot absorb nutrients without water.',
+    ga1_ok:'35–65% — healthy range. Monitor but no action needed.',
+    ga1_high:'Above 75% — too wet. Stop irrigation. Risk of root rot and fungal disease.',
+    ga2_title:'Soil pH', ga2_norm:'Normal: 6.0–7.0 pH', ga2_body:'pH measures how acidic or alkaline your soil is. pH 7 is neutral. Most crops grow best between 6–7.',
+    ga2_low:'Below 6.0 (acidic) — apply agricultural lime. Acidic soil blocks phosphorus, calcium, and magnesium.',
+    ga2_ok:'6.0–7.0 — ideal for most crops. No action needed.',
+    ga2_high:'Above 7.5 (alkaline) — apply sulphur or ammonium sulphate. Alkaline soil blocks iron and manganese.',
+    ga3_title:'Smoke / Air Quality', ga3_norm:'Normal: 0–15 ppm', ga3_body:'Smoke sensors detect fine particles in air. Clean air is 0–15 ppm. Above 50 ppm means nearby fire or burning.',
+    ga3_low:'0–15 ppm — clean air, no concern.',
+    ga3_ok:'15–50 ppm — mild smoke. Check for burning in adjacent fields.',
+    ga3_high:'Above 50 ppm — active smoke. Dispatch inspection immediately. Do not send workers in without visual confirmation.',
+    ga4_title:'Grass Density (Pastures)', ga4_norm:'Normal: 50–100%', ga4_body:'For pasture zones, grass density shows what percentage of the ground has healthy grass cover. Below 50% means overgrazing.',
+    ga4_low:'Below 40% — move cattle out immediately. Land needs 3+ weeks rest to recover.',
+    ga4_ok:'50–100% — healthy pasture. Animals have enough to eat.',
+    ga4_high:'Excellent coverage. Ideal grazing conditions.',
+    faq1_q:'What does the Health Score percentage mean?', faq1_a:'Health Score (0–100) is calculated from soil moisture. Below 35 = Critical (red), 35–60 = Warning (amber), above 60 = Healthy (green). For livestock zones it reflects water tank level.',
+    faq2_q:'Why does a sensor show WATCH when the value looks normal?', faq2_a:'WATCH means the value is within range but trending badly — e.g. moisture is 38% but has been dropping for 3 days. The AI flags it early so you can act before it becomes CRITICAL.',
+    faq3_q:'How often does the AI update the Plan of Action?', faq3_a:'The Plan regenerates every time sensor data syncs (every 3 seconds in demo). With real IoT sensors — every 15–30 minutes. The plan always reflects the current state of your farm.',
+    faq4_q:'How do I add a new zone?', faq4_a:'Go to the Zones page. Click "⊕ Add Zone" in the left list. Fill in name, crop type, area (ha), water source, and soil data, then click Add Zone. The new zone appears on the map immediately.',
+    faq5_q:'Does AgroSense work on mobile phones?', faq5_a:'Yes. Fully responsive. On mobile use the bottom navigation bar. The ☰ button opens the full sidebar. All pages are optimized for phone screens.',
+    faq6_q:'How are alerts sent to my team?', faq6_a:'Critical alerts are sent via Telegram bot (already connected) and SMS if enabled in Settings → Notifications. You can configure email digests and push notifications too.',
+    faq7_q:'How do I change the language?', faq7_a:'On desktop: use the KZ / RU / EN switcher in the top nav bar. On mobile: open the sidebar with the ☰ button. Switching instantly translates all labels.',
+    plan_header_title:'AI-Generated Action Plan', plan_header_sub:'Updated based on current sensor readings · 9 actions queued',
+    plan_stat_crit:'CRITICAL', plan_stat_high:'HIGH', plan_stat_rout:'ROUTINE',
+    plan_sec_urgent:'🔴 Urgent — Act Within 6 Hours',
+    plan_sec_today:'🟡 Today — Complete by End of Day',
+    plan_sec_week:'🟢 This Week — Routine Maintenance',
+    plan_weather_title:'🌤️ Week Forecast',
+    plan_mark_all:'✓ Mark All Done', plan_reset:'⟳ Reset',
+    plan_footer_done:'Done', plan_footer_total:'Total', plan_footer_risk:'At Risk', plan_footer_time:'Est. Time',
+
   },
   RU: {
     ob_tagline:'Умная платформа сельскохозяйственного интеллекта',
@@ -4100,7 +5650,7 @@ const I18N_FULL = {
     farm_meta_val:'Смешанное хозяйство · 3 200 га',
     nav_plan:'План действий',
     nav_overview:'Обзор', nav_zones:'Зоны', nav_sensors:'Датчики',
-    nav_insights:'ИИ Анализ', nav_alerts:'Оповещения', nav_reports:'Отчёты', nav_settings:'Настройки',
+    nav_insights:'ИИ Анализ', nav_alerts:'Оповещения', nav_plan:'План действий', nav_guide:'Гайд', nav_reports:'Отчёты', nav_settings:'Настройки',
     nav_navigation:'Навигация', nav_analytics:'Аналитика', nav_system:'Система',
     nav_live_map:'Карта',
     pt_overview:'Умная с/х платформа', ps_overview:'Казахстан · Мониторинг 12 активных зон',
@@ -4124,6 +5674,66 @@ const I18N_FULL = {
     rp_ai_placeholder:'Спросите о хозяйстве...',
     sys_sensors:'Датчики онлайн', sys_ai:'ИИ Движок', sys_satellite:'Спутник',
     sys_drone:'Дрон', sys_latency:'Задержка', sys_scan:'Последний скан',
+    // ── GUIDE & PLAN ──
+    pt_guide:'Руководство', ps_guide:'Всё о платформе AgroSense KZ',
+    pt_plan:'План действий', ps_plan:'Приоритетные шаги для улучшения фермы прямо сейчас',
+    guide_hero_title:'Добро пожаловать в AgroSense KZ',
+    guide_hero_sub:'Платформа умного сельского хозяйства — для фермеров Казахстана',
+    guide_hero_body:'AgroSense KZ отслеживает ваши поля 24/7 с помощью IoT-датчиков, ИИ-анализа и спутниковых снимков. Это руководство научит вас читать данные, реагировать на оповещения и использовать все возможности платформы.',
+    guide_chip1:'🚀 С чего начать', guide_chip2:'🗂 Обзор страниц', guide_chip3:'📡 Датчики',
+    guide_chip4:'⚠️ Оповещения', guide_chip5:'📋 План', guide_chip6:'❓ FAQ',
+    guide_sec_start:'🚀 С чего начать', guide_sec_pages:'🗂 Что делает каждая страница',
+    guide_sec_sensors:'📡 Как читать показания датчиков', guide_sec_alerts:'⚠️ Как работать с оповещениями',
+    guide_sec_plan:'📋 Как пользоваться Планом действий', guide_sec_faq:'❓ Часто задаваемые вопросы',
+    guide_legend_green:'Зелёный / НОРМА — всё здорово, действий не нужно',
+    guide_legend_amber:'Жёлтый / ВНИМАНИЕ — тенденция ухудшается, следите',
+    guide_legend_red:'Красный / ТРЕВОГА — проблема подтверждена, действуйте',
+    guide_legend_blue:'Синий / ИНФО — информация или возможность',
+    gs1_title:'1. Начните с Обзора', gs1_desc:'Каждое утро открывайте страницу Обзора. Там показан индекс здоровья фермы, главная рекомендация ИИ и самые важные показатели — всё сразу. Блок ИИ скажет, что требует внимания.', gs1_link:'→ Открыть Обзор',
+    gs2_title:'2. Перейдите в План действий', gs2_desc:'Страница Плана переводит данные датчиков в задачи по срочности. Начинайте каждый день отсюда — задачи по порядку: сначала №1, потом №2. У каждой задачи есть чеклист и кнопка "Выполнено".', gs2_link:'→ Открыть План действий',
+    gs3_title:'3. Закрывайте решённые оповещения', gs3_desc:'После устранения проблемы откройте страницу Оповещений и нажмите "Подтвердить". Это информирует команду и помогает ИИ обучаться.', gs3_link:'→ Открыть Оповещения',
+    gs4_title:'4. Изучите ваши датчики', gs4_desc:'Страница Датчики показывает показания всех 48 датчиков. Нажмите на карточку — увидите историю за 7 дней. Нажмите "? Что это значит" — получите объяснение.', gs4_link:'→ Открыть Датчики',
+    gf_overview_title:'◈ Обзор', gf_overview_desc:'Ежедневный дашборд. Показывает 8 ключевых показателей, сообщение ИИ, тренды здоровья и главные рекомендации одним взглядом.',
+    gf_zones_title:'▣ Зоны', gf_zones_desc:'Интерактивная карта всех зон фермы. Нажмите на зону — увидите оценку здоровья, данные почвы и матрицу рисков. Здесь же добавляются новые зоны.',
+    gf_sensors_title:'◉ Датчики', gf_sensors_desc:'Показания всех 48 IoT-датчиков в реальном времени. Переключайте зоны вкладками. Каждый датчик: значение, шкала нормы, история за 7 дней.',
+    gf_plan_title:'📋 План действий', gf_plan_desc:'Список задач от ИИ на основе данных датчиков. Отсортирован по срочности. У каждой задачи: описание, чеклист оборудования, поле для заметок.',
+    gf_insights_title:'✦ ИИ Анализ', gf_insights_desc:'Глубокий анализ каждой проблемы: причина, рекомендация, ожидаемый результат и риски бездействия.',
+    gf_alerts_title:'⚠ Оповещения', gf_alerts_desc:'Все активные оповещения датчиков. Фильтруйте по серьёзности. Подтверждайте решённые, просматривайте на карте или получайте рекомендацию ИИ.',
+    gf_reports_title:'📊 Отчёты', gf_reports_desc:'Аналитика за сезон: тренды здоровья, прогнозы урожая, эффективность полива, сравнение зон. Экспорт в PDF или Excel.',
+    gf_settings_title:'⚙ Настройки', gf_settings_desc:'Настройте профиль фермы, команду, устройства, уведомления и интеграции.',
+    gf_guide_title:'📖 Это руководство', gf_guide_desc:'Вы здесь! Возвращайтесь, когда возникнут вопросы о функциях, показаниях датчиков или оповещениях.',
+    ga1_title:'Влажность почвы', ga1_norm:'Норма: 40–65%', ga1_body:'Влажность почвы показывает, сколько воды в земле. Для большинства культур нужно 40–65%.',
+    ga1_low:'Ниже 35% — очень сухо. Срочно поливайте. Корни не могут поглощать питательные вещества.',
+    ga1_ok:'35–65% — здоровый диапазон. Наблюдайте, действий не нужно.',
+    ga1_high:'Выше 75% — слишком влажно. Остановите полив. Риск гниения корней.',
+    ga2_title:'pH почвы', ga2_norm:'Норма: 6.0–7.0 pH', ga2_body:'pH измеряет кислотность почвы. pH 7 — нейтральный. Большинство культур — 6–7.',
+    ga2_low:'Ниже 6.0 — кислая. Вносите известь. Кислая почва блокирует фосфор и кальций.',
+    ga2_ok:'6.0–7.0 — идеально. Действий не нужно.',
+    ga2_high:'Выше 7.5 — щелочная. Вносите серу или сульфат аммония.',
+    ga3_title:'Дым / Качество воздуха', ga3_norm:'Норма: 0–15 ppm', ga3_body:'Датчики дыма определяют мелкие частицы. Чистый воздух — 0–15 ppm. Выше 50 ppm — горение или пожар рядом.',
+    ga3_low:'0–15 ppm — чистый воздух, угрозы нет.',
+    ga3_ok:'15–50 ppm — небольшой дым. Проверьте горение на соседних полях.',
+    ga3_high:'Выше 50 ppm — активный дым. Срочно проведите осмотр. Не отправляйте работников без подтверждения.',
+    ga4_title:'Плотность травостоя (пастбища)', ga4_norm:'Норма: 50–100%', ga4_body:'Плотность травостоя показывает, какой процент пастбища покрыт травой. Ниже 50% — перегружено.',
+    ga4_low:'Ниже 40% — немедленно уберите скот. Земле нужен отдых минимум 3 недели.',
+    ga4_ok:'50–100% — здоровое пастбище. Животным достаточно еды.',
+    ga4_high:'Отличный покров. Идеальные условия для выпаса.',
+    faq1_q:'Что означает процент у "Оценки здоровья"?', faq1_a:'Оценка здоровья (0–100) рассчитывается из влажности почвы. Ниже 35 = Критично (красный), 35–60 = Предупреждение (жёлтый), выше 60 = Здорово (зелёный). Для пастбищ — уровень воды в баке.',
+    faq2_q:'Почему датчик показывает ВНИМАНИЕ при нормальном значении?', faq2_a:'ВНИМАНИЕ — значение в норме, но тренд плохой. Например, влажность 38%, но падает 3 дня подряд. ИИ предупреждает заранее, чтобы вы успели отреагировать до ТРЕВОГИ.',
+    faq3_q:'Как часто ИИ обновляет План действий?', faq3_a:'Plan перегенерируется каждые 3 сек. в демо. При реальных IoT — каждые 15–30 минут. Всегда отражает текущее состояние.',
+    faq4_q:'Как добавить новую зону?', faq4_a:'Страница Зоны → кнопка "⊕ Добавить зону" → заполните поля → "Добавить зону". Зона сразу появится на карте.',
+    faq5_q:'Работает ли AgroSense на мобильных?', faq5_a:'Да. Полностью адаптивный. На мобильном — нижняя навигация. Кнопка ☰ открывает сайдбар.',
+    faq6_q:'Как оповещения приходят команде?', faq6_a:'Критические — через Telegram-бот (подключён) и SMS. Настройте в Настройки → Уведомления.',
+    faq7_q:'Как сменить язык?', faq7_a:'На десктопе — переключатель KZ/RU/EN в верхней панели. На мобильном — кнопка ☰ → сайдбар.',
+    plan_header_title:'ИИ-план действий', plan_header_sub:'Обновлено на основе текущих показаний · 9 действий в очереди',
+    plan_stat_crit:'КРИТИЧНО', plan_stat_high:'СРОЧНО', plan_stat_rout:'РУТИНА',
+    plan_sec_urgent:'🔴 Срочно — в течение 6 часов',
+    plan_sec_today:'🟡 Сегодня — до конца дня',
+    plan_sec_week:'🟢 На этой неделе — плановое обслуживание',
+    plan_weather_title:'🌤️ Прогноз на неделю',
+    plan_mark_all:'✓ Отметить всё', plan_reset:'⟳ Сбросить',
+    plan_footer_done:'Выполнено', plan_footer_total:'Всего', plan_footer_risk:'Под угрозой', plan_footer_time:'Ест. время',
+
   },
   KZ: {
     ob_tagline:'Ақылды ауыл шаруашылығы интеллект платформасы',
@@ -4182,7 +5792,7 @@ const I18N_FULL = {
     farm_meta_val:'Аралас шаруашылық · 3 200 га',
     nav_plan:'Іс-қимыл жоспары',
     nav_overview:'Шолу', nav_zones:'Аймақтар', nav_sensors:'Сенсорлар',
-    nav_insights:'ЖИ Талдауы', nav_alerts:'Ескертулер', nav_reports:'Есептер', nav_settings:'Параметрлер',
+    nav_insights:'ЖИ Талдауы', nav_alerts:'Ескертулер', nav_plan:'Іс-әрекет жоспары', nav_guide:'Нұсқаулық', nav_reports:'Есептер', nav_settings:'Параметрлер',
     nav_navigation:'Навигация', nav_analytics:'Аналитика', nav_system:'Жүйе',
     nav_live_map:'Карта',
     pt_overview:'Ақылды ауыл шаруашылығы', ps_overview:'Қазақстан · 12 белсенді аймақты нақты уақытта бақылау',
@@ -4206,6 +5816,66 @@ const I18N_FULL = {
     rp_ai_placeholder:'Шаруашылық туралы сұраңыз...',
     sys_sensors:'Желідегі сенсорлар', sys_ai:'ЖИ қозғалтқышы', sys_satellite:'Жерсерік',
     sys_drone:'Дрон', sys_latency:'Кідіріс', sys_scan:'Соңғы скан',
+    // ── GUIDE & PLAN ──
+    pt_guide:'Нұсқаулық', ps_guide:'AgroSense KZ туралы білуге қажеттінің бәрі',
+    pt_plan:'Іс-әрекет жоспары', ps_plan:'Ферманы жақсарту үшін басымдықпен сұрыпталған қадамдар',
+    guide_hero_title:'AgroSense KZ-ге қош келдіңіз',
+    guide_hero_sub:'Ақылды ауыл шаруашылығы платформасы — Қазақстан фермерлері үшін',
+    guide_hero_body:'AgroSense KZ сіздің алқаптарыңызды IoT-сенсорлар, ЖИ-талдауы және жерсерік суреттері арқылы 24/7 бақылайды. Бұл нұсқаулық деректерді оқуды, ескертулерге жауап беруді үйретеді.',
+    guide_chip1:'🚀 Бастау', guide_chip2:'🗂 Беттер шолуы', guide_chip3:'📡 Сенсорлар',
+    guide_chip4:'⚠️ Ескертулер', guide_chip5:'📋 Жоспар', guide_chip6:'❓ ЖҚС',
+    guide_sec_start:'🚀 Бастау', guide_sec_pages:'🗂 Беттер не істейді',
+    guide_sec_sensors:'📡 Сенсор деректерін оқу', guide_sec_alerts:'⚠️ Ескертулермен жұмыс',
+    guide_sec_plan:'📋 Іс-әрекет жоспарын пайдалану', guide_sec_faq:'❓ Жиі қойылатын сұрақтар',
+    guide_legend_green:'Жасыл / НОРМА — бәрі дұрыс, іс-әрекет қажет емес',
+    guide_legend_amber:'Сары / НАЗАР — тенденция нашарлауда, қадағалаңыз',
+    guide_legend_red:'Қызыл / ЕСКЕРТУ — мәселе расталды, қазір іс-әрекет қажет',
+    guide_legend_blue:'Көк / АҚПАРАТ — ақпарат немесе мүмкіндік',
+    gs1_title:'1. Алдымен Шолуды тексеріңіз', gs1_desc:'Күн сайын таңертең Шолу бетін ашыңыз. Ферма денсаулығының индексі, ЖИ ұсынысы және маңызды көрсеткіштер бір қарауда.', gs1_link:'→ Шолуды ашу',
+    gs2_title:'2. Іс-әрекет жоспарына өтіңіз', gs2_desc:'Жоспар беті сенсор деректерін шұғылдығы бойынша сұрыпталған тапсырмаларға аударады. Алдымен №1, содан №2. Әр тапсырмада чеклист және "Орындалды" батырмасы бар.', gs2_link:'→ Іс-әрекет жоспарын ашу',
+    gs3_title:'3. Шешілген ескертулерді жабыңыз', gs3_desc:'Далада мәселені шешкеннен кейін Ескертулер бетіне өтіп "Растау" батырмасын басыңыз.', gs3_link:'→ Ескертулерді ашу',
+    gs4_title:'4. Сенсорларыңызды зерттеңіз', gs4_desc:'Сенсорлар беті барлық 48 сенсордың тікелей көрсеткіштерін береді. Кез келген картаны басыңыз — 7 күндік тарихты көресіз.', gs4_link:'→ Сенсорларды ашу',
+    gf_overview_title:'◈ Шолу', gf_overview_desc:'Күнделікті дашборд. 8 маңызды көрсеткіш, ЖИ хабарламасы, денсаулық трендтері.',
+    gf_zones_title:'▣ Аймақтар', gf_zones_desc:'Ферма аймақтарының интерактивті картасы. Аймақты басыңыз — денсаулық бағасы, топырақ деректері, тәуекел матрицасы.',
+    gf_sensors_title:'◉ Сенсорлар', gf_sensors_desc:'Барлық 48 IoT-сенсордың тікелей көрсеткіштері. Қойындылармен аймақтарды ауыстырыңыз.',
+    gf_plan_title:'📋 Іс-әрекет жоспары', gf_plan_desc:'ЖИ жасаған тапсырмалар тізімі. Шұғылдығы бойынша сұрыпталған. Сипаттама, жабдық тізімі, ескертпе өрісі.',
+    gf_insights_title:'✦ ЖИ Талдауы', gf_insights_desc:'Әр мәселенің терең талдауы: себеп, ұсыныс, нәтиже, бездіректік тәуекелі.',
+    gf_alerts_title:'⚠ Ескертулер', gf_alerts_desc:'Барлық белсенді ескертулер. Ауырлық бойынша сүзіңіз. Растаңыз, картада қараңыз.',
+    gf_reports_title:'📊 Есептер', gf_reports_desc:'Маусымдық аналитика: денсаулық трендтері, өнімділік болжамы, суару тиімділігі.',
+    gf_settings_title:'⚙ Параметрлер', gf_settings_desc:'Ферма профилін, командаңызды, құрылғыларды, хабарландыруларды баптаңыз.',
+    gf_guide_title:'📖 Бұл нұсқаулық', gf_guide_desc:'Сіз осындасыз! Мүмкіндіктер туралы сұрақтар туындаса, осюда оралыңыз.',
+    ga1_title:'Топырақ ылғалдылығы', ga1_norm:'Норма: 40–65%', ga1_body:'Топырақ ылғалдылығы жердегі су мөлшерін көрсетеді. Көптеген дақылдар үшін 40–65% қажет.',
+    ga1_low:'35%-дан төмен — өте құрғақ. Жедел суарыңыз.',
+    ga1_ok:'35–65% — сау диапазон. Бақылаңыз, іс-әрекет қажет емес.',
+    ga1_high:'75%-дан жоғары — тым ылғалды. Суаруды тоқтатыңыз.',
+    ga2_title:'Топырақ рН', ga2_norm:'Норма: 6.0–7.0 pH', ga2_body:'рН топырақтың қышқылдығын өлшейді. рН 7 — бейтарап. Дақылдар үшін 6–7 аралығы жақсы.',
+    ga2_low:'6.0-дан төмен — қышқыл. Известь енгізіңіз.',
+    ga2_ok:'6.0–7.0 — идеал. Іс-әрекет қажет емес.',
+    ga2_high:'7.5-тен жоғары — сілтілі. Күкірт немесе аммоний сульфаты енгізіңіз.',
+    ga3_title:'Түтін / Ауа сапасы', ga3_norm:'Норма: 0–15 ppm', ga3_body:'Түтін сенсорлары ауадағы бөлшектерді анықтайды. 0–15 ppm — таза ауа. 50 ppm-нен жоғары — өрт.',
+    ga3_low:'0–15 ppm — таза ауа.',
+    ga3_ok:'15–50 ppm — аз түтін. Көрші алқаптарда жануды тексеріңіз.',
+    ga3_high:'50 ppm-нен жоғары — белсенді түтін. Жедел тексеріс жіберіңіз.',
+    ga4_title:'Шөп тығыздығы (жайылымдар)', ga4_norm:'Норма: 50–100%', ga4_body:'Шөп тығыздығы жайылым жабынының пайызын көрсетеді. 50%-дан төмен — шамадан тыс жүктелген.',
+    ga4_low:'40%-дан төмен — малды дереу шығарыңыз. Жер кемінде 3 апта демалуы керек.',
+    ga4_ok:'50–100% — сау жайылым.',
+    ga4_high:'Тамаша жабын. Жайылым үшін идеал жағдай.',
+    faq1_q:'"Денсаулық бағасы" пайызы нені білдіреді?', faq1_a:'Денсаулық бағасы (0–100) топырақ ылғалдылығынан есептеледі. 35-тен төмен = Сыни (қызыл), 35–60 = Ескерту (сары), 60-тан жоғары = Сау (жасыл).',
+    faq2_q:'Мән қалыпты болса да НАЗАР неге шығады?', faq2_a:'НАЗАР — мән нормада, бірақ тенденция нашар. Мысалы, ылғалдылық 38%, бірақ 3 күн бойы төмендеуде. ЖИ ертерек ескертеді.',
+    faq3_q:'ЖИ жоспарды қаншалықты жиі жаңартады?', faq3_a:'Демода — 3 сек. сайын. Нақты IoT-мен — 15–30 мин. сайын.',
+    faq4_q:'Жаңа аймақты қалай қосуға болады?', faq4_a:'Аймақтар беті → "⊕ Аймақ қосу" → өрістерді толтырыңыз → "Аймақ қосу". Аймақ картада бірден пайда болады.',
+    faq5_q:'AgroSense ұялы телефондарда жұмыс істей ме?', faq5_a:'Иә. Толық адаптивті. Мобильді — төменгі навигация. ☰ батырмасы сайдбарды ашады.',
+    faq6_q:'Ескертулер командаға қалай жіберіледі?', faq6_a:'Сыни — Telegram-бот (қосулы) және SMS арқылы. Параметрлер → Хабарландыруларда баптаңыз.',
+    faq7_q:'Тілді қалай ауыстыруға болады?', faq7_a:'Жоғарғы панельдегі KZ/RU/EN ауыстырғышын пайдаланыңыз.',
+    plan_header_title:'ЖИ жасаған іс-әрекет жоспары', plan_header_sub:'Ағымдағы сенсор деректері негізінде жаңартылды · 9 іс-әрекет кезекте',
+    plan_stat_crit:'СЫНИ', plan_stat_high:'ШҰҒЫЛ', plan_stat_rout:'ЖОСПАРЛЫ',
+    plan_sec_urgent:'🔴 Шұғыл — 6 сағат ішінде',
+    plan_sec_today:'🟡 Бүгін — күн соңына дейін',
+    plan_sec_week:'🟢 Осы аптада — жоспарлы техқызмет',
+    plan_weather_title:'🌤️ Апта болжамы',
+    plan_mark_all:'✓ Барлығын белгілеу', plan_reset:'⟳ Қалпына келтіру',
+    plan_footer_done:'Орындалды', plan_footer_total:'Барлығы', plan_footer_risk:'Тәуекелде', plan_footer_time:'Болж. уақыт',
+
   }
 };
 
@@ -4226,7 +5896,7 @@ function applyAllI18n(lang) {
 
   // 2. Nav items (sidebar) — preserve icon and badge
   const navItems = document.querySelectorAll('.nav-item');
-  const navKeys  = ['nav_overview','nav_zones','nav_sensors','nav_insights','nav_alerts','nav_plan','nav_reports','nav_settings'];
+  const navKeys  = ['nav_overview','nav_zones','nav_sensors','nav_insights','nav_alerts','nav_plan','nav_guide','nav_reports','nav_settings'];
   navItems.forEach((el,i) => {
     if (!navKeys[i] || !d[navKeys[i]]) return;
     el.childNodes.forEach(n => {
@@ -4304,7 +5974,99 @@ function applyAllI18n(lang) {
     });
   });
 
-  // 13. Plan of Action page
+
+  // ── GUIDE PAGE ──
+  (function(){
+    var gp=document.getElementById('page-guide'); if(!gp)return;
+    function st(sel,key){var e=gp.querySelector(sel);if(e&&d[key])e.textContent=d[key];}
+    st('.page-title','pt_guide'); st('.page-sub','ps_guide');
+    st('.guide-hero-title','guide_hero_title'); st('.guide-hero-sub','guide_hero_sub');
+    var ghb=gp.querySelector('.guide-hero>div:last-child'); if(ghb&&d.guide_hero_body)ghb.textContent=d.guide_hero_body;
+    // color legend items
+    var glItems=gp.querySelectorAll('.gl-item');
+    var glKeys=['guide_legend_green','guide_legend_amber','guide_legend_red','guide_legend_blue'];
+    glItems.forEach(function(el,i){
+      if(!glKeys[i]||!d[glKeys[i]])return;
+      var strong=el.querySelector('strong'); if(!strong)return;
+      var txt=d[glKeys[i]]; var dash=txt.indexOf(' — ');
+      if(dash>-1){
+        strong.textContent=txt.slice(0,dash);
+        el.childNodes.forEach(function(n){if(n.nodeType===3&&n.textContent.trim())n.textContent=' — '+txt.slice(dash+3);});
+      }
+    });
+    // chips
+    var chips=gp.querySelectorAll('.guide-chip');
+    ['guide_chip1','guide_chip2','guide_chip3','guide_chip4','guide_chip5','guide_chip6'].forEach(function(k,i){if(chips[i]&&d[k])chips[i].textContent=d[k];});
+    // section headers (IDs)
+    [['gs-start','guide_sec_start'],['gs-pages','guide_sec_pages'],['gs-sensors','guide_sec_sensors'],['gs-alerts','guide_sec_alerts'],['gs-plan','guide_sec_plan'],['gs-faq','guide_sec_faq']].forEach(function(pair){
+      var e=document.getElementById(pair[0]); if(e&&d[pair[1]])e.textContent=d[pair[1]];
+    });
+    // Getting started cards
+    var gsCards=gp.querySelectorAll('.guide-section-card');
+    var gsCfg=[['gs1_title','gs1_desc','gs1_link'],['gs2_title','gs2_desc','gs2_link'],['gs3_title','gs3_desc','gs3_link'],['gs4_title','gs4_desc','gs4_link']];
+    gsCards.forEach(function(card,i){
+      var cfg=gsCfg[i]; if(!cfg)return;
+      var t=card.querySelector('.gs-title'); if(t&&d[cfg[0]])t.textContent=d[cfg[0]];
+      var dd=card.querySelector('.gs-desc');  if(dd&&d[cfg[1]])dd.textContent=d[cfg[1]];
+      var l=card.querySelector('.gs-link');  if(l&&d[cfg[2]])l.textContent=d[cfg[2]];
+    });
+    // Feature cards
+    var gfCards=gp.querySelectorAll('.gf-card');
+    var gfCfg=[['gf_overview_title','gf_overview_desc'],['gf_zones_title','gf_zones_desc'],['gf_sensors_title','gf_sensors_desc'],['gf_plan_title','gf_plan_desc'],['gf_insights_title','gf_insights_desc'],['gf_alerts_title','gf_alerts_desc'],['gf_reports_title','gf_reports_desc'],['gf_settings_title','gf_settings_desc'],['gf_guide_title','gf_guide_desc']];
+    gfCards.forEach(function(card,i){
+      var cfg=gfCfg[i]; if(!cfg)return;
+      var t=card.querySelector('.gf-title'); if(t&&d[cfg[0]])t.textContent=d[cfg[0]];
+      var dd=card.querySelector('.gf-desc');  if(dd&&d[cfg[1]])dd.textContent=d[cfg[1]];
+    });
+    // Sensor accordion items
+    var gaItems=gp.querySelectorAll('.ga-item');
+    gaItems.forEach(function(item,i){
+      var n=i+1;
+      var lbl=item.querySelector('.ga-label'); if(lbl&&d['ga'+n+'_title'])lbl.textContent=d['ga'+n+'_title'];
+      var badge=item.querySelector('.ga-badge'); if(badge&&d['ga'+n+'_norm'])badge.textContent=d['ga'+n+'_norm'];
+      var body=item.querySelector('.ga-body>p'); if(body&&d['ga'+n+'_body'])body.textContent=d['ga'+n+'_body'];
+      var steps=item.querySelectorAll('.ga-steps li');
+      ['low','ok','high'].forEach(function(sk,j){
+        var k='ga'+n+'_'+sk; if(!steps[j]||!d[k])return;
+        // last text node
+        steps[j].childNodes.forEach(function(tn){if(tn.nodeType===3&&tn.textContent.trim())tn.textContent=d[k];});
+      });
+    });
+    // FAQ
+    var faqItems=gp.querySelectorAll('.faq-item');
+    faqItems.forEach(function(item,i){
+      var n=i+1;
+      var qEl=item.querySelector('.faq-q');
+      var aEl=item.querySelector('.faq-a');
+      if(qEl&&d['faq'+n+'_q']){
+        var icon=qEl.querySelector('.faq-icon');
+        var arr=qEl.querySelector('.faq-arr');
+        qEl.textContent='';
+        if(icon)qEl.appendChild(icon);
+        qEl.appendChild(document.createTextNode(' '+d['faq'+n+'_q']));
+        if(arr)qEl.appendChild(arr);
+      }
+      if(aEl&&d['faq'+n+'_a'])aEl.textContent=d['faq'+n+'_a'];
+    });
+  })();
+
+  // ── PLAN PAGE ──
+  (function(){
+    var pp=document.getElementById('page-plan'); if(!pp)return;
+    function st(sel,key){var e=pp.querySelector(sel);if(e&&d[key])e.textContent=d[key];}
+    function sid(id,key){var e=document.getElementById(id);if(e&&d[key])e.textContent=d[key];}
+    st('.page-title','pt_plan'); st('.page-sub','ps_plan');
+    sid('plan-ai-title','plan_header_title'); sid('plan-ai-sub','plan_header_sub');
+    sid('plan-stat-crit','plan_stat_crit'); sid('plan-stat-high','plan_stat_high'); sid('plan-stat-rout','plan_stat_rout');
+    sid('plan-sec-urgent','plan_sec_urgent'); sid('plan-sec-today','plan_sec_today'); sid('plan-sec-week','plan_sec_week');
+    var pwt=pp.querySelector('.poa-weather-title'); if(pwt&&d.plan_weather_title)pwt.textContent=d.plan_weather_title;
+    var bma=document.getElementById('btn-mark-all'); if(bma&&d.plan_mark_all)bma.textContent=d.plan_mark_all;
+    var brst=document.getElementById('btn-reset-plan'); if(brst&&d.plan_reset)brst.textContent=d.plan_reset;
+    var fls=pp.querySelectorAll('.poa-footer-lbl');
+    ['plan_footer_done','plan_footer_total','plan_footer_risk','plan_footer_time'].forEach(function(k,i){if(fls[i]&&d[k])fls[i].textContent=d[k];});
+  })();
+
+  // 13. Plan of Action page (legacy)
   if (typeof applyPlanI18n === 'function') applyPlanI18n(lang);
 
   // 14. Sensor panel (range labels + WTM buttons)
@@ -4321,6 +6083,54 @@ function applyAllI18n(lang) {
   document.documentElement.setAttribute('data-lang', lang);
   currentLang = lang;
 }
+
+
+// ── GUIDE ACCORDION ──
+function toggleGuideAccordion(id){
+  var el=document.getElementById(id);
+  if(!el)return;
+  el.classList.toggle('open');
+}
+// ── FAQ TOGGLE ──
+function toggleFAQ(el){el.classList.toggle('open');}
+// ── GUIDE SCROLL NAV ──
+function scrollToGuideSection(id){
+  var el=document.getElementById(id);
+  if(!el)return;
+  // scroll the main-content container
+  var mc=document.querySelector('.main-content');
+  if(mc){var top=el.offsetTop-20;mc.scrollTop=top;}
+  else{el.scrollIntoView({behavior:'smooth',block:'start'});}
+}
+// ── CHECKLIST TOGGLE ──
+function toggleCL(el){
+  el.classList.toggle('done-cl');
+  var check=el.querySelector('.poa-cl-check');
+  if(check)check.textContent=el.classList.contains('done-cl')?'\u2713':'';
+  updatePOADoneCount();
+}
+// ── POA DONE COUNT ──
+function updatePOADoneCount(){
+  var done=document.querySelectorAll('.plan-step.done-step').length;
+  var cl=document.querySelectorAll('.poa-cl-item.done-cl').length;
+  var el=document.getElementById('poa-done-count');
+  if(el)el.textContent=done;
+}
+// Wrap existing markPlanStep to also update done count
+document.addEventListener('DOMContentLoaded',function(){
+  if(typeof markPlanStep==='function'){
+    var _orig=markPlanStep;
+    window.markPlanStep=function(id,btn){_orig(id,btn);updatePOADoneCount();};
+  }
+  // Guide chip highlight
+  document.querySelectorAll('.guide-chip').forEach(function(chip){
+    chip.addEventListener('click',function(){
+      document.querySelectorAll('.guide-chip').forEach(function(c){c.classList.remove('active');});
+      this.classList.add('active');
+      setTimeout(function(){chip.classList.remove('active');},1800);
+    });
+  });
+});
 
 </script>
 </body>
