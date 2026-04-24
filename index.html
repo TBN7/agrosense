@@ -4,8 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AgroSense KZ — Smart Agricultural Intelligence</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
@@ -33,9 +31,9 @@
   --top-h:60px;
   --radius:12px;
   --radius-sm:8px;
-  --font-head:'Syne',sans-serif;
-  --font-body:'Outfit',sans-serif;
-  --font-mono:'JetBrains Mono',monospace;
+  --font-head:'Segoe UI','SF Pro Display',-apple-system,BlinkMacSystemFont,sans-serif;
+  --font-body:'Segoe UI','SF Pro Text',-apple-system,BlinkMacSystemFont,sans-serif;
+  --font-mono:'JetBrains Mono','Fira Code','Consolas','Courier New',monospace;
 }
 body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;font-size:14px;-webkit-text-size-adjust:100%;}
  
@@ -757,6 +755,212 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
   }
 }
  
+/* ════════════════════════════════════════
+   LIGHT THEME
+════════════════════════════════════════ */
+[data-theme="light"]{
+  --bg:#F4F6F9;
+  --surface:#FFFFFF;
+  --card:#FFFFFF;
+  --card2:#F8FAFC;
+  --border:rgba(0,0,0,0.08);
+  --border2:rgba(0,0,0,0.13);
+  /* Vivid accents — designed for white/light backgrounds */
+  --green:#0D8A4A;        /* clear medium green */
+  --green2:#0A6E3B;
+  --green-dim:rgba(13,138,74,0.12);
+  --blue:#1467D6;         /* standard bright blue */
+  --blue-dim:rgba(20,103,214,0.12);
+  --amber:#D4800A;        /* proper amber/orange-yellow — not brown */
+  --amber-dim:rgba(212,128,10,0.12);
+  --red:#E0243A;          /* clear vivid red */
+  --red-dim:rgba(224,36,58,0.12);
+  --text:#1A1F2E;
+  --text2:#556070;
+  --text3:#96A3B0;
+}
+[data-theme="light"] body{background:var(--bg);}
+[data-theme="light"] .topnav{background:rgba(255,255,255,0.97);border-bottom:1px solid var(--border);}
+[data-theme="light"] .sidebar{background:#F4F6F9;border-right:1px solid var(--border);}
+[data-theme="light"] .right-panel{background:#F4F6F9;border-left:1px solid var(--border);}
+[data-theme="light"] .kpi-card{background:#FFFFFF;box-shadow:0 2px 10px rgba(30,60,30,0.07);}
+[data-theme="light"] .glass-card{background:#FFFFFF;box-shadow:0 2px 10px rgba(30,60,30,0.07);}
+[data-theme="light"] .ai-center{background:linear-gradient(135deg,rgba(27,122,62,0.07),rgba(26,95,173,0.05));border-color:rgba(27,122,62,0.22);}
+[data-theme="light"] .sensor-card-v3{background:#FFFFFF;box-shadow:0 1px 8px rgba(0,0,0,0.06);}
+[data-theme="light"] .plan-step{background:#FFFFFF;box-shadow:0 1px 8px rgba(0,0,0,0.06);}
+[data-theme="light"] .alert-item{background:#FFFFFF;}
+[data-theme="light"] .zone-item{background:#FFFFFF;}
+[data-theme="light"] .zone-item:hover{background:#F5F8FC;}
+[data-theme="light"] .nav-item:hover{background:rgba(0,122,82,0.07);}
+[data-theme="light"] .nav-item.active{background:rgba(0,122,82,0.10);border-left-color:var(--green);}
+[data-theme="light"] .map-area{background:#E4EBF5;}
+[data-theme="light"] #onboarding{background:#EEF2F7;background-image:radial-gradient(ellipse 80% 60% at 50% -10%,rgba(0,122,82,0.07) 0%,transparent 60%),radial-gradient(ellipse 50% 40% at 80% 80%,rgba(21,101,192,0.05) 0%,transparent 60%);}
+[data-theme="light"] .ob-card{background:#FFFFFF;}
+[data-theme="light"] .ob-card:hover{background:#F5F8FC;}
+[data-theme="light"] .ob-region,[data-theme="light"] .ob-size{background:#FFFFFF;}
+[data-theme="light"] .ob-gen-ring{border-color:rgba(0,0,0,0.1);border-top-color:var(--green);}
+[data-theme="light"] .sidebar-farm{background:linear-gradient(135deg,rgba(27,122,62,0.10),rgba(90,140,60,0.07));}
+[data-theme="light"] .guide-section-card,[data-theme="light"] .gf-card,[data-theme="light"] .ga-item,[data-theme="light"] .faq-item{background:#FFFFFF;box-shadow:0 2px 10px rgba(0,0,0,0.07);}
+[data-theme="light"] .poa-hero{background:linear-gradient(135deg,rgba(26,122,69,0.06),rgba(21,88,168,0.04));border-color:rgba(0,0,0,0.08);}
+[data-theme="light"] .poa-task,[data-theme="light"] .poa-sum-card{background:#FFFFFF;box-shadow:0 1px 8px rgba(0,0,0,0.06);}
+[data-theme="light"] .insight-card,[data-theme="light"] .rec-item{background:#FFFFFF;}
+[data-theme="light"] .chart-card,[data-theme="light"] .exec-card{background:#FFFFFF;box-shadow:0 1px 8px rgba(0,0,0,0.06);}
+[data-theme="light"] .mobile-bottom-nav{background:rgba(255,255,255,0.97);border-top:1px solid var(--border);}
+[data-theme="light"] .mobile-sidebar-overlay{background:rgba(0,0,0,0.35);}
+[data-theme="light"] .nav-search input{background:#F5F8FC;}
+[data-theme="light"] .sh-box,[data-theme="light"] .modal-box,[data-theme="light"] .sensor-history-modal{background:#FFFFFF;}
+[data-theme="light"] .sensor-tooltip{background:#FFFFFF;box-shadow:0 8px 30px rgba(0,0,0,0.15);}
+[data-theme="light"] .sensor-tooltip::before{background:#FFFFFF;}
+[data-theme="light"] .poa-checklist,[data-theme="light"] .poa-notes-input{background:#F5F8FC;}
+[data-theme="light"] .guide-legend,[data-theme="light"] .guide-hero{background:#FFFFFF;border-color:rgba(0,0,0,0.08);}
+[data-theme="light"] .ga-body,[data-theme="light"] .ga-steps li{background:rgba(0,0,0,0.02);}
+[data-theme="light"] .zp-stat,[data-theme="light"] .sys-item{background:#F5F8FC;}
+[data-theme="light"] .zone-profile,[data-theme="light"] .zones-list{background:#FFFFFF;}
+[data-theme="light"] .settings-content,.settings-content{background:transparent;}
+[data-theme="light"] .sidebar::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.15);}
+[data-theme="light"] .main-content::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.15);}
+
+/* Theme toggle */
+.theme-toggle{
+  display:flex;align-items:center;gap:2px;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius-sm);padding:3px;flex-shrink:0;
+}
+.theme-toggle-btn{
+  background:none;border:none;
+  width:28px;height:28px;border-radius:5px;
+  cursor:pointer;font-size:15px;
+  display:flex;align-items:center;justify-content:center;
+  transition:all 0.2s;color:var(--text3);line-height:1;
+}
+.theme-toggle-btn.active{background:var(--green-dim);color:var(--green);}
+[data-theme="light"] .theme-toggle-btn.active{background:rgba(27,122,62,0.13);color:var(--green);}
+
+/* ════════════════════════════════════════
+   PROFILE POPUP
+════════════════════════════════════════ */
+.profile-wrap{position:relative;flex-shrink:0;}
+.profile-popup{
+  position:absolute;top:calc(100% + 10px);right:0;
+  width:296px;
+  background:var(--surface);
+  border:1px solid var(--border2);
+  border-radius:var(--radius);
+  box-shadow:0 20px 60px rgba(0,0,0,0.40);
+  z-index:500;
+  overflow:hidden;
+  animation:fadeUp 0.2s ease;
+  display:none;
+}
+.profile-popup.open{display:block;}
+[data-theme="light"] .profile-popup{background:#FFFFFF;box-shadow:0 12px 40px rgba(0,0,0,0.14);}
+.pp-header{
+  padding:20px;
+  display:flex;align-items:center;gap:14px;
+  border-bottom:1px solid var(--border);
+  background:linear-gradient(135deg,rgba(0,214,143,0.10),rgba(59,158,255,0.08));
+  position:relative;
+}
+.pp-avatar-lg{
+  width:50px;height:50px;border-radius:50%;
+  background:linear-gradient(135deg,var(--green),var(--blue));
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-head);font-size:17px;font-weight:700;
+  color:#021A0D;flex-shrink:0;
+  box-shadow:0 4px 14px rgba(0,214,143,0.30);
+  user-select:none;
+}
+.pp-name-block{flex:1;min-width:0;}
+.pp-name-display{
+  font-family:var(--font-head);font-size:14px;font-weight:700;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.pp-role-tag{
+  display:inline-flex;align-items:center;gap:4px;margin-top:4px;
+  font-size:10px;font-family:var(--font-mono);
+  background:var(--green-dim);color:var(--green);
+  border:1px solid rgba(0,214,143,0.2);
+  border-radius:999px;padding:2px 8px;
+}
+.pp-body{padding:16px 16px 0;}
+.pp-field{margin-bottom:12px;}
+.pp-label{
+  font-size:10px;font-family:var(--font-mono);
+  text-transform:uppercase;letter-spacing:0.8px;
+  color:var(--text3);margin-bottom:5px;display:block;
+}
+.pp-input{
+  width:100%;background:var(--card);
+  border:1px solid var(--border);border-radius:var(--radius-sm);
+  padding:9px 12px;color:var(--text);
+  font-family:var(--font-body);font-size:13px;
+  outline:none;transition:border-color 0.2s;
+}
+.pp-input:focus{border-color:rgba(0,214,143,0.4);}
+.pp-input::placeholder{color:var(--text3);}
+[data-theme="light"] .pp-input{background:#F5F8FC;}
+.pp-notif-row{
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius-sm);padding:10px 12px;
+  margin-bottom:14px;gap:12px;
+}
+[data-theme="light"] .pp-notif-row{background:#F5F8FC;}
+.pp-notif-info{flex:1;min-width:0;}
+.pp-notif-title{font-size:12px;font-weight:600;color:var(--text);margin-bottom:2px;}
+.pp-notif-sub{font-size:11px;color:var(--text3);}
+.pp-toggle{
+  width:38px;height:22px;border-radius:11px;
+  background:var(--border2);border:none;cursor:pointer;
+  position:relative;transition:background 0.25s;flex-shrink:0;
+  padding:0;
+}
+.pp-toggle.on{background:var(--green);}
+.pp-toggle::after{
+  content:'';position:absolute;
+  top:3px;left:3px;width:16px;height:16px;
+  border-radius:50%;background:#fff;
+  transition:transform 0.25s;
+  box-shadow:0 1px 4px rgba(0,0,0,0.25);
+}
+.pp-toggle.on::after{transform:translateX(16px);}
+.pp-footer{
+  padding:12px 16px;
+  border-top:1px solid var(--border);
+  display:flex;gap:8px;
+}
+.pp-btn-save{
+  flex:1;background:var(--green);color:#021A0D;
+  border:none;border-radius:var(--radius-sm);
+  padding:9px;font-family:var(--font-head);font-size:13px;
+  font-weight:700;cursor:pointer;transition:all 0.2s;
+  display:flex;align-items:center;justify-content:center;gap:5px;
+}
+.pp-btn-save:hover{background:var(--green2);transform:translateY(-1px);}
+.pp-btn-cancel{
+  background:none;border:1px solid var(--border2);
+  border-radius:var(--radius-sm);padding:9px 14px;
+  color:var(--text2);font-size:13px;cursor:pointer;
+  transition:all 0.2s;
+}
+.pp-btn-cancel:hover{border-color:var(--border2);color:var(--text);}
+.pp-toast{
+  position:absolute;bottom:0;left:0;right:0;
+  background:var(--green);color:#021A0D;
+  text-align:center;padding:8px 12px;font-size:12px;
+  font-family:var(--font-head);font-weight:700;
+  display:none;animation:fadeUp 0.2s ease;
+}
+/* Profile popup mobile */
+@media(max-width:480px){
+  .profile-popup{
+    position:fixed;top:auto;bottom:0;right:0;left:0;
+    width:100%;border-radius:var(--radius) var(--radius) 0 0;
+    max-height:90vh;overflow-y:auto;
+    box-shadow:0 -8px 40px rgba(0,0,0,0.4);
+  }
+}
+
 /* ── MOBILE NAV (hamburger + bottom bar) ── */
 .mobile-menu-btn{
   display:none;
@@ -825,6 +1029,10 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
   .main-content{padding-bottom:60px;}
   /* hide right panel on small screens */
   .right-panel{display:none;}
+  /* hide some topnav items on mobile but keep theme, lang, profile */
+  .nav-search,.nav-weather,.nav-conn,.nav-btn,.nav-spacer{display:none !important;}
+  .theme-toggle{display:flex !important;}
+  .nav-lang{display:flex !important;}
  
   /* Onboarding mobile fixes */
   .ob-wrap{width:95%;padding:0 10px;}
@@ -1963,6 +2171,390 @@ body{overflow-x:hidden;}
 }
 
 </style>
+<script>
+/* ── AgroChart — full inline chart engine, zero dependencies ── */
+(function(G){
+'use strict';
+
+// ── Bezier smoothing helper ──
+function smooth(pts, t){
+  // Returns control points for smooth bezier curves
+  var cp = [];
+  for(var i=0;i<pts.length;i++){
+    var p0=pts[Math.max(0,i-1)], p1=pts[i], p2=pts[Math.min(pts.length-1,i+1)], p3=pts[Math.min(pts.length-1,i+2)];
+    cp.push({
+      cp1x: p1[0]+(p2[0]-p0[0])*t,
+      cp1y: p1[1]+(p2[1]-p0[1])*t,
+      cp2x: p2[0]-(p3[0]-p1[0])*t,
+      cp2y: p2[1]-(p3[1]-p1[1])*t
+    });
+  }
+  return cp;
+}
+
+function AgroChart(canvas, cfg){
+  if(!canvas) return;
+  if(canvas._ac){ canvas._ac.destroy(); }
+  this.canvas = canvas;
+  this.cfg = cfg;
+  this.data = cfg.data;
+  canvas._ac = this;
+  canvas._chartjs = true; // compat flag
+  this._resize();
+  var self = this;
+  this._ro = null; // ResizeObserver removed — causes loop
+  this._draw();
+}
+
+AgroChart.prototype._resize = function(){
+  var canvas = this.canvas;
+  var parent = canvas.parentElement;
+  var w = (parent ? parent.offsetWidth : 0) || canvas.offsetWidth || 400;
+  if(w < 10) w = 400;
+  canvas.width  = w * (window.devicePixelRatio||1);
+  canvas.height = (canvas.getAttribute('height')||140) * (window.devicePixelRatio||1);
+  canvas.style.width  = w + 'px';
+  canvas.style.height = (canvas.getAttribute('height')||140) + 'px';
+};
+
+AgroChart.prototype.destroy = function(){
+  if(this.canvas){ this.canvas._ac = null; this.canvas._chartjs = false; }
+};
+
+AgroChart.prototype.update = function(){ this._resize(); this._draw(); };
+
+AgroChart.prototype._draw = function(){
+  var canvas = this.canvas;
+  var cfg = this.cfg;
+  var ctx = canvas.getContext('2d');
+  var dpr = window.devicePixelRatio||1;
+  var W = canvas.width, H = canvas.height;
+  var type = cfg.type || 'line';
+  var data = this.data || {};
+  var labels = data.labels || [];
+  var datasets = data.datasets || [];
+  var opts = cfg.options || {};
+  var scales = opts.scales || {};
+
+  ctx.clearRect(0,0,W,H);
+  ctx.scale(1,1); // reset
+
+  // ── DOUGHNUT ──
+  if(type === 'doughnut' || type === 'pie'){
+    this._drawDoughnut(ctx, W, H, datasets, data.labels, opts);
+    return;
+  }
+
+  // ── BAR / LINE ──
+  var isHBar = opts.indexAxis === 'y';
+  if(type === 'bar' && isHBar){
+    this._drawHBar(ctx, W, H, datasets, labels, opts);
+    return;
+  }
+
+  // Padding
+  var pad = { t: 16*dpr, r: 16*dpr, b: 36*dpr, l: 46*dpr };
+  // Extra bottom for legend if needed
+  var showLegend = opts.plugins && opts.plugins.legend && opts.plugins.legend.position === 'bottom';
+  if(showLegend) pad.b += 28*dpr;
+
+  var cW = W - pad.l - pad.r;
+  var cH = H - pad.t - pad.b;
+
+  // Collect values for scale
+  var allVals = [];
+  datasets.forEach(function(ds){ (ds.data||[]).forEach(function(v){ if(v!=null) allVals.push(+v); }); });
+  var scX = scales.x||{}, scY = scales.y||{};
+  var minV = scY.min != null ? scY.min : (allVals.length ? Math.min.apply(null,allVals)*0.97 : 0);
+  var maxV = scY.max != null ? scY.max : (allVals.length ? Math.max.apply(null,allVals)*1.03 : 100);
+  if(minV === maxV){ minV -= 1; maxV += 1; }
+  var range = maxV - minV;
+  var n = labels.length || 1;
+
+  function xp(i){ return pad.l + (n>1 ? (i/(n-1))*cW : cW/2); }
+  function yp(v){ return pad.t + cH - ((+v-minV)/range)*cH; }
+  function xpBar(i,di,dsLen){ 
+    var slotW = cW/n;
+    var bW = slotW*0.7/dsLen;
+    return pad.l + i*slotW + slotW*0.15 + di*bW;
+  }
+
+  // ── Grid ──
+  var gridColor = (scY.grid && scY.grid.color) || 'rgba(255,255,255,0.05)';
+  ctx.strokeStyle = gridColor;
+  ctx.lineWidth = dpr;
+  ctx.setLineDash([3*dpr,3*dpr]);
+  var gridCount = 5;
+  for(var g=0;g<=gridCount;g++){
+    var gy = pad.t + (g/gridCount)*cH;
+    ctx.beginPath(); ctx.moveTo(pad.l, gy); ctx.lineTo(pad.l+cW, gy); ctx.stroke();
+  }
+  ctx.setLineDash([]);
+
+  // ── Y axis labels ──
+  ctx.fillStyle = gridColor.replace('0.05','0.7').replace('0.03','0.7');
+  ctx.font = (11*dpr)+'px sans-serif';
+  ctx.textAlign = 'right';
+  ctx.textBaseline = 'middle';
+  for(var g=0;g<=gridCount;g++){
+    var val = minV + ((gridCount-g)/gridCount)*range;
+    var lbl = Math.abs(val)<10 ? val.toFixed(1) : Math.round(val)+'';
+    ctx.fillText(lbl, pad.l - 6*dpr, pad.t + (g/gridCount)*cH);
+  }
+
+  // ── X axis labels ──
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'top';
+  var xStep = Math.ceil(n/8);
+  labels.forEach(function(lbl,i){
+    if(i%xStep===0 || i===n-1){
+      ctx.fillText(lbl, xp(i), pad.t+cH+6*dpr);
+    }
+  });
+
+  // ── Datasets ──
+  datasets.forEach(function(ds, di){
+    var pts = ds.data || [];
+    var color = ds.borderColor || ds.backgroundColor || '#00D68F';
+    if(typeof color === 'function') color = '#00D68F';
+    var fillColor = ds.backgroundColor;
+    var lw = (ds.borderWidth || 2) * dpr;
+    var pr = ds.pointRadius != null ? ds.pointRadius * dpr : 3*dpr;
+
+    if(type === 'bar'){
+      var slotW = cW/n;
+      var bW = (slotW*0.7/datasets.length) - dpr;
+      pts.forEach(function(v,i){
+        if(v==null) return;
+        var x = pad.l + i*slotW + slotW*0.15 + di*bW;
+        var barH = ((+v-minV)/range)*cH;
+        var y = pad.t + cH - barH;
+        ctx.fillStyle = typeof ds.backgroundColor==='function' ? ds.backgroundColor({dataIndex:i}) : (ds.backgroundColor||color);
+        ctx.beginPath();
+        // Rounded top
+        var r = Math.min(3*dpr, bW/2);
+        ctx.moveTo(x+r, y);
+        ctx.lineTo(x+bW-r, y);
+        ctx.quadraticCurveTo(x+bW, y, x+bW, y+r);
+        ctx.lineTo(x+bW, y+barH);
+        ctx.lineTo(x, y+barH);
+        ctx.lineTo(x, y+r);
+        ctx.quadraticCurveTo(x, y, x+r, y);
+        ctx.closePath();
+        ctx.fill();
+      });
+      return;
+    }
+
+    // LINE — build point array
+    var validPts = pts.map(function(v,i){ return v!=null ? [xp(i),yp(v)] : null; }).filter(Boolean);
+    if(!validPts.length) return;
+
+    var tension = ds.tension || 0;
+
+    // Fill area under line
+    if(fillColor && fillColor !== false){
+      ctx.beginPath();
+      if(tension > 0){
+        var cp = smooth(validPts, tension*0.5);
+        ctx.moveTo(validPts[0][0], validPts[0][1]);
+        for(var i=0;i<validPts.length-1;i++){
+          ctx.bezierCurveTo(cp[i].cp1x,cp[i].cp1y,cp[i].cp2x,cp[i].cp2y,validPts[i+1][0],validPts[i+1][1]);
+        }
+      } else {
+        validPts.forEach(function(p,i){ i===0?ctx.moveTo(p[0],p[1]):ctx.lineTo(p[0],p[1]); });
+      }
+      ctx.lineTo(validPts[validPts.length-1][0], pad.t+cH);
+      ctx.lineTo(validPts[0][0], pad.t+cH);
+      ctx.closePath();
+      ctx.fillStyle = typeof fillColor==='string' ? fillColor : color+'22';
+      ctx.fill();
+    }
+
+    // Line stroke
+    ctx.beginPath();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = lw;
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
+    if(tension > 0){
+      var cp = smooth(validPts, tension*0.5);
+      ctx.moveTo(validPts[0][0], validPts[0][1]);
+      for(var i=0;i<validPts.length-1;i++){
+        ctx.bezierCurveTo(cp[i].cp1x,cp[i].cp1y,cp[i].cp2x,cp[i].cp2y,validPts[i+1][0],validPts[i+1][1]);
+      }
+    } else {
+      validPts.forEach(function(p,i){ i===0?ctx.moveTo(p[0],p[1]):ctx.lineTo(p[0],p[1]); });
+    }
+    ctx.stroke();
+
+    // Points
+    if(pr > 0){
+      validPts.forEach(function(p){
+        ctx.beginPath();
+        ctx.arc(p[0],p[1],pr,0,Math.PI*2);
+        ctx.fillStyle = ds.pointBackgroundColor || color;
+        ctx.fill();
+        if(pr > 2*dpr){
+          ctx.strokeStyle = 'rgba(0,0,0,0.3)';
+          ctx.lineWidth = dpr;
+          ctx.stroke();
+        }
+      });
+    }
+  });
+
+  // ── Legend ──
+  if(showLegend && datasets.length){
+    var ly = pad.t + cH + 24*dpr;
+    var totalW = 0;
+    var legendItems = [];
+    datasets.forEach(function(ds){
+      var lbl = ds.label || '';
+      var col = ds.borderColor || ds.backgroundColor || '#888';
+      if(typeof col === 'function') col = '#888';
+      ctx.font = (11*dpr)+'px sans-serif';
+      var tw = ctx.measureText(lbl).width;
+      legendItems.push({lbl:lbl, col:col, w:tw});
+      totalW += tw + 26*dpr;
+    });
+    var lx = (W - totalW)/2;
+    legendItems.forEach(function(item){
+      ctx.fillStyle = item.col;
+      ctx.beginPath();
+      ctx.roundRect ? ctx.roundRect(lx, ly-4*dpr, 16*dpr, 10*dpr, 2*dpr) : ctx.rect(lx, ly-4*dpr, 16*dpr, 10*dpr);
+      ctx.fill();
+      ctx.fillStyle = 'rgba(180,200,220,0.85)';
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(item.lbl, lx+20*dpr, ly+1*dpr);
+      lx += item.w + 26*dpr;
+    });
+  }
+};
+
+// ── Doughnut ──
+AgroChart.prototype._drawDoughnut = function(ctx, W, H, datasets, labels, opts){
+  var dpr = window.devicePixelRatio||1;
+  var showLegend = opts.plugins && opts.plugins.legend && opts.plugins.legend.position === 'bottom';
+  var legendH = showLegend ? 36*dpr : 0;
+  var cx = W/2, cy = (H - legendH)/2;
+  var r = Math.min(cx, cy) * 0.85;
+  var cutout = parseFloat((opts.cutout||'70%'))/100;
+  var inner = r * cutout;
+  var ds = datasets[0]||{};
+  var vals = ds.data||[];
+  var colors = ds.backgroundColor||[];
+  var total = vals.reduce(function(a,b){return a+(+b||0);},0);
+  if(!total) return;
+
+  var angle = -Math.PI/2;
+  vals.forEach(function(v,i){
+    var sweep = (v/total)*Math.PI*2;
+    ctx.beginPath();
+    ctx.moveTo(cx + inner*Math.cos(angle), cy + inner*Math.sin(angle));
+    ctx.arc(cx, cy, r, angle, angle+sweep);
+    ctx.arc(cx, cy, inner, angle+sweep, angle, true);
+    ctx.closePath();
+    ctx.fillStyle = colors[i]||'#888';
+    ctx.fill();
+    // Thin gap between segments
+    ctx.strokeStyle = ctx.canvas.style.background || 'transparent';
+    ctx.lineWidth = 2*dpr;
+    ctx.stroke();
+    angle += sweep;
+  });
+
+  // Legend
+  if(showLegend && labels){
+    var lx = 0, ly = H - legendH + 8*dpr;
+    ctx.font = (11*dpr)+'px sans-serif';
+    var items = labels.map(function(l,i){ 
+      return {lbl:l, col:colors[i]||'#888', w:ctx.measureText(l).width+22*dpr}; 
+    });
+    var tw = items.reduce(function(a,b){return a+b.w+12*dpr;},0);
+    lx = (W-tw)/2;
+    items.forEach(function(item){
+      ctx.fillStyle = item.col;
+      ctx.beginPath();
+      ctx.roundRect ? ctx.roundRect(lx, ly, 14*dpr, 10*dpr, 2*dpr) : ctx.rect(lx, ly, 14*dpr, 10*dpr);
+      ctx.fill();
+      ctx.fillStyle = 'rgba(180,200,220,0.85)';
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'top';
+      ctx.fillText(item.lbl, lx+17*dpr, ly+1*dpr);
+      lx += item.w + 12*dpr;
+    });
+  }
+};
+
+// ── Horizontal bar ──
+AgroChart.prototype._drawHBar = function(ctx, W, H, datasets, labels, opts){
+  var dpr = window.devicePixelRatio||1;
+  var pad = {t:8*dpr,r:20*dpr,b:8*dpr,l:56*dpr};
+  var cW = W-pad.l-pad.r, cH = H-pad.t-pad.b;
+  var n = labels.length||1;
+  var allVals = [];
+  datasets.forEach(function(ds){(ds.data||[]).forEach(function(v){if(v!=null)allVals.push(+v);});});
+  var scX = (opts.scales&&opts.scales.x)||{};
+  var minV = scX.min!=null?scX.min:0;
+  var maxV = scX.max!=null?scX.max:(allVals.length?Math.max.apply(null,allVals)*1.05:100);
+  var range = maxV-minV||1;
+  var slotH = cH/n;
+  var bH = slotH*0.55;
+
+  // Y labels
+  ctx.fillStyle='rgba(180,200,220,0.75)';
+  ctx.font=(11*dpr)+'px sans-serif';
+  ctx.textAlign='right';
+  ctx.textBaseline='middle';
+  labels.forEach(function(lbl,i){
+    ctx.fillText(lbl, pad.l-6*dpr, pad.t+i*slotH+slotH/2);
+  });
+
+  // Grid
+  ctx.strokeStyle='rgba(255,255,255,0.05)';
+  ctx.lineWidth=dpr;
+  for(var g=0;g<=4;g++){
+    var gx=pad.l+(g/4)*cW;
+    ctx.beginPath();ctx.moveTo(gx,pad.t);ctx.lineTo(gx,pad.t+cH);ctx.stroke();
+  }
+
+  // Bars
+  datasets.forEach(function(ds,di){
+    var pts = ds.data||[];
+    pts.forEach(function(v,i){
+      if(v==null)return;
+      var bLen = ((+v-minV)/range)*cW;
+      var y = pad.t+i*slotH+(slotH-bH)/2+di*(bH/datasets.length);
+      var thisH = bH/datasets.length - dpr;
+      var col = typeof ds.backgroundColor==='function'?ds.backgroundColor({dataIndex:i}):(ds.backgroundColor||'rgba(0,214,143,0.7)');
+      ctx.fillStyle = col;
+      ctx.beginPath();
+      var rr=Math.min(3*dpr,thisH/2);
+      ctx.roundRect?ctx.roundRect(pad.l,y,bLen,thisH,rr):ctx.fillRect(pad.l,y,bLen,thisH);
+      ctx.fill();
+      // Value label
+      ctx.fillStyle='rgba(220,230,240,0.9)';
+      ctx.textAlign='left';
+      ctx.textBaseline='middle';
+      ctx.font=(10*dpr)+'px sans-serif';
+      ctx.fillText(Math.round(+v), pad.l+bLen+4*dpr, y+thisH/2);
+    });
+  });
+};
+
+// ── Compat statics ──
+AgroChart.register = function(){};
+AgroChart.defaults = {
+  color:'rgba(180,200,220,0.8)',
+  borderColor:'rgba(255,255,255,0.05)',
+  font:{family:'sans-serif'}
+};
+
+G.Chart = AgroChart;
+})(window);
+</script>
 </head>
 <body>
  
@@ -2088,6 +2680,11 @@ body{overflow-x:hidden;}
       <button class="active" onclick="setLang(this,'RU')">RU</button>
       <button onclick="setLang(this,'EN')">EN</button>
     </div>
+    <!-- THEME TOGGLE -->
+    <div class="theme-toggle" id="themeToggle" title="Switch theme">
+      <button class="theme-toggle-btn active" id="btnDark" onclick="setTheme('dark')" title="Dark">🌙</button>
+      <button class="theme-toggle-btn" id="btnLight" onclick="setTheme('light')" title="Light">☀️</button>
+    </div>
     <button class="nav-btn primary" onclick="showPage('zones')">
       <span>🗺</span> Live Map
     </button>
@@ -2095,7 +2692,41 @@ body{overflow-x:hidden;}
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2a5 5 0 0 1 5 5v2l1.5 2.5H1.5L3 9V7a5 5 0 0 1 5-5ZM6 13.5a2 2 0 0 0 4 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
       <div class="notif-badge">4</div>
     </div>
-    <div class="avatar" title="Profile">АА</div>
+    <!-- PROFILE WRAP -->
+    <div class="profile-wrap" id="profileWrap">
+      <div class="avatar" id="avatarBtn" title="Profile" onclick="toggleProfile()">АА</div>
+      <div class="profile-popup" id="profilePopup">
+        <div class="pp-header">
+          <div class="pp-avatar-lg" id="pp-avatar-lg">АА</div>
+          <div class="pp-name-block">
+            <div class="pp-name-display" id="pp-name-display">Фермер</div>
+            <div class="pp-role-tag">✦ Farm Manager</div>
+          </div>
+        </div>
+        <div class="pp-body">
+          <div class="pp-field">
+            <label class="pp-label">Имя / Аты</label>
+            <input class="pp-input" id="pp-name-input" type="text" placeholder="Введите ваше имя...">
+          </div>
+          <div class="pp-field">
+            <label class="pp-label">Номер телефона / Телефон</label>
+            <input class="pp-input" id="pp-phone-input" type="tel" placeholder="+7 (___) ___-__-__">
+          </div>
+          <div class="pp-notif-row">
+            <div class="pp-notif-info">
+              <div class="pp-notif-title">SMS уведомления</div>
+              <div class="pp-notif-sub">Критические оповещения на ваш номер</div>
+            </div>
+            <button class="pp-toggle on" id="pp-notif-toggle" onclick="this.classList.toggle('on')"></button>
+          </div>
+        </div>
+        <div class="pp-footer">
+          <button class="pp-btn-cancel" onclick="closeProfile()">Отмена</button>
+          <button class="pp-btn-save" onclick="saveProfile()">✓ Сохранить</button>
+        </div>
+        <div class="pp-toast" id="pp-toast">✓ Профиль сохранён!</div>
+      </div>
+    </div>
   </nav>
  
   <div class="body-layout">
@@ -3558,6 +4189,9 @@ let activeNavItem=null;
 // ── ONBOARDING ──
 function selectCard(el,field,val){
   obSelections[field]=val;
+  // Store region for dashboard personalisation
+  window.farmData = window.farmData || {};
+  window.farmData[field] = val;
   const group=el.closest('.ob-cards,.ob-regions,.ob-sizes');
   group.querySelectorAll('.ob-card,.ob-region,.ob-size').forEach(c=>c.classList.remove('selected'));
   el.classList.add('selected');
@@ -3597,6 +4231,8 @@ function launchApp(){
     if(btn){ document.querySelectorAll('.nav-lang button').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); }
     currentLang = savedLang;
     applyAllI18n(savedLang);
+    // Apply region personalisation
+    setTimeout(applyRegion, 150);
   }, 300);
 }
  
@@ -4086,6 +4722,8 @@ function setLang(el, lang){
   el.classList.add('active');
   currentLang = lang;
   applyAllI18n(lang);
+  // Re-apply region labels in the new language
+  setTimeout(applyRegion, 50);
 }
  
 function t(key){ return (I18N[currentLang]||I18N.EN)[key] || (I18N.EN[key] || key); }
@@ -4346,42 +4984,50 @@ function askAI(){
 }
  
 // ── CHARTS ──
-Chart.defaults.color='rgba(122,144,184,0.8)';
-Chart.defaults.borderColor='rgba(255,255,255,0.05)';
-Chart.defaults.font.family="'Outfit',sans-serif";
+if(typeof Chart!=='undefined'&&Chart.defaults){
+  Chart.defaults.color='rgba(122,144,184,0.8)';
+  Chart.defaults.borderColor='rgba(255,255,255,0.05)';
+  if(Chart.defaults.font)Chart.defaults.font.family="'Outfit',sans-serif";
+}
  
 function initCharts(){
+  const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+  const gridCol = isLight ? 'rgba(0,0,0,0.06)' : 'rgba(255,255,255,0.04)';
   const months=['Jan','Feb','Mar','Apr','May','Jun'];
   const ctx1=document.getElementById('healthChart');
-  if(!ctx1||ctx1._chartjs)return;
+  if(ctx1&&ctx1._ac){ctx1._ac.destroy();}
+  if(!ctx1)return;
   new Chart(ctx1,{type:'line',data:{labels:months,datasets:[
-    {label:'Wheat',data:[72,74,76,78,75,78],borderColor:'#00D68F',backgroundColor:'rgba(0,214,143,0.05)',tension:0.4,pointRadius:3,pointBackgroundColor:'#00D68F'},
-    {label:'Corn',data:[68,70,74,80,82,84],borderColor:'#3B9EFF',backgroundColor:'rgba(59,158,255,0.05)',tension:0.4,pointRadius:3,pointBackgroundColor:'#3B9EFF'},
-    {label:'Potato',data:[65,68,70,72,69,71],borderColor:'#F5B731',backgroundColor:'rgba(245,183,49,0.05)',tension:0.4,pointRadius:3,pointBackgroundColor:'#F5B731'}
-  ]},options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(255,255,255,0.03)'}},y:{min:60,max:90,grid:{color:'rgba(255,255,255,0.03)'}}}}});
+    {label:'Wheat',data:[72,74,76,78,75,78],borderColor:'#00D68F',backgroundColor:'rgba(0,214,143,0.08)',tension:0.4,pointRadius:4,pointBackgroundColor:'#00D68F'},
+    {label:'Corn', data:[68,70,74,80,82,84],borderColor:'#3B9EFF',backgroundColor:'rgba(59,158,255,0.08)',tension:0.4,pointRadius:4,pointBackgroundColor:'#3B9EFF'},
+    {label:'Potato',data:[65,68,70,72,69,71],borderColor:'#F5B731',backgroundColor:'rgba(245,183,49,0.08)',tension:0.4,pointRadius:4,pointBackgroundColor:'#F5B731'}
+  ]},options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:{color:gridCol}},y:{min:60,max:90,grid:{color:gridCol}}}}});
  
   const ctx2=document.getElementById('zoneChart');
-  if(!ctx2||ctx2._chartjs)return;
-  new Chart(ctx2,{type:'doughnut',data:{labels:['Healthy','Warning','Critical'],datasets:[{data:[7,3,2],backgroundColor:['rgba(0,214,143,0.8)','rgba(245,183,49,0.8)','rgba(255,92,107,0.8)'],borderColor:'rgba(0,0,0,0)',borderWidth:0}]},options:{responsive:true,cutout:'70%',plugins:{legend:{position:'bottom',labels:{padding:12,font:{size:11}}}}}});
+  if(ctx2&&ctx2._ac){ctx2._ac.destroy();}
+  if(!ctx2)return;
+  new Chart(ctx2,{type:'doughnut',data:{labels:['Healthy','Warning','Critical'],datasets:[{data:[7,3,2],backgroundColor:['rgba(0,214,143,0.85)','rgba(245,183,49,0.85)','rgba(255,92,107,0.85)'],borderWidth:0}]},options:{responsive:true,cutout:'68%',plugins:{legend:{position:'bottom',labels:{padding:14,font:{size:11}}}}}});
 }
  
 function initAnalyticsCharts(){
+  const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+  const gridCol = isLight ? 'rgba(0,0,0,0.06)' : 'rgba(255,255,255,0.04)';
   const months=['Oct','Nov','Dec','Jan','Feb','Mar','Apr'];
   const t1=document.getElementById('trendChart');
-  if(t1&&!t1._chartjs){
-    new Chart(t1,{type:'line',data:{labels:months,datasets:[{data:[65,68,72,75,73,76,78],borderColor:'#00D68F',backgroundColor:'rgba(0,214,143,0.08)',fill:true,tension:0.4,pointRadius:4,pointBackgroundColor:'#00D68F'}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(255,255,255,0.03)'}},y:{min:60,max:85,grid:{color:'rgba(255,255,255,0.03)'}}}}}); 
+  if(t1){if(t1._ac)t1._ac.destroy();
+    new Chart(t1,{type:'line',data:{labels:months,datasets:[{data:[65,68,72,75,73,76,78],borderColor:'#00D68F',backgroundColor:'rgba(0,214,143,0.08)',fill:true,tension:0.4,pointRadius:4,pointBackgroundColor:'#00D68F'}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:{color:gridCol}},y:{min:60,max:85,grid:{color:gridCol}}}}}); 
   }
   const t2=document.getElementById('yieldChart');
-  if(t2&&!t2._chartjs){
-    new Chart(t2,{type:'bar',data:{labels:['W-A1','W-A2','Corn B1','Corn B2','Potato E','Barley Z5'],datasets:[{label:'AgroSense',data:[28,84,90,75,82,86],backgroundColor:'rgba(0,214,143,0.7)'},{label:'Regional Avg',data:[72,72,72,72,72,72],backgroundColor:'rgba(59,158,255,0.4)'}]},options:{responsive:true,plugins:{legend:{position:'bottom',labels:{font:{size:10}}}},scales:{x:{grid:{color:'rgba(255,255,255,0.03)'}},y:{grid:{color:'rgba(255,255,255,0.03)'}}}}}); 
+  if(t2){if(t2._ac)t2._ac.destroy();
+    new Chart(t2,{type:'bar',data:{labels:['W-A1','W-A2','Corn B1','Corn B2','Potato E','Barley Z5'],datasets:[{label:'AgroSense',data:[28,84,90,75,82,86],backgroundColor:'rgba(0,214,143,0.7)'},{label:'Regional Avg',data:[72,72,72,72,72,72],backgroundColor:'rgba(59,158,255,0.4)'}]},options:{responsive:true,plugins:{legend:{position:'bottom',labels:{font:{size:10}}}},scales:{x:{grid:{color:gridCol}},y:{grid:{color:gridCol}}}}}); 
   }
   const t3=document.getElementById('irrChart');
-  if(t3&&!t3._chartjs){
-    new Chart(t3,{type:'line',data:{labels:months,datasets:[{label:'m³/ha',data:[320,310,290,280,265,250,240],borderColor:'#3B9EFF',backgroundColor:'rgba(59,158,255,0.08)',fill:true,tension:0.4,pointRadius:3}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(255,255,255,0.03)'}},y:{grid:{color:'rgba(255,255,255,0.03)'}}}}}); 
+  if(t3){if(t3._ac)t3._ac.destroy();
+    new Chart(t3,{type:'line',data:{labels:months,datasets:[{label:'m³/ha',data:[320,310,290,280,265,250,240],borderColor:'#3B9EFF',backgroundColor:'rgba(59,158,255,0.08)',fill:true,tension:0.4,pointRadius:3}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:{color:gridCol}},y:{grid:{color:gridCol}}}}}); 
   }
   const t4=document.getElementById('zoneCompChart');
-  if(t4&&!t4._chartjs){
-    new Chart(t4,{type:'bar',data:{labels:['A1','A2','B1','B2','P-E','P-W','Z5','PA','PC'],datasets:[{data:[28,72,90,75,65,85,86,88,55],backgroundColor:d=>['rgba(255,92,107,0.7)','rgba(245,183,49,0.7)','rgba(0,214,143,0.7)','rgba(245,183,49,0.7)','rgba(255,92,107,0.7)','rgba(0,214,143,0.7)','rgba(0,214,143,0.7)','rgba(0,214,143,0.7)','rgba(245,183,49,0.7)'][d.dataIndex]}]},options:{responsive:true,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{min:0,max:100,grid:{color:'rgba(255,255,255,0.03)'}},y:{grid:{color:'rgba(255,255,255,0.03)'}}}}}); 
+  if(t4){if(t4._ac)t4._ac.destroy();
+    new Chart(t4,{type:'bar',data:{labels:['A1','A2','B1','B2','P-E','P-W','Z5','PA','PC'],datasets:[{data:[28,72,90,75,65,85,86,88,55],backgroundColor:d=>['rgba(255,92,107,0.7)','rgba(245,183,49,0.7)','rgba(0,214,143,0.7)','rgba(245,183,49,0.7)','rgba(255,92,107,0.7)','rgba(0,214,143,0.7)','rgba(0,214,143,0.7)','rgba(0,214,143,0.7)','rgba(245,183,49,0.7)'][d.dataIndex]}]},options:{responsive:true,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{min:0,max:100,grid:{color:gridCol}},y:{grid:{color:gridCol}}}}}); 
   }
 }
  
@@ -5978,9 +6624,10 @@ function applyAllI18n(lang) {
   // ── GUIDE PAGE ──
   (function(){
     var gp=document.getElementById('page-guide'); if(!gp)return;
-    function st(sel,key){var e=gp.querySelector(sel);if(e&&d[key])e.textContent=d[key];}
-    st('.page-title','pt_guide'); st('.page-sub','ps_guide');
-    st('.guide-hero-title','guide_hero_title'); st('.guide-hero-sub','guide_hero_sub');
+    // Helper: set textContent of first matching element by selector
+    function qset(sel,key){var e=gp.querySelector(sel);if(e&&d[key])e.textContent=d[key];}
+    qset('.page-title','pt_guide'); qset('.page-sub','ps_guide');
+    qset('.guide-hero-title','guide_hero_title'); qset('.guide-hero-sub','guide_hero_sub');
     var ghb=gp.querySelector('.guide-hero>div:last-child'); if(ghb&&d.guide_hero_body)ghb.textContent=d.guide_hero_body;
     // color legend items
     var glItems=gp.querySelectorAll('.gl-item');
@@ -6018,7 +6665,7 @@ function applyAllI18n(lang) {
       var t=card.querySelector('.gf-title'); if(t&&d[cfg[0]])t.textContent=d[cfg[0]];
       var dd=card.querySelector('.gf-desc');  if(dd&&d[cfg[1]])dd.textContent=d[cfg[1]];
     });
-    // Sensor accordion items
+    // Accordion items
     var gaItems=gp.querySelectorAll('.ga-item');
     gaItems.forEach(function(item,i){
       var n=i+1;
@@ -6028,7 +6675,6 @@ function applyAllI18n(lang) {
       var steps=item.querySelectorAll('.ga-steps li');
       ['low','ok','high'].forEach(function(sk,j){
         var k='ga'+n+'_'+sk; if(!steps[j]||!d[k])return;
-        // last text node
         steps[j].childNodes.forEach(function(tn){if(tn.nodeType===3&&tn.textContent.trim())tn.textContent=d[k];});
       });
     });
@@ -6053,12 +6699,13 @@ function applyAllI18n(lang) {
   // ── PLAN PAGE ──
   (function(){
     var pp=document.getElementById('page-plan'); if(!pp)return;
-    function st(sel,key){var e=pp.querySelector(sel);if(e&&d[key])e.textContent=d[key];}
-    function sid(id,key){var e=document.getElementById(id);if(e&&d[key])e.textContent=d[key];}
-    st('.page-title','pt_plan'); st('.page-sub','ps_plan');
-    sid('plan-ai-title','plan_header_title'); sid('plan-ai-sub','plan_header_sub');
-    sid('plan-stat-crit','plan_stat_crit'); sid('plan-stat-high','plan_stat_high'); sid('plan-stat-rout','plan_stat_rout');
-    sid('plan-sec-urgent','plan_sec_urgent'); sid('plan-sec-today','plan_sec_today'); sid('plan-sec-week','plan_sec_week');
+    // Helper: set textContent by selector within plan page
+    function qsetP(sel,key){var e=pp.querySelector(sel);if(e&&d[key])e.textContent=d[key];}
+    function sidP(id,key){var e=document.getElementById(id);if(e&&d[key])e.textContent=d[key];}
+    qsetP('.page-title','pt_plan'); qsetP('.page-sub','ps_plan');
+    sidP('plan-ai-title','plan_header_title'); sidP('plan-ai-sub','plan_header_sub');
+    sidP('plan-stat-crit','plan_stat_crit'); sidP('plan-stat-high','plan_stat_high'); sidP('plan-stat-rout','plan_stat_rout');
+    sidP('plan-sec-urgent','plan_sec_urgent'); sidP('plan-sec-today','plan_sec_today'); sidP('plan-sec-week','plan_sec_week');
     var pwt=pp.querySelector('.poa-weather-title'); if(pwt&&d.plan_weather_title)pwt.textContent=d.plan_weather_title;
     var bma=document.getElementById('btn-mark-all'); if(bma&&d.plan_mark_all)bma.textContent=d.plan_mark_all;
     var brst=document.getElementById('btn-reset-plan'); if(brst&&d.plan_reset)brst.textContent=d.plan_reset;
@@ -6118,11 +6765,29 @@ function updatePOADoneCount(){
 }
 // Wrap existing markPlanStep to also update done count
 document.addEventListener('DOMContentLoaded',function(){
+  // ── Restore saved theme (light is default) ──
+  var savedTheme = localStorage.getItem('agrosense_theme') || 'light';
+  setTheme(savedTheme);
+
+  // ── Restore saved profile ──
+  var savedName = localStorage.getItem('agrosense_farmer_name');
+  if(savedName){
+    var initials = savedName.split(' ').map(function(w){return w[0]||'';}).join('').slice(0,2).toUpperCase();
+    var btnA = document.getElementById('avatarBtn');
+    var lgA  = document.getElementById('pp-avatar-lg');
+    var dispA = document.getElementById('pp-name-display');
+    if(btnA)  btnA.textContent  = initials || savedName.slice(0,2).toUpperCase();
+    if(lgA)   lgA.textContent   = initials || savedName.slice(0,2).toUpperCase();
+    if(dispA) dispA.textContent = savedName;
+  }
+
+  // ── Plan step wrapper ──
   if(typeof markPlanStep==='function'){
     var _orig=markPlanStep;
     window.markPlanStep=function(id,btn){_orig(id,btn);updatePOADoneCount();};
   }
-  // Guide chip highlight
+
+  // ── Guide chip highlight ──
   document.querySelectorAll('.guide-chip').forEach(function(chip){
     chip.addEventListener('click',function(){
       document.querySelectorAll('.guide-chip').forEach(function(c){c.classList.remove('active');});
@@ -6131,6 +6796,195 @@ document.addEventListener('DOMContentLoaded',function(){
     });
   });
 });
+
+// ══════════════════════════════════════════════════════
+// THEME TOGGLE
+// ══════════════════════════════════════════════════════
+function setTheme(theme){
+  const html = document.documentElement;
+  if(theme === 'light'){
+    html.setAttribute('data-theme','light');
+  } else {
+    html.removeAttribute('data-theme');
+  }
+  // Update toggle buttons — guard against null (called before DOM ready on restore)
+  const btnD = document.getElementById('btnDark');
+  const btnL = document.getElementById('btnLight');
+  if(btnD && btnL){
+    if(theme === 'light'){
+      btnD.classList.remove('active');
+      btnL.classList.add('active');
+    } else {
+      btnD.classList.add('active');
+      btnL.classList.remove('active');
+    }
+  }
+  // Re-draw charts only if app is running
+  if(typeof activePage !== 'undefined'){
+    if(typeof initCharts === 'function'){ try{ initCharts(); }catch(e){} }
+    if(typeof initAnalyticsCharts === 'function' && activePage === 'analytics'){
+      try{ initAnalyticsCharts(); }catch(e){}
+    }
+  }
+  localStorage.setItem('agrosense_theme', theme);
+}
+
+// theme restore handled in DOMContentLoaded
+
+
+// ══════════════════════════════════════════════════════
+// PROFILE POPUP
+// ══════════════════════════════════════════════════════
+let profileOpen = false;
+
+function toggleProfile(){
+  profileOpen = !profileOpen;
+  const popup = document.getElementById('profilePopup');
+  if(profileOpen){
+    popup.classList.add('open');
+    // Pre-fill saved values
+    const savedName = localStorage.getItem('agrosense_farmer_name') || '';
+    const savedPhone = localStorage.getItem('agrosense_farmer_phone') || '';
+    document.getElementById('pp-name-input').value = savedName;
+    document.getElementById('pp-phone-input').value = savedPhone;
+    // Focus name field
+    setTimeout(() => document.getElementById('pp-name-input').focus(), 150);
+  } else {
+    popup.classList.remove('open');
+  }
+}
+
+function closeProfile(){
+  profileOpen = false;
+  document.getElementById('profilePopup').classList.remove('open');
+}
+
+function saveProfile(){
+  const name = document.getElementById('pp-name-input').value.trim();
+  const phone = document.getElementById('pp-phone-input').value.trim();
+
+  // Save to localStorage
+  if(name) localStorage.setItem('agrosense_farmer_name', name);
+  if(phone) localStorage.setItem('agrosense_farmer_phone', phone);
+
+  // Update avatar initials
+  const initials = name
+    ? name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()
+    : 'АА';
+  document.getElementById('avatarBtn').textContent = initials;
+  document.getElementById('pp-avatar-lg').textContent = initials;
+  document.getElementById('pp-name-display').textContent = name || 'Фермер';
+
+  // Show toast
+  const toast = document.getElementById('pp-toast');
+  toast.style.display = 'block';
+  setTimeout(() => {
+    toast.style.display = 'none';
+    closeProfile();
+  }, 1400);
+}
+
+// Close profile popup on outside click
+document.addEventListener('click', function(e){
+  const wrap = document.getElementById('profileWrap');
+  if(profileOpen && wrap && !wrap.contains(e.target)){
+    closeProfile();
+  }
+});
+
+// profile restore handled in DOMContentLoaded
+
+
+// ══════════════════════════════════════════════════════
+// REGION SYNC — apply selected city everywhere in the UI
+// ══════════════════════════════════════════════════════
+const REGION_DATA = {
+  almaty:    { ru:'Алматы',    kz:'Алматы',    en:'Almaty',    farmRu:'Алматы Агро',    farmKz:'Алматы Агро',    farmEn:'Almaty Agro',    weatherEn:'Almaty Region',    temp:'+18°C', emoji:'🏔️' },
+  astana:    { ru:'Астана',    kz:'Астана',     en:'Astana',    farmRu:'Астана Агро',    farmKz:'Астана Агро',    farmEn:'Astana Agro',    weatherEn:'Astana Region',    temp:'+12°C', emoji:'🏛️' },
+  kostanay:  { ru:'Костанай',  kz:'Қостанай',   en:'Kostanay',  farmRu:'Костанай Агро',  farmKz:'Қостанай Агро',  farmEn:'Kostanay Agro',  weatherEn:'Kostanay Region',  temp:'+15°C', emoji:'🌾' },
+  akmola:    { ru:'Акмола',    kz:'Ақмола',     en:'Akmola',    farmRu:'Акмола Агро',    farmKz:'Ақмола Агро',    farmEn:'Akmola Agro',    weatherEn:'Akmola Region',    temp:'+14°C', emoji:'🌻' },
+  shymkent:  { ru:'Шымкент',   kz:'Шымкент',    en:'Shymkent',  farmRu:'Шымкент Агро',   farmKz:'Шымкент Агро',   farmEn:'Shymkent Agro',  weatherEn:'Shymkent Region',  temp:'+24°C', emoji:'☀️' },
+  karaganda:  { ru:'Қарағанды', kz:'Қарағанды',  en:'Karaganda', farmRu:'Қарағанды Агро', farmKz:'Қарағанды Агро', farmEn:'Karaganda Agro', weatherEn:'Karaganda Region', temp:'+16°C', emoji:'⛏️' },
+  atyrau:    { ru:'Атырау',    kz:'Атырау',     en:'Atyrau',    farmRu:'Атырау Агро',    farmKz:'Атырау Агро',    farmEn:'Atyrau Agro',    weatherEn:'Atyrau Region',    temp:'+21°C', emoji:'🛢️' },
+  pavlodar:  { ru:'Павлодар',  kz:'Павлодар',   en:'Павлодар',  farmRu:'Павлодар Агро',  farmKz:'Павлодар Агро',  farmEn:'Pavlodar Agro',  weatherEn:'Pavlodar Region',  temp:'+13°C', emoji:'🚜' },
+  other:     { ru:'Другой',    kz:'Басқа',      en:'Other',     farmRu:'Агро Хозяйство', farmKz:'Агро Шаруашылық', farmEn:'Agro Farm',     weatherEn:'Kazakhstan',       temp:'+17°C', emoji:'🗺️' },
+};
+
+// Called from launchApp — applies the selected region to the whole UI
+function applyRegion(){
+  // Use obSelections.region if available (set during onboarding), fallback to farmData or almaty
+  const key = (typeof obSelections !== 'undefined' && obSelections.region)
+    ? obSelections.region
+    : ((window.farmData && window.farmData.region) ? window.farmData.region : 'almaty');
+  const reg = REGION_DATA[key] || REGION_DATA['almaty'];
+  const lang = (typeof currentLang !== 'undefined') ? currentLang : 'RU';
+
+  // Determine display names based on current language
+  const cityName = lang === 'KZ' ? reg.kz : (lang === 'EN' ? reg.en : reg.ru);
+  const farmName = lang === 'KZ' ? reg.farmKz : (lang === 'EN' ? reg.farmEn : reg.farmRu);
+
+  // --- Topnav weather widget ---
+  const locEl = document.querySelector('.nav-weather .loc');
+  const tempEl = document.querySelector('.nav-weather .temp');
+  if(locEl) locEl.textContent = cityName + ' Region';
+  if(tempEl) tempEl.textContent = reg.temp;
+
+  // --- Sidebar farm name ---
+  const farmNameEl = document.getElementById('farm-name');
+  if(farmNameEl) farmNameEl.textContent = farmName;
+
+  // --- Overview page subtitle ---
+  const overviewSub = document.querySelector('#page-overview .page-sub');
+  if(overviewSub){
+    const base = lang === 'KZ' ? 'Қазақстан · 12 белсенді аймақты нақты уақытта бақылау'
+                : (lang === 'EN' ? 'Kazakhstan · Real-time monitoring across 12 active zones'
+                : 'Казахстан · Мониторинг 12 активных зон в реальном времени');
+    overviewSub.textContent = cityName + ' · ' + base;
+  }
+
+  // --- Analytics page subtitle ---
+  const anaSub = document.querySelector('#page-analytics .page-sub');
+  if(anaSub){
+    const yr = '2024';
+    anaSub.textContent = lang === 'KZ'
+      ? yr + ' маусымы · ' + cityName + ' шаруашылығы'
+      : (lang === 'EN'
+        ? 'Season ' + yr + ' · ' + cityName + ' Farm Portfolio · Executive Dashboard'
+        : 'Сезон ' + yr + ' · ' + cityName + ' · Портфолио хозяйства');
+  }
+
+  // --- Settings page subtitle & region row ---
+  const settSub = document.querySelector('#page-settings .page-sub');
+  if(settSub){
+    settSub.textContent = lang === 'KZ'
+      ? 'Корпоративтік баптаулар · ' + cityName + ' Агро Холдинг'
+      : (lang === 'EN'
+        ? 'Enterprise configuration · ' + cityName + ' Agro Holdings'
+        : 'Корпоративные настройки · ' + cityName + ' Агро Холдинг');
+  }
+  // Update region row inside settings if it exists
+  document.querySelectorAll('.setting-row').forEach(row => {
+    const h4 = row.querySelector('h4');
+    if(h4 && (h4.textContent === 'Region' || h4.textContent === 'Регион' || h4.textContent === 'Аймақ')){
+      const valEl = row.querySelector('div:last-child');
+      if(valEl) valEl.textContent = cityName + ' Region';
+    }
+    if(h4 && (h4.textContent === 'Farm Name' || h4.textContent === 'Название фермы')){
+      const valEl = row.querySelector('div:last-child');
+      if(valEl) valEl.textContent = farmName;
+    }
+  });
+
+  // --- Right panel weather description ---
+  const wpDesc = document.querySelector('.weather-desc');
+  if(wpDesc){
+    const cond = lang === 'KZ' ? 'Айнымалы бұлтты' : (lang === 'EN' ? 'Partly Cloudy' : 'Переменная облачность');
+    wpDesc.textContent = cond + ' · ' + cityName;
+  }
+
+  // Store for reuse when language changes
+  window._currentRegion = key;
+}
 
 </script>
 </body>
